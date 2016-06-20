@@ -1,12 +1,14 @@
 package com.github.mkorman9.model;
 
+import com.google.common.base.MoreObjects;
+import com.google.common.base.Objects;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import java.util.Objects;
 
 @Entity
 @Table(name = "CAT")
@@ -26,6 +28,12 @@ public class Cat {
     private Integer duelsWon;
 
     public Cat() {
+    }
+
+    public Cat(String roleName, String name, Integer duelsWon) {
+        this.roleName = roleName;
+        this.name = name;
+        this.duelsWon = duelsWon;
     }
 
     public Long getId() {
@@ -65,14 +73,24 @@ public class Cat {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Cat cat = (Cat) o;
-        return Objects.equals(id, cat.id) &&
-                Objects.equals(roleName, cat.roleName) &&
-                Objects.equals(name, cat.name) &&
-                Objects.equals(duelsWon, cat.duelsWon);
+        return Objects.equal(id, cat.id) &&
+                Objects.equal(roleName, cat.roleName) &&
+                Objects.equal(name, cat.name) &&
+                Objects.equal(duelsWon, cat.duelsWon);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, roleName, name, duelsWon);
+        return Objects.hashCode(id, roleName, name, duelsWon);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("id", id)
+                .add("roleName", roleName)
+                .add("name", name)
+                .add("duelsWon", duelsWon)
+                .toString();
     }
 }
