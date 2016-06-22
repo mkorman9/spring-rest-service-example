@@ -1,0 +1,42 @@
+package com.github.mkorman9.web.form;
+
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+public class CatForm {
+    @NotNull
+    @Size(min = 3)
+    private String roleName;
+
+    @NotNull
+    @Size(min = 3)
+    private String name;
+
+    @Min(0)
+    private Integer duelsWon;
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Integer getDuelsWon() {
+        return duelsWon;
+    }
+
+    public void setDuelsWon(Integer duelsWon) {
+        this.duelsWon = duelsWon;
+    }
+}
