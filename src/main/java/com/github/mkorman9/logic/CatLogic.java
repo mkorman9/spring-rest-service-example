@@ -25,4 +25,9 @@ public class CatLogic {
         Cat entity = new Cat(catForm.getRoleName(), catForm.getName(), catForm.getDuelsWon());
         catRepository.save(entity);
     }
+
+    @Transactional
+    public void removeCat(Long id) {
+        catRepository.delete(id);
+    }
 }

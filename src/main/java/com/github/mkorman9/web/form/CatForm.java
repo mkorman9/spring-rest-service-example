@@ -6,13 +6,14 @@ import javax.validation.constraints.Size;
 
 public class CatForm {
     @NotNull
-    @Size(min = 3)
+    @Size(min = 3, max = 50)
     private String roleName;
 
     @NotNull
-    @Size(min = 3)
+    @Size(min = 3, max = 50)
     private String name;
 
+    @NotNull
     @Min(0)
     private Integer duelsWon;
 
