@@ -27,8 +27,9 @@ public class CatLogic {
 
     @Transactional
     public void addNewCat(CatData catData) {
-        catRepository.save(catFactory.createEntity(catData));
-        LOGGER.info("Added new cat " + catData.toString());
+        Cat entity = catFactory.createEntity(catData);
+        catRepository.save(entity);
+        LOGGER.info("Added new cat " + entity.toString());
     }
 
     @Transactional
