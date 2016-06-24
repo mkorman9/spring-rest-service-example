@@ -20,7 +20,6 @@ public class CatLogic {
     @Autowired
     private CatFactory catFactory;
 
-    @Transactional(readOnly = true)
     public List<Cat> findAllCats() {
         return Lists.newArrayList(catRepository.findAll());
     }
@@ -42,6 +41,6 @@ public class CatLogic {
     public void updateCat(Long id, CatData catData) {
         Cat entity = catRepository.findOne(id);
         catFactory.editEntity(entity, catData);
-        LOGGER.info("Updating cat with id " + id + " to " + entity.toString());
+        LOGGER.info("Updated cat with id " + id + " with " + entity.toString());
     }
 }
