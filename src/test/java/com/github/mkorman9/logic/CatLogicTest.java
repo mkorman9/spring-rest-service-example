@@ -37,6 +37,6 @@ public class CatLogicTest {
     public void shouldListAllCats() throws Exception {
         List<Cat> catsFound = catLogic.findAllCats();
 
-        assertThat(catsFound).isSameAs(catsFound);
+        assertThat(catsFound).isEqualTo(CATS);
     }
 }
