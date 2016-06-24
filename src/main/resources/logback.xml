@@ -1,57 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
-    <appender name="com.github.mkorman9.test.debug" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${catalina.home}/logs/test_debug.log</file>
+    <appender name="com.github.mkorman9.test" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${catalina.home}/logs/spring_rest_service.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <Pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</Pattern>
+            <Pattern>[%p][%d{yyyy-MM-dd HH:mm:ss.SSS}][%c] %msg%n</Pattern>
         </encoder>
 
         <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <fileNamePattern>${catalina.home}/logs/test_debug.%i.log</fileNamePattern>
+            <fileNamePattern>${catalina.home}/logs/spring_rest_service.%i.log</fileNamePattern>
             <MinIndex>1</MinIndex>
-            <MaxIndex>10</MaxIndex>
+            <MaxIndex>20</MaxIndex>
         </rollingPolicy>
 
         <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <MaxFileSize>10MB</MaxFileSize>
+            <MaxFileSize>15MB</MaxFileSize>
         </triggeringPolicy>
 
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>DEBUG</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
         </filter>
     </appender>
 
-    <appender name="com.github.mkorman9.test.error" class="ch.qos.logback.core.rolling.RollingFileAppender">
-        <file>${catalina.home}/logs/test_error.log</file>
-        <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
-            <Pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</Pattern>
-        </encoder>
-
-        <rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
-            <fileNamePattern>${catalina.home}/logs/test_error.%i.log</fileNamePattern>
-            <MinIndex>1</MinIndex>
-            <MaxIndex>10</MaxIndex>
-        </rollingPolicy>
-
-        <triggeringPolicy class="ch.qos.logback.core.rolling.SizeBasedTriggeringPolicy">
-            <MaxFileSize>10MB</MaxFileSize>
-        </triggeringPolicy>
-
-        <filter class="ch.qos.logback.classic.filter.LevelFilter">
-            <level>ERROR</level>
-            <onMatch>ACCEPT</onMatch>
-            <onMismatch>DENY</onMismatch>
-        </filter>
-    </appender>
-
-    <logger name="org.springframework.web" level="ERROR" />
+    <logger name="org.springframework" level="ERROR" />
     <logger name="org.hibernate" level="ERROR" />
 
     <root level="ALL">
-        <appender-ref ref="com.github.mkorman9.test.debug" />
-        <appender-ref ref="com.github.mkorman9.test.error" />
+        <appender-ref ref="com.github.mkorman9.test" />
     </root>
 
 </configuration>
