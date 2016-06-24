@@ -2,7 +2,6 @@ package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatRepository;
 import com.github.mkorman9.model.Cat;
-import com.github.mkorman9.web.form.CatForm;
 import com.google.common.collect.Lists;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,6 +13,8 @@ import java.util.List;
 public class CatLogic {
     @Autowired
     private CatRepository catRepository;
+    @Autowired
+    private CatFactory catFactory;
 
     @Transactional(readOnly = true)
     public List<Cat> findAllCats() {
@@ -21,13 +22,18 @@ public class CatLogic {
     }
 
     @Transactional
-    public void addNewCat(CatForm catForm) {
-        Cat entity = new Cat(catForm.getRoleName(), catForm.getName(), catForm.getDuelsWon());
-        catRepository.save(entity);
+    public void addNewCat(CatData catData) {
+        catRepository.save(catFactory.createEntity(catData));
     }
 
     @Transactional
     public void removeCat(Long id) {
         catRepository.delete(id);
+    }
+
+    @Transactional
+    public void updateCat(Long id, CatData catData) {
+        Cat entity = catRepository.findOne(id);
+        catFactory.editEntity(entity, catData);
     }
 }

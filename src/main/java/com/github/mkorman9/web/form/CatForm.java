@@ -1,10 +1,12 @@
 package com.github.mkorman9.web.form;
 
+import com.github.mkorman9.logic.CatData;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class CatForm {
+public class CatForm implements CatData {
     @NotNull
     @Size(min = 3, max = 50)
     private String roleName;

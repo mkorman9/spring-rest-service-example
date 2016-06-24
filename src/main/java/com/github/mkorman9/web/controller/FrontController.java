@@ -5,10 +5,7 @@ import com.github.mkorman9.model.Cat;
 import com.github.mkorman9.web.form.CatForm;
 import com.github.mkorman9.web.form.ResponseForm;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,11 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/")
-public class FrontController {
+public class FrontController extends ControllersCommons {
     @Autowired
     private CatLogic catLogic;
 
@@ -46,16 +42,9 @@ public class FrontController {
         return new ResponseForm("ok");
     }
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity exceptionHandler() {
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ResponseForm("error"));
-    }
-
-    private ResponseForm handlerBindingError(BindingResult bindingResult) {
-        return new ResponseForm("error", bindingResult.getFieldErrors().stream()
-                        .map(error -> String.format("'%s' %s", error.getField(), error.getDefaultMessage()))
-                        .collect(Collectors.toList()));
+    @RequestMapping(value = "/edit/{id}", method = RequestMethod.PUT)
+    public ResponseForm editCat(@PathVariable("id") Long id, @RequestBody @Valid CatForm catForm) {
+        catLogic.updateCat(id, catForm);
+        return new ResponseForm("ok");
     }
 }
