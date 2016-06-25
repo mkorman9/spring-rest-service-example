@@ -21,9 +21,14 @@ public class FrontController extends ControllersCommons {
     @Autowired
     private CatLogic catLogic;
 
-    @RequestMapping(value = "/", method = RequestMethod.GET)
+    @RequestMapping(value = "/all", method = RequestMethod.GET)
     public List<Cat> findAllCats() {
         return catLogic.findAllCats();
+    }
+
+    @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
+    public Cat getSingleCat(@PathVariable("id") Long id) {
+        return catLogic.findSingleCat(id);
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)

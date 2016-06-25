@@ -24,6 +24,14 @@ public class CatLogic {
         return Lists.newArrayList(catRepository.findAll());
     }
 
+    public Cat findSingleCat(Long id) {
+        Cat entity = catRepository.findOne(id);
+        if (entity == null) {
+            throw new IllegalArgumentException("Entity with id " + id + " not found");
+        }
+        return entity;
+    }
+
     @Transactional
     public void addNewCat(CatData catData) {
         Cat entity = catFactory.createEntity(catData);
@@ -40,6 +48,10 @@ public class CatLogic {
     @Transactional
     public void updateCat(Long id, CatData catData) {
         Cat entity = catRepository.findOne(id);
+        if (entity == null) {
+            throw new IllegalArgumentException("Entity with id " + id + " not found");
+        }
+
         catFactory.editEntity(entity, catData);
         LOGGER.info("Updated cat with id " + id + " with " + entity.toString());
     }
