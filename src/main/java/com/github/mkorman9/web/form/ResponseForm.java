@@ -7,6 +7,7 @@ import java.util.List;
 public class ResponseForm {
     private String status;
     private List<String> errors;
+    private Object data;
 
     public ResponseForm(String status) {
         this(status, Lists.newArrayList());
@@ -15,6 +16,11 @@ public class ResponseForm {
     public ResponseForm(String status, List<String> errors) {
         this.status = status;
         this.errors = errors;
+    }
+
+    public ResponseForm(String status, Object data) {
+        this.status = status;
+        this.data = data;
     }
 
     public String getStatus() {
@@ -31,5 +37,13 @@ public class ResponseForm {
 
     public void setErrors(List<String> errors) {
         this.errors = errors;
+    }
+
+    public Object getData() {
+        return data;
+    }
+
+    public void setData(Object data) {
+        this.data = data;
     }
 }

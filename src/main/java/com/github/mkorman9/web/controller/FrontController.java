@@ -1,7 +1,6 @@
 package com.github.mkorman9.web.controller;
 
 import com.github.mkorman9.logic.CatLogic;
-import com.github.mkorman9.model.Cat;
 import com.github.mkorman9.web.form.CatForm;
 import com.github.mkorman9.web.form.ResponseForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/")
@@ -22,13 +20,13 @@ public class FrontController extends ControllersCommons {
     private CatLogic catLogic;
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
-    public List<Cat> findAllCats() {
-        return catLogic.findAllCats();
+    public ResponseForm findAllCats() {
+        return new ResponseForm("ok", catLogic.findAllCats());
     }
 
     @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
-    public Cat getSingleCat(@PathVariable("id") Long id) {
-        return catLogic.findSingleCat(id);
+    public ResponseForm getSingleCat(@PathVariable("id") Long id) {
+        return new ResponseForm("ok", catLogic.findSingleCat(id));
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
