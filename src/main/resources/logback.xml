@@ -3,6 +3,7 @@
     <appender name="com.github.mkorman9.test" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${catalina.home}/logs/spring_rest_service.log</file>
         <encoder class="ch.qos.logback.classic.encoder.PatternLayoutEncoder">
+            <charset>UTF-8</charset>
             <Pattern>[%p][%d{yyyy-MM-dd HH:mm:ss.SSS}][%c] %msg%n</Pattern>
         </encoder>
 
