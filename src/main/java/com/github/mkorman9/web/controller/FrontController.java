@@ -16,8 +16,12 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/")
 public class FrontController extends ControllersCommons {
-    @Autowired
     private CatLogic catLogic;
+
+    @Autowired
+    public FrontController(CatLogic catLogic) {
+        this.catLogic = catLogic;
+    }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public ResponseForm findAllCats() {

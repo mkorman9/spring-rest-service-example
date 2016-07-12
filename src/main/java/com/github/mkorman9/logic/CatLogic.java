@@ -15,10 +15,14 @@ import java.util.List;
 public class CatLogic {
     private static Logger LOGGER = LoggerFactory.getLogger(CatLogic.class);
 
-    @Autowired
     private CatRepository catRepository;
-    @Autowired
     private CatFactory catFactory;
+
+    @Autowired
+    public CatLogic(CatRepository catRepository, CatFactory catFactory) {
+        this.catRepository = catRepository;
+        this.catFactory = catFactory;
+    }
 
     public List<Cat> findAllCats() {
         return Lists.newArrayList(catRepository.findAll());
