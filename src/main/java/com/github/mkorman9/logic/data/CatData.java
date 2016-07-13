@@ -1,4 +1,4 @@
-package com.github.mkorman9.logic;
+package com.github.mkorman9.logic.data;
 
 public interface CatData {
     String getRoleName();
@@ -6,4 +6,6 @@ public interface CatData {
     String getName();
 
     Integer getDuelsWon();
+
+    CatsGroupData getGroup();
 }

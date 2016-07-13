@@ -5,13 +5,17 @@ import com.google.common.base.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "CAT")
+//@JsonIgnoreProperties({"group"})
 public class Cat {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,6 +30,10 @@ public class Cat {
 
     @Column(name = "DUELS_WON")
     private Integer duelsWon;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "GROUP_ID")
+    private CatsGroup group;
 
     public Cat() {
     }
@@ -66,6 +74,14 @@ public class Cat {
 
     public void setDuelsWon(Integer duelsWon) {
         this.duelsWon = duelsWon;
+    }
+
+    public CatsGroup getGroup() {
+        return group;
+    }
+
+    public void setGroup(CatsGroup group) {
+        this.group = group;
     }
 
     @Override

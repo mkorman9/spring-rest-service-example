@@ -1,6 +1,7 @@
 package com.github.mkorman9.web.controller;
 
 import com.github.mkorman9.logic.CatLogic;
+import com.github.mkorman9.logic.CatsGroupLogic;
 import com.github.mkorman9.web.form.CatForm;
 import com.github.mkorman9.web.form.ResponseForm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +18,12 @@ import javax.validation.Valid;
 @RequestMapping("/")
 public class FrontController extends ControllersCommons {
     private CatLogic catLogic;
+    private CatsGroupLogic catsGroupLogic;
 
     @Autowired
-    public FrontController(CatLogic catLogic) {
+    public FrontController(CatLogic catLogic, CatsGroupLogic catsGroupLogic) {
         this.catLogic = catLogic;
+        this.catsGroupLogic = catsGroupLogic;
     }
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
@@ -53,5 +56,10 @@ public class FrontController extends ControllersCommons {
     public ResponseForm editCat(@PathVariable("id") Long id, @RequestBody @Valid CatForm catForm) {
         catLogic.updateCat(id, catForm);
         return new ResponseForm("ok");
+    }
+
+    @RequestMapping(value = "/groups", method = RequestMethod.GET)
+    public ResponseForm findAllGroups() {
+        return new ResponseForm("ok", catsGroupLogic.findAll());
     }
 }

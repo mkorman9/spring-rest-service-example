@@ -1,6 +1,7 @@
 package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatRepository;
+import com.github.mkorman9.logic.data.CatData;
 import com.github.mkorman9.model.Cat;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;

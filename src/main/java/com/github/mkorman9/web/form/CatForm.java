@@ -1,7 +1,8 @@
 package com.github.mkorman9.web.form;
 
-import com.github.mkorman9.logic.CatData;
+import com.github.mkorman9.logic.data.CatData;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -18,6 +19,10 @@ public class CatForm implements CatData {
     @NotNull
     @Min(0)
     private Integer duelsWon;
+
+    @NotNull
+    @Valid
+    private CatsGroupForm group;
 
     public String getRoleName() {
         return roleName;
@@ -41,5 +46,13 @@ public class CatForm implements CatData {
 
     public void setDuelsWon(Integer duelsWon) {
         this.duelsWon = duelsWon;
+    }
+
+    public CatsGroupForm getGroup() {
+        return group;
+    }
+
+    public void setGroup(CatsGroupForm group) {
+        this.group = group;
     }
 }
