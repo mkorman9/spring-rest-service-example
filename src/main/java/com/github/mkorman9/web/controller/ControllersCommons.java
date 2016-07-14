@@ -22,12 +22,12 @@ class ControllersCommons {
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ResponseForm("error", Lists.newArrayList(exception.getMessage())));
+                .body(new ResponseForm("error", Lists.newArrayList(new ResponseForm.Error("", exception.getMessage()))));
     }
 
     protected ResponseForm handlerBindingError(BindingResult bindingResult) {
         return new ResponseForm("error", bindingResult.getFieldErrors().stream()
-                .map(error -> String.format("'%s' %s", error.getField(), error.getDefaultMessage()))
+                .map(error -> new ResponseForm.Error(error.getField(), error.getCode()))
                 .collect(Collectors.toList()));
     }
 }
