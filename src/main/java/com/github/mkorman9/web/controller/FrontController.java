@@ -53,7 +53,11 @@ public class FrontController extends ControllersCommons {
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.PUT)
-    public ResponseForm editCat(@PathVariable("id") Long id, @RequestBody @Valid CatForm catForm) {
+    public ResponseForm editCat(@PathVariable("id") Long id, @RequestBody @Valid CatForm catForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return handlerBindingError(bindingResult);
+        }
+
         catLogic.updateCat(id, catForm);
         return new ResponseForm("ok");
     }
