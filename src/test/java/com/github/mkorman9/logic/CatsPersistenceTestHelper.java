@@ -30,6 +30,7 @@ public abstract class CatsPersistenceTestHelper {
         catRepository = mock(CatRepository.class);
 
         when(catsGroupRepository.findAll()).thenReturn(persistedGroups);
+        when(catsGroupRepository.findOne(any(Long.class))).thenAnswer(findOneGroup());
         when(catRepository.findAll()).thenReturn(persistedCats);
         when(catRepository.save(any(Cat.class))).thenAnswer(addCat());
         when(catRepository.findOne(any(Long.class))).thenAnswer(findOneCat());
@@ -38,6 +39,14 @@ public abstract class CatsPersistenceTestHelper {
 
     protected abstract List<CatsGroup> createTestGroups();
     protected abstract List<Cat> createTestCats();
+
+    private Answer<CatsGroup> findOneGroup() {
+        return invocationOnMock -> {
+            Long id = (Long) invocationOnMock.getArguments()[0];
+            Optional<CatsGroup> group = persistedGroups.stream().filter(g -> Objects.equals(g.getId(), id)).findFirst();
+            return group.isPresent() ? group.get() : null;
+        };
+    }
 
     private Answer<Void> addCat() {
         return invocationOnMock -> {

@@ -7,7 +7,9 @@ import com.github.mkorman9.model.CatsGroup;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 
 import java.util.List;
 
@@ -21,6 +23,9 @@ public class CatLogicTest extends CatsPersistenceTestHelper {
 
     private CatsGroup group1, group2;
     private Cat cat1, cat2, cat3;
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 
     @Before
     public void setUp() throws Exception {
@@ -45,6 +50,18 @@ public class CatLogicTest extends CatsPersistenceTestHelper {
 
         assertThat(Sets.newHashSet(catsFoundBefore)).isEqualTo(Sets.newHashSet(cat1, cat2, cat3));
         assertThat(Sets.newHashSet(catsFoundAfter)).isEqualTo(Sets.newHashSet(cat2Updated, cat3, catToAdd));
+    }
+
+    @Test
+    public void shouldThrowWhenCatNotFound() throws Exception {
+        expectedException.expect(IllegalArgumentException.class);
+        catLogic.findSingleCat(1000L);
+    }
+
+    @Test
+    public void shouldThrowWhenUpdatingUnavailableCat() throws Exception {
+        expectedException.expect(IllegalArgumentException.class);
+        catLogic.updateCat(1000L, mock(CatData.class));
     }
 
     private CatData createNewCatData() {
