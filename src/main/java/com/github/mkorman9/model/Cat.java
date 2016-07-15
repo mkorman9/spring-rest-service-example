@@ -2,6 +2,8 @@ package com.github.mkorman9.model;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,11 +14,13 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 @Entity
 @Table(name = "CAT")
 //@JsonIgnoreProperties({"group"})
-public class Cat {
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "cats")
+public class Cat implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "ID", unique = true, nullable = false)
