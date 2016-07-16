@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
 @Configuration
@@ -35,8 +34,7 @@ public class JpaConfiguration {
         properties.setProperty("h4m.adapter.spymemcached.hosts", cacheServerAddress);
 
         try {
-            InputStream resourceAsStream = getClass().getResourceAsStream("/META-INF/hibernate.properties");
-            properties.load(resourceAsStream);
+            properties.load(getClass().getResourceAsStream("/META-INF/hibernate.properties"));
         } catch (IOException e) {
             throw new RuntimeException("Cannot load Hibernate properties file", e);
         }
