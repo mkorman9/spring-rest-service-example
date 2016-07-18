@@ -1,7 +1,6 @@
 package com.github.mkorman9.web.controller;
 
 import com.github.mkorman9.web.form.ResponseForm;
-import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -22,10 +21,10 @@ class ControllersCommons {
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ResponseForm("error", Lists.newArrayList(new ResponseForm.Error("", exception.getMessage()))));
+                .body(new ResponseForm("error", new ResponseForm.Error(exception.getMessage())));
     }
 
-    protected ResponseForm handlerBindingError(BindingResult bindingResult) {
+    protected ResponseForm handleBindingError(BindingResult bindingResult) {
         return new ResponseForm("error", bindingResult.getFieldErrors().stream()
                 .map(error -> new ResponseForm.Error(error.getField(), error.getCode()))
                 .collect(Collectors.toList()));

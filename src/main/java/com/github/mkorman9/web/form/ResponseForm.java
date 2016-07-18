@@ -1,9 +1,11 @@
 package com.github.mkorman9.web.form;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.Lists;
 
 import java.util.List;
 
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ResponseForm {
     private String status;
     private List<Error> errors;
@@ -16,6 +18,10 @@ public class ResponseForm {
     public ResponseForm(String status, List<Error> errors) {
         this.status = status;
         this.errors = errors;
+    }
+
+    public ResponseForm(String status, Error error) {
+        this(status, Lists.newArrayList(error));
     }
 
     public ResponseForm(String status, Object data) {
@@ -47,9 +53,14 @@ public class ResponseForm {
         this.data = data;
     }
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     public static class Error {
         private String field;
         private String message;
+
+        public Error(String message) {
+            this(null, message);
+        }
 
         public Error(String field, String message) {
             this.field = field;

@@ -39,7 +39,7 @@ public class FrontController extends ControllersCommons {
     @RequestMapping(value = "/add", method = RequestMethod.POST)
     public ResponseForm addNewCat(@RequestBody @Valid CatForm catForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return handlerBindingError(bindingResult);
+            return handleBindingError(bindingResult);
         }
 
         catLogic.addNewCat(catForm);
@@ -55,7 +55,7 @@ public class FrontController extends ControllersCommons {
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.PUT)
     public ResponseForm editCat(@PathVariable("id") Long id, @RequestBody @Valid CatForm catForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return handlerBindingError(bindingResult);
+            return handleBindingError(bindingResult);
         }
 
         catLogic.updateCat(id, catForm);
