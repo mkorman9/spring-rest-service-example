@@ -4,14 +4,13 @@ import com.github.mkorman9.logic.data.CatData;
 import com.github.mkorman9.logic.data.CatsGroupData;
 import com.github.mkorman9.model.Cat;
 import com.github.mkorman9.model.CatsGroup;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -42,14 +41,14 @@ public class CatLogicTest extends CatsPersistenceTestHelper {
         Cat cat2Updated = catFactory.createEntity(catUpdatedData);
         cat2Updated.setId(2L);
 
-        List<Cat> catsFoundBefore = catLogic.findAllCats();
+        Set<Cat> catsFoundBefore = catLogic.findAllCats();
         catLogic.addNewCat(catToAddData);
         catLogic.removeCat(1L);
         catLogic.updateCat(2L, catUpdatedData);
-        List<Cat> catsFoundAfter = catLogic.findAllCats();
+        Set<Cat> catsFoundAfter = catLogic.findAllCats();
 
-        assertThat(Sets.newHashSet(catsFoundBefore)).isEqualTo(Sets.newHashSet(cat1, cat2, cat3));
-        assertThat(Sets.newHashSet(catsFoundAfter)).isEqualTo(Sets.newHashSet(cat2Updated, cat3, catToAdd));
+        assertThat(catsFoundBefore).containsOnly(cat1, cat2, cat3);
+        assertThat(catsFoundAfter).containsOnly(cat2Updated, cat3, catToAdd);
     }
 
     @Test
@@ -91,7 +90,7 @@ public class CatLogicTest extends CatsPersistenceTestHelper {
     }
 
     @Override
-    protected List<CatsGroup> createTestGroups() {
+    protected Set<CatsGroup> createTestGroups() {
         group1 = new CatsGroup();
         group1.setId(1L);
         group1.setName("Pirates");
@@ -100,11 +99,11 @@ public class CatLogicTest extends CatsPersistenceTestHelper {
         group2.setId(2L);
         group2.setName("Bandits");
 
-        return Lists.newArrayList(group1, group2);
+        return Sets.newHashSet(group1, group2);
     }
 
     @Override
-    protected List<Cat> createTestCats() {
+    protected Set<Cat> createTestCats() {
         cat1 = new Cat();
         cat1.setId(1L);
         cat1.setRoleName("Pirate");
@@ -126,6 +125,6 @@ public class CatLogicTest extends CatsPersistenceTestHelper {
         cat3.setDuelsWon(7);
         cat3.setGroup(group2);
 
-        return Lists.newArrayList(cat1, cat2, cat3);
+        return Sets.newHashSet(cat1, cat2, cat3);
     }
 }

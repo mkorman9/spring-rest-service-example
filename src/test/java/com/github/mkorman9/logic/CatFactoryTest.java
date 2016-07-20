@@ -4,11 +4,11 @@ import com.github.mkorman9.logic.data.CatData;
 import com.github.mkorman9.logic.data.CatsGroupData;
 import com.github.mkorman9.model.Cat;
 import com.github.mkorman9.model.CatsGroup;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Mockito.mock;
@@ -43,16 +43,16 @@ public class CatFactoryTest extends CatsPersistenceTestHelper {
     }
 
     @Override
-    protected List<CatsGroup> createTestGroups() {
+    protected Set<CatsGroup> createTestGroups() {
         CatsGroup group1 = new CatsGroup();
         group1.setId(1L);
         group1.setName("Pirates");
 
-        return Lists.newArrayList(group1);
+        return Sets.newHashSet(group1);
     }
 
     @Override
-    protected List<Cat> createTestCats() {
-        return Lists.newArrayList();
+    protected Set<Cat> createTestCats() {
+        return Sets.newHashSet();
     }
 }

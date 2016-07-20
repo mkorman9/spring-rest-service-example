@@ -2,11 +2,11 @@ package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatsGroupRepository;
 import com.github.mkorman9.model.CatsGroup;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Set;
 
 @Service
 public class CatsGroupLogic {
@@ -17,7 +17,7 @@ public class CatsGroupLogic {
         this.catsGroupRepository = catsGroupRepository;
     }
 
-    public List<CatsGroup> findAll() {
-        return Lists.newArrayList(catsGroupRepository.findAll());
+    public Set<CatsGroup> findAll() {
+        return Sets.newHashSet(catsGroupRepository.findAll());
     }
 }

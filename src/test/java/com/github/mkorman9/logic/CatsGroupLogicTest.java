@@ -2,12 +2,11 @@ package com.github.mkorman9.logic;
 
 import com.github.mkorman9.model.Cat;
 import com.github.mkorman9.model.CatsGroup;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.List;
+import java.util.Set;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -24,13 +23,13 @@ public class CatsGroupLogicTest extends CatsPersistenceTestHelper {
 
     @Test
     public void allGroupsShouldBeFound() throws Exception {
-        List<CatsGroup> allGroups = catsGroupLogic.findAll();
+        Set<CatsGroup> allGroups = catsGroupLogic.findAll();
 
-        assertThat(Sets.newHashSet(allGroups)).isEqualTo(Sets.newHashSet(group1, group2));
+        assertThat(allGroups).containsOnly(group1, group2);
     }
 
     @Override
-    protected List<CatsGroup> createTestGroups() {
+    protected Set<CatsGroup> createTestGroups() {
         group1 = new CatsGroup();
         group1.setId(1L);
         group1.setName("Bandits");
@@ -39,11 +38,11 @@ public class CatsGroupLogicTest extends CatsPersistenceTestHelper {
         group2.setId(2L);
         group2.setName("Pirates");
 
-        return Lists.newArrayList(group1, group2);
+        return Sets.newHashSet(group1, group2);
     }
 
     @Override
-    protected List<Cat> createTestCats() {
-        return Lists.newArrayList();
+    protected Set<Cat> createTestCats() {
+        return Sets.newHashSet();
     }
 }

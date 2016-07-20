@@ -6,9 +6,9 @@ import com.github.mkorman9.model.Cat;
 import com.github.mkorman9.model.CatsGroup;
 import org.mockito.stubbing.Answer;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.doAnswer;
@@ -19,8 +19,8 @@ public abstract class CatsPersistenceTestHelper {
     protected CatsGroupRepository catsGroupRepository;
     protected CatRepository catRepository;
 
-    private List<CatsGroup> persistedGroups;
-    private List<Cat> persistedCats;
+    private Set<CatsGroup> persistedGroups;
+    private Set<Cat> persistedCats;
 
     protected void setUp() throws Exception {
         persistedGroups = createTestGroups();
@@ -37,8 +37,8 @@ public abstract class CatsPersistenceTestHelper {
         doAnswer(deleteCat()).when(catRepository).delete(any(Long.class));
     }
 
-    protected abstract List<CatsGroup> createTestGroups();
-    protected abstract List<Cat> createTestCats();
+    protected abstract Set<CatsGroup> createTestGroups();
+    protected abstract Set<Cat> createTestCats();
 
     private Answer<CatsGroup> findOneGroup() {
         return invocationOnMock -> {
