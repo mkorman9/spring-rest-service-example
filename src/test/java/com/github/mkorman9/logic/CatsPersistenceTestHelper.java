@@ -7,7 +7,6 @@ import com.github.mkorman9.model.CatsGroup;
 import org.mockito.stubbing.Answer;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.Set;
 
 import static org.mockito.Matchers.any;
@@ -43,8 +42,10 @@ public abstract class CatsPersistenceTestHelper {
     private Answer<CatsGroup> findOneGroup() {
         return invocationOnMock -> {
             Long id = (Long) invocationOnMock.getArguments()[0];
-            Optional<CatsGroup> group = persistedGroups.stream().filter(g -> Objects.equals(g.getId(), id)).findFirst();
-            return group.isPresent() ? group.get() : null;
+            return persistedGroups.stream()
+                    .filter(g -> Objects.equals(g.getId(), id))
+                    .findFirst()
+                    .orElse(null);
         };
     }
 
@@ -59,16 +60,20 @@ public abstract class CatsPersistenceTestHelper {
     private Answer<Cat> findOneCat() {
         return invocationOnMock -> {
             Long id = (Long) invocationOnMock.getArguments()[0];
-            Optional<Cat> cat = persistedCats.stream().filter(c -> Objects.equals(c.getId(), id)).findFirst();
-            return cat.isPresent() ? cat.get() : null;
+            return persistedCats.stream()
+                    .filter(c -> Objects.equals(c.getId(), id))
+                    .findFirst()
+                    .orElse(null);
         };
     }
 
     private Answer deleteCat() {
         return invocationOnMock -> {
             Long id = (Long) invocationOnMock.getArguments()[0];
-            Optional<Cat> cat = persistedCats.stream().filter(c -> Objects.equals(c.getId(), id)).findFirst();
-            if (cat.isPresent()) persistedCats.remove(cat.get());
+            persistedCats.stream()
+                    .filter(cat -> Objects.equals(cat.getId(), id))
+                    .findFirst()
+                    .ifPresent(cat -> persistedCats.remove(cat));
             return null;
         };
     }
