@@ -3,7 +3,7 @@ package com.github.mkorman9.logic;
 import com.github.mkorman9.dao.CatRepository;
 import com.github.mkorman9.logic.data.CatData;
 import com.github.mkorman9.model.Cat;
-import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +22,7 @@ public class CatLogic {
     }
 
     public Set<Cat> findAllCats() {
-        return Sets.newHashSet(catRepository.findAll());
+        return ImmutableSet.copyOf(catRepository.findAll());
     }
 
     public Cat findSingleCat(Long id) {

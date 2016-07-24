@@ -2,7 +2,7 @@ package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatsGroupRepository;
 import com.github.mkorman9.model.CatsGroup;
-import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +18,6 @@ public class CatsGroupLogic {
     }
 
     public Set<CatsGroup> findAll() {
-        return Sets.newHashSet(catsGroupRepository.findAll());
+        return ImmutableSet.copyOf(catsGroupRepository.findAll());
     }
 }
