@@ -1,9 +1,9 @@
 package com.github.mkorman9;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
-import org.springframework.jndi.JndiObjectFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -18,20 +18,13 @@ import java.util.Properties;
 @EnableTransactionManagement
 @EnableJpaRepositories
 public class JpaConfiguration {
-    @Bean
-    public JndiObjectFactoryBean cacheServerAddress() {
-        JndiObjectFactoryBean jndiObjectFactoryBean = new JndiObjectFactoryBean();
-        jndiObjectFactoryBean.setJndiName("java:comp/env/cacheServerAddress");
-        jndiObjectFactoryBean.setLookupOnStartup(true);
-        jndiObjectFactoryBean.setCache(true);
-        jndiObjectFactoryBean.setExpectedType(String.class);
-        return jndiObjectFactoryBean;
-    }
+    @Value("${cache.address}")
+    private String cacheAddress;
 
     @Bean
-    public Properties hibernateProperties(String cacheServerAddress) {
+    public Properties hibernateProperties() {
         Properties properties = new Properties();
-        properties.setProperty("h4m.adapter.spymemcached.hosts", cacheServerAddress);
+        properties.setProperty("h4m.adapter.spymemcached.hosts", cacheAddress);
 
         try {
             properties.load(getClass().getResourceAsStream("/META-INF/hibernate.properties"));
