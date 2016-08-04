@@ -21,10 +21,12 @@ public class CatLogic {
         this.catFactory = catFactory;
     }
 
+    @Transactional(readOnly = true)
     public Set<Cat> findAllCats() {
         return ImmutableSet.copyOf(catRepository.findAll());
     }
 
+    @Transactional(readOnly = true)
     public Cat findSingleCat(Long id) {
         Cat entity = catRepository.findOne(id);
         if (entity == null) {
