@@ -17,7 +17,8 @@ public class ApplicationCacheConfiguration {
     public CacheManager cacheManager() {
         GuavaCacheManager guavaCacheManager = new GuavaCacheManager();
         guavaCacheManager.setCacheBuilder(CacheBuilder.newBuilder()
-                .expireAfterWrite(10, TimeUnit.SECONDS));
+                .expireAfterWrite(10, TimeUnit.SECONDS)
+                .maximumSize(1000));
         guavaCacheManager.setCacheNames(ImmutableSet.of("someCacheRegion"));
         return guavaCacheManager;
     }
