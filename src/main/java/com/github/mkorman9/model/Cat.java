@@ -35,7 +35,7 @@ public class Cat implements Serializable {
     @Column(name = "DUELS_WON")
     private Integer duelsWon;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne
     @JoinColumn(name = "GROUP_ID")
     private CatsGroup group;
 
