@@ -45,13 +45,12 @@ public class CatsGroup {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CatsGroup catsGroup = (CatsGroup) o;
-        return Objects.equal(id, catsGroup.id) &&
-                Objects.equal(name, catsGroup.name);
+        return Objects.equal(name, catsGroup.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, name);
+        return Objects.hashCode(name);
     }
 
     @Override
