@@ -92,15 +92,12 @@ public class Cat implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Cat cat = (Cat) o;
-        return Objects.equal(id, cat.id) &&
-                Objects.equal(roleName, cat.roleName) &&
-                Objects.equal(name, cat.name) &&
-                Objects.equal(duelsWon, cat.duelsWon);
+        return Objects.equal(name, cat.name);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(id, roleName, name, duelsWon);
+        return Objects.hashCode(name);
     }
 
     @Override
