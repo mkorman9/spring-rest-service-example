@@ -25,13 +25,8 @@ public class CatFactoryTest extends CatsPersistenceTestHelper {
 
     @Test
     public void shouldCreateEntityFromData() throws Exception {
-        CatsGroupData catsGroupData = mock(CatsGroupData.class);
-        when(catsGroupData.getId()).thenReturn(1L);
-        CatData catData = mock(CatData.class);
-        when(catData.getRoleName()).thenReturn("Pirate");
-        when(catData.getName()).thenReturn("Barnaba");
-        when(catData.getGroup()).thenReturn(catsGroupData);
-        when(catData.getDuelsWon()).thenReturn(12);
+        CatsGroupData catsGroupData = prepareCatsGroupDataMock(1L);
+        CatData catData = prepareCatDataMock("Pirate", "Barnaba", catsGroupData, 12);
 
         Cat cat = catFactory.createEntity(catData);
 
@@ -54,5 +49,19 @@ public class CatFactoryTest extends CatsPersistenceTestHelper {
     @Override
     protected Set<Cat> createTestCats() {
         return Sets.newHashSet();
+    }
+
+    private CatsGroupData prepareCatsGroupDataMock(Long id) {
+        CatsGroupData catsGroupData = mock(CatsGroupData.class);
+        when(catsGroupData.getId()).thenReturn(id);
+        return catsGroupData;
+    }
+    private CatData prepareCatDataMock(String roleName, String name, CatsGroupData group, int duelsWon) {
+        CatData catData = mock(CatData.class);
+        when(catData.getRoleName()).thenReturn(roleName);
+        when(catData.getName()).thenReturn(name);
+        when(catData.getGroup()).thenReturn(group);
+        when(catData.getDuelsWon()).thenReturn(duelsWon);
+        return catData;
     }
 }
