@@ -36,22 +36,28 @@ public class CatLogicTest extends CatsPersistenceTestHelper {
 
     @Test
     public void shouldPersistNewCat() throws Exception {
+        // given
         CatData catToAdd = createCatDataMock(1L, "Pirate", "Barnaba", 13);
 
+        // when
         catLogic.addNewCat(catToAdd);
         Set<Cat> allCats = catLogic.findAllCats();
 
+        // then
         assertThat(allCats.size()).isEqualTo(4);
         assertThat(allCats).contains(testCats.toArray());
     }
 
     @Test
     public void shouldEditExistingCat() throws Exception {
+        // given
         CatData catDataToUpdate = createCatDataMock(1L, "Pirate", "Barnaba", 13);
 
+        // when
         catLogic.updateCat(1L, catDataToUpdate);
         Set<Cat> allCats = catLogic.findAllCats();
 
+        // then
         assertThat(allCats.size()).isEqualTo(3);
         assertThat(allCats).contains(testCats.toArray());
         assertThat(allCats.stream()
@@ -65,9 +71,11 @@ public class CatLogicTest extends CatsPersistenceTestHelper {
 
     @Test
     public void shouldDeleteExistingCat() throws Exception {
+        // when
         catLogic.removeCat(1L);
         Set<Cat> allCats = catLogic.findAllCats();
 
+        // then
         assertThat(allCats.size()).isEqualTo(2);
         assertThat(allCats.stream()
                 .filter(cat -> cat.getName().equals("Jack") &&
@@ -80,13 +88,19 @@ public class CatLogicTest extends CatsPersistenceTestHelper {
 
     @Test
     public void shouldThrowWhenCatNotFound() throws Exception {
+        // given
         expectedException.expect(IllegalArgumentException.class);
+
+        // then
         catLogic.findSingleCat(1000L);
     }
 
     @Test
     public void shouldThrowWhenUpdatingUnavailableCat() throws Exception {
+        // given
         expectedException.expect(IllegalArgumentException.class);
+
+        // then
         catLogic.updateCat(1000L, mock(CatData.class));
     }
 

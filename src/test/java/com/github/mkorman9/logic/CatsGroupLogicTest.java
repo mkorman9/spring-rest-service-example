@@ -25,8 +25,10 @@ public class CatsGroupLogicTest extends CatsPersistenceTestHelper {
 
     @Test
     public void allGroupsShouldBeFound() throws Exception {
+        // given
         Set<CatsGroup> allGroups = catsGroupLogic.findAll();
 
+        // then
         assertThat(allGroups).containsOnly(testGroups.toArray());
     }
 

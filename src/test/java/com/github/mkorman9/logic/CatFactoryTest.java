@@ -26,13 +26,16 @@ public class CatFactoryTest extends CatsPersistenceTestHelper {
 
     @Test
     public void shouldCreateEntityFromData() throws Exception {
+        // given
         String roleName = "Pirate";
         String name = "Barnaba";
         int duelsWon = 12;
         CatData catData = createCatDataMock(groupId, roleName, name, duelsWon);
 
+        // when
         Cat cat = catFactory.createEntity(catData);
 
+        // then
         assertThat(cat.getRoleName()).isEqualTo(roleName);
         assertThat(cat.getName()).isEqualTo(name);
         assertThat(cat.getDuelsWon()).isEqualTo(duelsWon);
