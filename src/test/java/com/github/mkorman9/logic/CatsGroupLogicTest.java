@@ -1,5 +1,6 @@
 package com.github.mkorman9.logic;
 
+import com.github.mkorman9.logic.testhelper.CatsPersistenceTestHelper;
 import com.github.mkorman9.model.Cat;
 import com.github.mkorman9.model.CatsGroup;
 import com.google.common.collect.Sets;
@@ -13,36 +14,29 @@ import static org.fest.assertions.Assertions.assertThat;
 public class CatsGroupLogicTest extends CatsPersistenceTestHelper {
     private CatsGroupLogic catsGroupLogic;
 
-    private CatsGroup group1, group2;
+    private Set<CatsGroup> testGroups;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp();
+        testGroups = createTestGroups();
+        super.setUp(testGroups, createTestCats());
         catsGroupLogic = new CatsGroupLogic(catsGroupRepository);
     }
 
     @Test
     public void allGroupsShouldBeFound() throws Exception {
+        // given
         Set<CatsGroup> allGroups = catsGroupLogic.findAll();
 
-        assertThat(allGroups).containsOnly(group1, group2);
+        // then
+        assertThat(allGroups).containsOnly(testGroups.toArray());
     }
 
-    @Override
-    protected Set<CatsGroup> createTestGroups() {
-        group1 = new CatsGroup();
-        group1.setId(1L);
-        group1.setName("Bandits");
-
-        group2 = new CatsGroup();
-        group2.setId(2L);
-        group2.setName("Pirates");
-
-        return Sets.newHashSet(group1, group2);
+    private Set<CatsGroup> createTestGroups() {
+        return Sets.newHashSet(createCatsGroup(1L, "Bandits"), createCatsGroup(2L, "Pirates"));
     }
 
-    @Override
-    protected Set<Cat> createTestCats() {
+    private Set<Cat> createTestCats() {
         return Sets.newHashSet();
     }
 }
