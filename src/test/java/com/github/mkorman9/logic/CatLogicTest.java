@@ -41,11 +41,17 @@ public class CatLogicTest extends CatsPersistenceTestHelper {
 
         // when
         catLogic.addNewCat(catToAdd);
-        Set<Cat> allCats = catLogic.findAllCats();
+        Set<CatData> allCats = catLogic.findAllCats();
 
         // then
         assertThat(allCats.size()).isEqualTo(4);
-        assertThat(allCats).contains(testCats.toArray());
+        assertThat(allCats.stream()
+                .filter(cat -> cat.getRoleName().equals("Pirate") &&
+                        cat.getName().equals("Barnaba") &&
+                        cat.getDuelsWon() == 13
+                        )
+                .count())
+                .isEqualTo(1);
     }
 
     @Test
@@ -55,11 +61,10 @@ public class CatLogicTest extends CatsPersistenceTestHelper {
 
         // when
         catLogic.updateCat(1L, catDataToUpdate);
-        Set<Cat> allCats = catLogic.findAllCats();
+        Set<CatData> allCats = catLogic.findAllCats();
 
         // then
         assertThat(allCats.size()).isEqualTo(3);
-        assertThat(allCats).contains(testCats.toArray());
         assertThat(allCats.stream()
                 .filter(cat -> cat.getName().equals("Barnaba") &&
                         cat.getRoleName().equals("Pirate") &&
@@ -73,7 +78,7 @@ public class CatLogicTest extends CatsPersistenceTestHelper {
     public void shouldDeleteExistingCat() throws Exception {
         // when
         catLogic.removeCat(1L);
-        Set<Cat> allCats = catLogic.findAllCats();
+        Set<CatData> allCats = catLogic.findAllCats();
 
         // then
         assertThat(allCats.size()).isEqualTo(2);

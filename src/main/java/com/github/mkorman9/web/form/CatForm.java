@@ -8,6 +8,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 public class CatForm implements CatData {
+    private Long id;
+
     @NotNull
     @Size(min = 3, max = 50)
     private String roleName;
@@ -23,6 +25,14 @@ public class CatForm implements CatData {
     @NotNull
     @Valid
     private CatsGroupForm group;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getRoleName() {
         return roleName;
