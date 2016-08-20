@@ -4,11 +4,11 @@ import com.github.mkorman9.logic.data.CatData;
 import com.github.mkorman9.logic.testhelper.CatsPersistenceTestHelper;
 import com.github.mkorman9.model.Cat;
 import com.github.mkorman9.model.CatsGroup;
-import com.google.common.collect.Sets;
+import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.Set;
+import java.util.List;
 
 import static org.fest.assertions.Assertions.assertThat;
 
@@ -16,11 +16,14 @@ public class CatFactoryTest extends CatsPersistenceTestHelper {
     private final long groupId = 1L;
     private final String groupName = "Pirates";
 
+    private List<CatsGroup> testGroups;
+
     private CatFactory catFactory;
 
     @Before
     public void setUp() throws Exception {
-        super.setUp(createTestGroups(), createTestCats());
+        testGroups = createTestGroups();
+        super.setUp(testGroups, createTestCats());
         catFactory = new CatFactory(catsGroupRepository);
     }
 
@@ -43,11 +46,30 @@ public class CatFactoryTest extends CatsPersistenceTestHelper {
         assertThat(cat.getGroup().getName()).isEqualTo(groupName);
     }
 
-    private Set<CatsGroup> createTestGroups() {
-        return Sets.newHashSet(createCatsGroup(groupId, groupName));
+    @Test
+    public void shouldCreateDataFromEntity() throws Exception {
+        // given
+        String roleName = "Pirate";
+        String name = "Barnaba";
+        int duelsWon = 12;
+        Cat entity = createCat(1L, roleName, name, duelsWon, testGroups.get(0));
+
+        // when
+        CatData data = catFactory.createData(entity);
+
+        // then
+        assertThat(data.getRoleName()).isEqualTo(roleName);
+        assertThat(data.getName()).isEqualTo(name);
+        assertThat(data.getDuelsWon()).isEqualTo(duelsWon);
+        assertThat(data.getGroup().getId()).isEqualTo(groupId);
+        assertThat(data.getGroup().getName()).isEqualTo(groupName);
     }
 
-    private Set<Cat> createTestCats() {
-        return Sets.newHashSet();
+    private List<CatsGroup> createTestGroups() {
+        return Lists.newArrayList(createCatsGroup(groupId, groupName));
+    }
+
+    private List<Cat> createTestCats() {
+        return Lists.newArrayList();
     }
 }
