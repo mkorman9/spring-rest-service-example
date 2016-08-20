@@ -19,7 +19,6 @@ import static org.mockito.Mockito.mock;
 public class CatLogicTest extends CatsPersistenceTestHelper {
     private CatLogic catLogic;
 
-    private List<Cat> testCats;
     private List<CatsGroup> testGroups;
 
     @Rule
@@ -28,8 +27,7 @@ public class CatLogicTest extends CatsPersistenceTestHelper {
     @Before
     public void setUp() throws Exception {
         testGroups = createTestGroups();
-        testCats = createTestCats();
-        super.setUp(testGroups, testCats);
+        super.setUp(testGroups, createTestCats());
 
         catLogic = new CatLogic(catRepository, new CatFactory(catsGroupRepository));
     }
