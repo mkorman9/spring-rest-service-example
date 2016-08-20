@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CatLogic {
@@ -22,17 +23,20 @@ public class CatLogic {
     }
 
     @Transactional(readOnly = true)
-    public Set<Cat> findAllCats() {
-        return ImmutableSet.copyOf(catRepository.findAll());
+    public Set<CatData> findAllCats() {
+        return ImmutableSet.copyOf(catRepository.findAll())
+                .stream()
+                .map(cat -> catFactory.createData(cat))
+                .collect(Collectors.toSet());
     }
 
     @Transactional(readOnly = true)
-    public Cat findSingleCat(Long id) {
+    public CatData findSingleCat(Long id) {
         Cat entity = catRepository.findOne(id);
         if (entity == null) {
             throw new IllegalArgumentException("Entity with id " + id + " not found");
         }
-        return entity;
+        return catFactory.createData(entity);
     }
 
     @Transactional

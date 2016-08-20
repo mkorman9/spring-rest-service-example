@@ -2,7 +2,9 @@ package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatsGroupRepository;
 import com.github.mkorman9.logic.data.CatData;
+import com.github.mkorman9.logic.data.CatDataOutput;
 import com.github.mkorman9.logic.data.CatsGroupData;
+import com.github.mkorman9.logic.data.CatsGroupDataOutput;
 import com.github.mkorman9.model.Cat;
 import com.github.mkorman9.model.CatsGroup;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +29,22 @@ public class CatFactory {
         entity.setRoleName(catData.getRoleName());
         entity.setName(catData.getName());
         entity.setDuelsWon(catData.getDuelsWon());
-        entity.setGroup(convertGroup(catData.getGroup()));
+        entity.setGroup(convertDataGroupToEntity(catData.getGroup()));
     }
 
-    private CatsGroup convertGroup(CatsGroupData group) {
+    public CatData createData(Cat entity) {
+        return new CatDataOutput(entity.getId(),
+                entity.getRoleName(),
+                entity.getName(),
+                entity.getDuelsWon(),
+                convertEntityGroupToData(entity.getGroup()));
+    }
+
+    public CatsGroupData convertEntityGroupToData(CatsGroup group) {
+        return new CatsGroupDataOutput(group.getId(), group.getName());
+    }
+
+    private CatsGroup convertDataGroupToEntity(CatsGroupData group) {
         return catsGroupRepository.findOne(group.getId());
     }
 }
