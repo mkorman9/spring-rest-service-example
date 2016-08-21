@@ -37,10 +37,9 @@ public class JpaConfiguration {
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource source, Properties hibernateProperties) throws IOException {
-        HibernateJpaVendorAdapter jpaVendorAdapter  = new HibernateJpaVendorAdapter();
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(source);
-        factoryBean.setJpaVendorAdapter(jpaVendorAdapter);
+        factoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         factoryBean.setPackagesToScan("com.github.mkorman9.model");
         factoryBean.setJpaProperties(hibernateProperties);
         return factoryBean;
