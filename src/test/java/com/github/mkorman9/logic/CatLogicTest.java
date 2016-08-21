@@ -46,8 +46,7 @@ public class CatLogicTest extends CatsPersistenceTestHelper {
         assertThat(allCats.stream()
                 .filter(cat -> cat.getRoleName().equals("Pirate") &&
                         cat.getName().equals("Barnaba") &&
-                        cat.getDuelsWon() == 13
-                        )
+                        cat.getDuelsWon() == 13)
                 .count())
                 .isEqualTo(1);
     }
@@ -66,8 +65,8 @@ public class CatLogicTest extends CatsPersistenceTestHelper {
         assertThat(allCats.stream()
                 .filter(cat -> cat.getName().equals("Barnaba") &&
                         cat.getRoleName().equals("Pirate") &&
-                        cat.getDuelsWon().equals(13) &&
-                        cat.getGroup().getId().equals(1L))
+                        cat.getDuelsWon() == 13 &&
+                        cat.getGroup().getId() == 1L)
                 .count())
                 .isEqualTo(1);
     }
@@ -83,8 +82,8 @@ public class CatLogicTest extends CatsPersistenceTestHelper {
         assertThat(allCats.stream()
                 .filter(cat -> cat.getName().equals("Jack") &&
                         cat.getRoleName().equals("Pirate") &&
-                        cat.getDuelsWon().equals(10) &&
-                        cat.getGroup().getId().equals(1L))
+                        cat.getDuelsWon() == 10 &&
+                        cat.getGroup().getId() == 1L)
                 .count())
                 .isEqualTo(0);
     }
