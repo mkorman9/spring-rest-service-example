@@ -1,5 +1,8 @@
 #!/bin/bash
 
+echo "SLEEP"
+sleep 60
+
 # Simple smoke test. Will be replaced with full test suite
 timeout_counter="0"
 while [ "$(curl -s "http://127.0.0.1:$APPLICATION_PORT/")" == '' ]; do
