@@ -1,5 +1,5 @@
 #!/bin/bash
 
-// TODO: Run tests here
+# TODO: Run tests here
 
 exit 0
