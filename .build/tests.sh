@@ -1,19 +1,20 @@
 #!/bin/bash
 
-# Simple smoke test. Will be replaced with full test suite
+# Wait until application wakes up
 timeout_counter="0"
 while [ "$(curl -s "http://127.0.0.1:$APPLICATION_PORT/")" == '' ]; do
     if [[ $timeout_counter == "10" ]]; then
-        break
+        echo "Application wake up phase timeout out"
+        exit 1
     fi
 
     sleep 2
     timeout_counter=$[$timeout_counter+1]
 done
 
-STATUS=$(curl -s "http://127.0.0.1:$APPLICATION_PORT/all" | python -c 'import json,sys;obj=json.load(sys.stdin);print obj["status"]')
-if [ "$STATUS" != 'ok' ]; then
-    echo $STATUS
+$ROBOT_BINARY ${WORKSPACE}/automated-tests/*.robot
+
+if [ $? != 0 ]; then
     exit 1
 fi
 
