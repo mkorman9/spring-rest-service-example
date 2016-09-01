@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Install test dependencies
+$PIP_BINARY install robotframework-httplibrary
+
 # Wait until application wakes up
 timeout_counter="0"
 while [ "$(curl -s "http://127.0.0.1:$APPLICATION_PORT/")" == '' ]; do
