@@ -1,30 +1,42 @@
 package com.github.mkorman9.logic;
 
+import com.github.mkorman9.dao.CatsGroupRepository;
 import com.github.mkorman9.logic.data.CatData;
-import com.github.mkorman9.logic.testhelper.CatsPersistenceTestHelper;
+import com.github.mkorman9.logic.data.CatsGroupData;
 import com.github.mkorman9.model.Cat;
 import com.github.mkorman9.model.CatsGroup;
 import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.List;
 
+import static com.github.mkorman9.logic.CatsPersistenceTestHelper.createCat;
+import static com.github.mkorman9.logic.CatsPersistenceTestHelper.createCatDataMock;
+import static com.github.mkorman9.logic.CatsPersistenceTestHelper.createCatsGroup;
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Matchers.anyLong;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
-public class CatFactoryTest extends CatsPersistenceTestHelper {
+@RunWith(MockitoJUnitRunner.class)
+public class CatFactoryTest {
     private final long groupId = 1L;
     private final String groupName = "Pirates";
+    private final CatsGroup catsGroup = createCatsGroup(groupId, groupName);
 
-    private List<CatsGroup> testGroups;
-
+    @Mock
+    private CatsGroupRepository catsGroupRepository;
+    @InjectMocks
     private CatFactory catFactory;
 
     @Before
     public void setUp() throws Exception {
-        testGroups = createTestGroups();
-        super.setUp(testGroups, createTestCats());
-        catFactory = new CatFactory(catsGroupRepository);
+        when(catsGroupRepository.findOne(anyLong())).thenReturn(catsGroup);
     }
 
     @Test
@@ -33,7 +45,7 @@ public class CatFactoryTest extends CatsPersistenceTestHelper {
         String roleName = "Pirate";
         String name = "Barnaba";
         int duelsWon = 12;
-        CatData catData = createCatDataMock(groupId, roleName, name, duelsWon);
+        CatData catData = createCatDataMock(roleName, name, duelsWon, groupId);
 
         // when
         Cat cat = catFactory.createEntity(catData);
@@ -52,7 +64,7 @@ public class CatFactoryTest extends CatsPersistenceTestHelper {
         String roleName = "Pirate";
         String name = "Barnaba";
         int duelsWon = 12;
-        Cat entity = createCat(1L, roleName, name, duelsWon, testGroups.get(0));
+        Cat entity = createCat(1L, roleName, name, duelsWon, catsGroup);
 
         // when
         CatData data = catFactory.createData(entity);
@@ -63,13 +75,5 @@ public class CatFactoryTest extends CatsPersistenceTestHelper {
         assertThat(data.getDuelsWon()).isEqualTo(duelsWon);
         assertThat(data.getGroup().getId()).isEqualTo(groupId);
         assertThat(data.getGroup().getName()).isEqualTo(groupName);
-    }
-
-    private List<CatsGroup> createTestGroups() {
-        return Lists.newArrayList(createCatsGroup(groupId, groupName));
-    }
-
-    private List<Cat> createTestCats() {
-        return Lists.newArrayList();
     }
 }

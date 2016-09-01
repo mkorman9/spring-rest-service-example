@@ -1,7 +1,7 @@
 package com.github.mkorman9.logic;
 
+import com.github.mkorman9.dao.CatRepository;
 import com.github.mkorman9.logic.data.CatData;
-import com.github.mkorman9.logic.testhelper.CatsPersistenceTestHelper;
 import com.github.mkorman9.model.Cat;
 import com.github.mkorman9.model.CatsGroup;
 import com.google.common.collect.Lists;
@@ -9,111 +9,94 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.List;
 import java.util.Set;
 
+import static com.github.mkorman9.logic.CatsPersistenceTestHelper.createCat;
+import static com.github.mkorman9.logic.CatsPersistenceTestHelper.createCatDataMock;
+import static com.github.mkorman9.logic.CatsPersistenceTestHelper.createCatsGroup;
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-public class CatLogicTest extends CatsPersistenceTestHelper {
+@RunWith(MockitoJUnitRunner.class)
+public class CatLogicTest {
+    @Mock
+    private CatRepository catRepository;
+    @Mock
+    private CatFactory catFactory;
+    @InjectMocks
     private CatLogic catLogic;
-
-    private List<CatsGroup> testGroups;
 
     @Rule
     public ExpectedException expectedException = ExpectedException.none();
 
-    @Before
-    public void setUp() throws Exception {
-        testGroups = createTestGroups();
-        super.setUp(testGroups, createTestCats());
-
-        catLogic = new CatLogic(catRepository, new CatFactory(catsGroupRepository));
-    }
-
     @Test
-    public void shouldPersistNewCat() throws Exception {
+    public void shouldConvertAndPersistNewCat() throws Exception {
         // given
-        CatData catToAdd = createCatDataMock(1L, "Pirate", "Barnaba", 13);
+        CatData catToAdd = createCatDataMock("Pirate", "Barnaba", 13, 1L);
+        Cat catConverted = createCat(1L, "Pirate", "Barnaba", 13, createCatsGroup(0L, "Pirates"));
+        when(catFactory.createEntity(eq(catToAdd))).thenReturn(catConverted);
 
         // when
         catLogic.addNewCat(catToAdd);
-        Set<CatData> allCats = catLogic.findAllCats();
 
         // then
-        assertThat(allCats.size()).isEqualTo(4);
-        assertThat(allCats.stream()
-                .filter(cat -> cat.getRoleName().equals("Pirate") &&
-                        cat.getName().equals("Barnaba") &&
-                        cat.getDuelsWon() == 13)
-                .count())
-                .isEqualTo(1);
+        verify(catFactory).createEntity(eq(catToAdd));
+        verify(catRepository).save(eq(catConverted));
     }
 
     @Test
     public void shouldEditExistingCat() throws Exception {
         // given
-        CatData catDataToUpdate = createCatDataMock(1L, "Pirate", "Barnaba", 13);
+        Cat catToUpdate = createCat(0L, "Pirate", "Barnaba", 14, createCatsGroup(0L, "Pirates"));
+        CatData catDataToUpdate = createCatDataMock("Pirate", "Barnaba", 13, 0L);
+        when(catRepository.findOne(eq(0L))).thenReturn(catToUpdate);
+
+        // when
+        catLogic.updateCat(0L, catDataToUpdate);
+
+        // then
+        verify(catRepository).findOne(eq(0L));
+        verify(catFactory).editEntity(eq(catToUpdate), eq(catDataToUpdate));
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenTryingToEditNonExistingCat() throws Exception {
+        // given
+        CatData catDataToUpdate = createCatDataMock("Pirate", "Barnaba", 13, 0L);
+        when(catRepository.findOne(eq(0L))).thenReturn(null);
+
+        expectedException.expect(IllegalArgumentException.class);
 
         // when
         catLogic.updateCat(1L, catDataToUpdate);
-        Set<CatData> allCats = catLogic.findAllCats();
-
-        // then
-        assertThat(allCats.size()).isEqualTo(3);
-        assertThat(allCats.stream()
-                .filter(cat -> cat.getName().equals("Barnaba") &&
-                        cat.getRoleName().equals("Pirate") &&
-                        cat.getDuelsWon() == 13 &&
-                        cat.getGroup().getId() == 1L)
-                .count())
-                .isEqualTo(1);
     }
 
     @Test
-    public void shouldDeleteExistingCat() throws Exception {
+    public void shouldDeleteCat() throws Exception {
         // when
         catLogic.removeCat(1L);
-        Set<CatData> allCats = catLogic.findAllCats();
 
         // then
-        assertThat(allCats.size()).isEqualTo(2);
-        assertThat(allCats.stream()
-                .filter(cat -> cat.getName().equals("Jack") &&
-                        cat.getRoleName().equals("Pirate") &&
-                        cat.getDuelsWon() == 10 &&
-                        cat.getGroup().getId() == 1L)
-                .count())
-                .isEqualTo(0);
+        verify(catRepository).delete(eq(1L));
     }
 
     @Test
-    public void shouldThrowWhenCatNotFound() throws Exception {
+    public void shouldThrowWhenSingleCatNotFound() throws Exception {
         // given
+        when(catRepository.findOne(eq(1000L))).thenReturn(null);
+
         expectedException.expect(IllegalArgumentException.class);
 
         // then
         catLogic.findSingleCat(1000L);
-    }
-
-    @Test
-    public void shouldThrowWhenUpdatingUnavailableCat() throws Exception {
-        // given
-        expectedException.expect(IllegalArgumentException.class);
-
-        // then
-        catLogic.updateCat(1000L, mock(CatData.class));
-    }
-
-    private List<CatsGroup> createTestGroups() {
-        return Lists.newArrayList(createCatsGroup(1L, "Pirates"),
-                createCatsGroup(2L, "Bandits"));
-    }
-
-    private List<Cat> createTestCats() {
-        return Lists.newArrayList(createCat(1L, "Pirate", "Jack", 10, testGroups.get(0)),
-                createCat(2L, "Bandit", "Bonny", 7, testGroups.get(1)),
-                createCat(3L, "Bandit", "Clyde", 7, testGroups.get(1)));
     }
 }

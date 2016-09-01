@@ -1,53 +1,48 @@
 package com.github.mkorman9.logic;
 
+import com.github.mkorman9.dao.CatsGroupRepository;
 import com.github.mkorman9.logic.data.CatsGroupData;
-import com.github.mkorman9.logic.testhelper.CatsPersistenceTestHelper;
 import com.github.mkorman9.model.Cat;
 import com.github.mkorman9.model.CatsGroup;
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Sets;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
 import java.util.Set;
 
 import static org.fest.assertions.Assertions.assertThat;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
-public class CatsGroupLogicTest extends CatsPersistenceTestHelper {
+@RunWith(MockitoJUnitRunner.class)
+public class CatsGroupLogicTest {
+    @Mock
+    private CatsGroupRepository catsGroupRepository;
+    @Mock
+    private CatFactory catFactory;
+    @InjectMocks
     private CatsGroupLogic catsGroupLogic;
 
-    private Set<CatsGroup> testGroups;
-
-    @Before
-    public void setUp() throws Exception {
-        testGroups = createTestGroups();
-        super.setUp(testGroups, createTestCats());
-        catsGroupLogic = new CatsGroupLogic(catsGroupRepository, new CatFactory(catsGroupRepository));
-    }
-
     @Test
-    public void allGroupsShouldBeFound() throws Exception {
+    public void allGroupsFromDBShouldBeFoundAndConvertedToData() throws Exception {
         // given
-        Set<CatsGroupData> allGroups = catsGroupLogic.findAll();
+        CatsGroup testCatsGroup = CatsPersistenceTestHelper.createCatsGroup(0, "Pirates");
+        CatsGroupData testCatsGroupData = CatsPersistenceTestHelper.createGroupDataMock(0);
+
+        when(catsGroupRepository.findAll()).thenReturn(ImmutableList.of(testCatsGroup));
+        when(catFactory.convertEntityGroupToData(eq(testCatsGroup))).thenReturn(testCatsGroupData);
+
+        // when
+        catsGroupLogic.findAll();
 
         // then
-        assertThat(allGroups.size()).isEqualTo(testGroups.size());
-        assertThat(allGroups.stream()
-                .filter(groupData -> groupData.getId() == 1L &&
-                        groupData.getName().equals("Bandits"))
-                .count())
-                .isEqualTo(1);
-        assertThat(allGroups.stream()
-                .filter(groupData -> groupData.getId() == 2L &&
-                        groupData.getName().equals("Pirates"))
-                .count())
-                .isEqualTo(1);
-    }
-
-    private Set<CatsGroup> createTestGroups() {
-        return Sets.newHashSet(createCatsGroup(1L, "Bandits"), createCatsGroup(2L, "Pirates"));
-    }
-
-    private Set<Cat> createTestCats() {
-        return Sets.newHashSet();
+        verify(catsGroupRepository).findAll();
+        verify(catFactory).convertEntityGroupToData(eq(testCatsGroup));
     }
 }
