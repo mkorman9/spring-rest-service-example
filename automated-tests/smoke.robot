@@ -1,3 +1,6 @@
+*** Setting ***
+Library  HttpLibrary.HTTP
+
 *** Test Cases ***
 Application should expose valid API for retrieving cats
     Create HTTP Context  http://127.0.0.1:%{APPLICATION_PORT}
