@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Install test dependencies
-$PIP_BINARY install robotframework-httplibrary
+$PIP_BINARY install --user robotframework-httplibrary
 
 # Wait until application wakes up
 timeout_counter="0"
