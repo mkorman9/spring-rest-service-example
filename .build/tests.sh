@@ -15,7 +15,7 @@ while [ "$(curl -s "http://127.0.0.1:$APPLICATION_PORT/")" == '' ]; do
     timeout_counter=$[$timeout_counter+1]
 done
 
-$ROBOT_BINARY ${WORKSPACE}/automated-tests/*.robot
+$ROBOT_BINARY -d $CI_WORK_DIRECTORY ${WORKSPACE}/automated-tests/*.robot
 
 if [ $? != 0 ]; then
     exit 1
