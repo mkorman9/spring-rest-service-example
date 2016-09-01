@@ -6,6 +6,5 @@ Application should expose valid API for retrieving cats
     Create HTTP Context  localhost:%{APPLICATION_PORT}
     GET  /all
     Response Status Code Should Equal  200
-    Follow Response
     ${response}=  Get Response Body
     Should Be Valid Json  ${response}
