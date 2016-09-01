@@ -6,6 +6,7 @@ Add cat
     [Arguments]  ${roleName}  ${name}  ${duelsWon}  ${groupId}
     Next Request Should Succeed
     Set Request Body  {"roleName":"${roleName}","name","${name}","duelsWon":${duelsWon},group:{"id":${groupId}}}
+    Set Request Header  Content-Type  application/json
     POST  /add
     ${response}=  Get Response Body
     Should Be Valid Json  ${response}
