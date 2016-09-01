@@ -21,7 +21,7 @@ Read all cats
 *** Test Cases ***
 Added cat should be remembered and returned
     Create HTTP Context  localhost:%{APPLICATION_PORT}
-    Add cat  Pirate  Barnaba  13  0
-    Add cat  Bandit  Bonny  12  1
+    Add cat  Pirate  Barnaba  13  1
+    Add cat  Bandit  Bonny  12  2
     ${catsJson}=  Read all cats
     Log  ${catsJson}
