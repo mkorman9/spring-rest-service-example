@@ -3,7 +3,7 @@ Library  HttpLibrary.HTTP
 
 *** Test Cases ***
 Application should expose valid API for retrieving cats
-    Create HTTP Context  http://127.0.0.1:%{APPLICATION_PORT}
+    Create HTTP Context  localhost:%{APPLICATION_PORT}
     GET  /all
     Response Status Code Should Equal  200
     Follow Response
