@@ -6,7 +6,7 @@ def _compare_str(val1, val2):
 
 
 def _compare_cat_properties(cat, role_name, name, duels_won, group_name):
-    return compare_str(cat['roleName'], role_name) and _compare_str(cat['name'], name) and _compare_str(cat['duelsWon'], duels_won) and _compare_str(cat['group']['name'], group_name)
+    return _compare_str(cat['roleName'], role_name) and _compare_str(cat['name'], name) and _compare_str(cat['duelsWon'], duels_won) and _compare_str(cat['group']['name'], group_name)
 
 
 def find_id_for_group(groups_json, group_name):
