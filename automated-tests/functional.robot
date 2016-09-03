@@ -35,7 +35,7 @@ Add cat
 Delete cat
     [Arguments]  ${id}
     Next Request Should Succeed
-    DELETE /delete/${id}
+    DELETE  /delete/${id}
     ${response}=  Get Response Body
     Should Be Valid Json  ${response}
 
