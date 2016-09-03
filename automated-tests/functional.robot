@@ -1,5 +1,6 @@
 *** Setting ***
 Library  HttpLibrary.HTTP
+Library  keywords.py
 
 *** Keywords ***
 Add cat
@@ -16,12 +17,16 @@ Read all cats
     GET  /all
     ${response}=  Get Response Body
     Should Be Valid Json  ${response}
+    ${response}=  Get Json Value  ${response}  /data
     [Return]  ${response}
 
 *** Test Cases ***
 Added cat should be remembered and returned
     Create HTTP Context  localhost:%{APPLICATION_PORT}
+
     Add cat  Pirate  Barnaba  13  1
     Add cat  Bandit  Bonny  12  2
-    ${catsJson}=  Read all cats
-    Log  ${catsJson}
+
+    ${cats}=  Read all cats
+    Cat Should Exist On List  ${cats}  Pirate  Barnaba  13  Pirates
+    Cat Should Exist On List  ${cats}  Bandit  Bonny  12  Bandits
