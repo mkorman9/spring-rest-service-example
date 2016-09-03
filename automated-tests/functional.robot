@@ -66,7 +66,7 @@ Cat should be deleted successfully
 
     ${banditsId}=  Get Id For Group  Bandits
     Add cat  Robber  Gutek  2  ${banditsId}
-    ${catId}=  Find Id For Cat  Gutek
+    ${catId}=  Get Id For Cat  Gutek
 
     Delete cat  ${catId}
 
