@@ -3,6 +3,16 @@ Library  HttpLibrary.HTTP
 Library  keywords.py
 
 *** Keywords ***
+Get Id For Group
+    [Arguments]  ${name}
+    Next Request Should Succeed
+    GET  /groups
+    ${response}=  Get Response Body
+    Should Be Valid Json  ${response}
+    ${response}=  Get Json Value  ${response}  /data
+    ${id}=  Find Id For Group  ${response}  ${name}
+    [Return]  ${id}
+
 Add cat
     [Arguments]  ${roleName}  ${name}  ${duelsWon}  ${groupId}
     Next Request Should Succeed
@@ -24,8 +34,11 @@ Read all cats
 Added cat should be remembered and returned
     Create HTTP Context  localhost:%{APPLICATION_PORT}
 
-    Add cat  Pirate  Barnaba  13  1
-    Add cat  Bandit  Bonny  12  2
+    ${piratesId}=  Get Id For Group  Pirates
+    ${banditsId}=  Get Id For Group  Bandits
+
+    Add cat  Pirate  Barnaba  13  ${piratesId}
+    Add cat  Bandit  Bonny  12  ${banditsId}
 
     ${cats}=  Read all cats
     Cat Should Exist On List  ${cats}  Pirate  Barnaba  13  Pirates
