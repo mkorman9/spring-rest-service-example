@@ -9,12 +9,12 @@ def _compare_cat_properties(cat, role_name, name, duels_won, group_name):
     return _compare_str(cat['roleName'], role_name) and _compare_str(cat['name'], name) and _compare_str(cat['duelsWon'], duels_won) and _compare_str(cat['group']['name'], group_name)
 
 
-def find_id_for_group(groups_json, group_name):
-    groups = json.loads(groups_json)
-    for group in groups:
-        if _compare_str(group['name'], group_name):
-            return group['id']
-    raise AssertionError('Group with name %s was not found in %s' % (group_name, groups_json))
+def find_id_by_name(entity_json, name):
+    entities = json.loads(entity_json)
+    for entity in entities:
+        if _compare_str(entity['name'], name):
+            return entity['id']
+    raise AssertionError('Entity with name %s was not found in %s' % (name, entity_json))
 
 
 def cat_should_exist_on_list(cats_json, role_name, name, duels_won, group_name):
