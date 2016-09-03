@@ -65,7 +65,7 @@ Cat should be deleted successfully
     Create HTTP Context  localhost:%{APPLICATION_PORT}
 
     ${banditsId}=  Get Id For Group  Bandits
-    Add cat  Robber  Gutek  2  ${piratesId}
+    Add cat  Robber  Gutek  2  ${banditsId}
     ${catId}=  Find Id For Cat  Gutek
 
     Delete cat  ${catId}
