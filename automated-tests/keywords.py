@@ -9,6 +9,12 @@ def _compare_cat_properties(cat, role_name, name, duels_won, group_name):
     return _compare_str(cat['roleName'], role_name) and _compare_str(cat['name'], name) and _compare_str(cat['duelsWon'], duels_won) and _compare_str(cat['group']['name'], group_name)
 
 
+def cat_should_be_equal_to(cat_json, role_name, name, duels_won, group_name):
+    cat = json.loads(cat_json)
+    if not _compare_cat_properties(cat, role_name, name, duels_won, group_name):
+        raise AssertionError('Cat %s is not equal to (%s, %s, %s, %s)' % (cat_json, role_name, name, duels_won, group_name)
+
+
 def find_id_by_name(entity_json, name):
     entities = json.loads(entity_json)
     for entity in entities:

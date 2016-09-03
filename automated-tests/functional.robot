@@ -34,25 +34,37 @@ Add cat
     Should Be Valid Json  ${response}
 
 Delete cat
-    [Arguments]  ${id}
+    [Arguments]  ${name}
+    ${catId}=  Get Id For Cat  ${name}
     Next Request Should Succeed
-    DELETE  /delete/${id}
+    DELETE  /delete/${catId}
     ${response}=  Get Response Body
     Should Be Valid Json  ${response}
 
 Update cat
-    [Arguments]  ${id}  ${roleName}  ${name}  ${duelsWon}  ${groupName}
+    [Arguments]  ${roleName}  ${name}  ${duelsWon}  ${groupName}
     ${groupId}=  Get Id For Group  ${groupName}
+    ${catId}=  Get Id For Cat  ${name}
     Next Request Should Succeed
     Set Request Body  {"roleName":"${roleName}","name":"${name}","duelsWon":${duelsWon},"group":{"id":${groupId}}}
     Set Request Header  Content-Type  application/json
-    PUT  /edit/${id}
+    PUT  /edit/${catId}
     ${response}=  Get Response Body
     Should Be Valid Json  ${response}
 
 Read all cats
     Next Request Should Succeed
     GET  /all
+    ${response}=  Get Response Body
+    Should Be Valid Json  ${response}
+    ${response}=  Get Json Value  ${response}  /data
+    [Return]  ${response}
+
+Read single cat
+    [Arguments]  ${name}
+    ${catId}=  Get Id For Cat  ${name}
+    Next Request Should Succeed
+    GET  /get/${catId}
     ${response}=  Get Response Body
     Should Be Valid Json  ${response}
     ${response}=  Get Json Value  ${response}  /data
@@ -68,14 +80,14 @@ Added cat should be remembered and returned
     ${cats}=  Read all cats
     Cat Should Exist On List  ${cats}  Pirate  Barnaba  13  Pirates
     Cat Should Exist On List  ${cats}  Bandit  Bonny  12  Bandits
+    ${barnaba}=  Read Single Cat  Barnaba
+    Cat Should Be Equal To  ${barnaba}  Pirate  Barnaba  13  Pirates
 
 Cat should be deleted successfully
     Create HTTP Context  localhost:%{APPLICATION_PORT}
 
     Add cat  Robber  Gutek  2  Bandits
-    ${catId}=  Get Id For Cat  Gutek
-
-    Delete cat  ${catId}
+    Delete cat  Gutek
 
     ${cats}=  Read all cats
     Cat Should Not Exist On List  ${cats}  Robber  Gutek  2  Bandits
@@ -84,9 +96,7 @@ Cat should be updated successfully
     Create HTTP Context  localhost:%{APPLICATION_PORT}
 
     Add cat  Hunter  Bronek  7  Bandits
-    ${catId}=  Get Id For Cat  Bronek
-
-    Update cat  ${catId}  Hunter  Bronek  8  Bandits
+    Update cat  Hunter  Bronek  8  Bandits
 
     ${cats}=  Read all cats
     Cat Should Not Exist On List  ${cats}  Hunter  Bronek  7  Bandits
