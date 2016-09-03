@@ -46,7 +46,7 @@ Update cat
     Next Request Should Succeed
     Set Request Body  {"roleName":"${roleName}","name":"${name}","duelsWon":${duelsWon},"group":{"id":${groupId}}}
     Set Request Header  Content-Type  application/json
-    PUT  /update/${id}
+    PUT  /edit/${id}
     ${response}=  Get Response Body
     Should Be Valid Json  ${response}
 
@@ -72,8 +72,7 @@ Added cat should be remembered and returned
 Cat should be deleted successfully
     Create HTTP Context  localhost:%{APPLICATION_PORT}
 
-    ${banditsId}=  Get Id For Group  Bandits
-    Add cat  Robber  Gutek  2  ${banditsId}
+    Add cat  Robber  Gutek  2  Bandits
     ${catId}=  Get Id For Cat  Gutek
 
     Delete cat  ${catId}
