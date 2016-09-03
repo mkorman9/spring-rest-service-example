@@ -24,7 +24,8 @@ Get Id For Cat
     [Return]  ${id}
 
 Add cat
-    [Arguments]  ${roleName}  ${name}  ${duelsWon}  ${groupId}
+    [Arguments]  ${roleName}  ${name}  ${duelsWon}  ${groupName}
+    ${groupId}=  Get Id For Group  ${groupName}
     Next Request Should Succeed
     Set Request Body  {"roleName":"${roleName}","name":"${name}","duelsWon":${duelsWon},"group":{"id":${groupId}}}
     Set Request Header  Content-Type  application/json
@@ -36,6 +37,16 @@ Delete cat
     [Arguments]  ${id}
     Next Request Should Succeed
     DELETE  /delete/${id}
+    ${response}=  Get Response Body
+    Should Be Valid Json  ${response}
+
+Update cat
+    [Arguments]  ${id}  ${roleName}  ${name}  ${duelsWon}  ${groupName}
+    ${groupId}=  Get Id For Group  ${groupName}
+    Next Request Should Succeed
+    Set Request Body  {"roleName":"${roleName}","name":"${name}","duelsWon":${duelsWon},"group":{"id":${groupId}}}
+    Set Request Header  Content-Type  application/json
+    PUT  /update/${id}
     ${response}=  Get Response Body
     Should Be Valid Json  ${response}
 
@@ -51,11 +62,8 @@ Read all cats
 Added cat should be remembered and returned
     Create HTTP Context  localhost:%{APPLICATION_PORT}
 
-    ${piratesId}=  Get Id For Group  Pirates
-    ${banditsId}=  Get Id For Group  Bandits
-
-    Add cat  Pirate  Barnaba  13  ${piratesId}
-    Add cat  Bandit  Bonny  12  ${banditsId}
+    Add cat  Pirate  Barnaba  13  Pirates
+    Add cat  Bandit  Bonny  12  Bandits
 
     ${cats}=  Read all cats
     Cat Should Exist On List  ${cats}  Pirate  Barnaba  13  Pirates
@@ -72,3 +80,15 @@ Cat should be deleted successfully
 
     ${cats}=  Read all cats
     Cat Should Not Exist On List  ${cats}  Robber  Gutek  2  Bandits
+
+Cat should be updated successfully
+    Create HTTP Context  localhost:%{APPLICATION_PORT}
+
+    Add cat  Hunter  Bronek  7  Bandits
+    ${catId}=  Get Id For Cat  Bronek
+
+    Update cat  ${catId}  Hunter  Bronek  8  Bandits
+
+    ${cats}=  Read all cats
+    Cat Should Not Exist On List  ${cats}  Hunter  Bronek  7  Bandits
+    Cat Should Exist On List  ${cats}  Hunter  Bronek  8  Bandits
