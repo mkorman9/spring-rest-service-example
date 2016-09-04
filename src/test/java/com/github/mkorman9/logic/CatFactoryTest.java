@@ -7,7 +7,9 @@ import com.github.mkorman9.model.Cat;
 import com.github.mkorman9.model.CatsGroup;
 import com.google.common.collect.Lists;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -20,6 +22,7 @@ import static com.github.mkorman9.logic.CatsPersistenceTestHelper.createCatDataM
 import static com.github.mkorman9.logic.CatsPersistenceTestHelper.createCatsGroup;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.anyLong;
+import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
@@ -34,9 +37,12 @@ public class CatFactoryTest {
     @InjectMocks
     private CatFactory catFactory;
 
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
+
     @Before
     public void setUp() throws Exception {
-        when(catsGroupRepository.findOne(anyLong())).thenReturn(catsGroup);
+        when(catsGroupRepository.findOne(eq(groupId))).thenReturn(catsGroup);
     }
 
     @Test
@@ -75,5 +81,20 @@ public class CatFactoryTest {
         assertThat(data.getDuelsWon()).isEqualTo(duelsWon);
         assertThat(data.getGroup().getId()).isEqualTo(groupId);
         assertThat(data.getGroup().getName()).isEqualTo(groupName);
+    }
+
+    @Test
+    public void shouldThrowExceptionWhenUsingNonExistingGroup() throws Exception {
+        // given
+        String roleName = "Pirate";
+        String name = "Barnaba";
+        int duelsWon = 12;
+        Long nonExistingGroupId = 10L;
+        CatData data = createCatDataMock(roleName, name, duelsWon, nonExistingGroupId);
+
+        expectedException.expect(IllegalStateException.class);
+        
+        // when
+        catFactory.createEntity(data);
     }
 }

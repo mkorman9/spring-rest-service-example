@@ -50,6 +50,10 @@ public class CatFactory {
     }
 
     private CatsGroup convertDataGroupToEntity(CatsGroupData group) {
-        return catsGroupRepository.findOne(group.getId());
+        CatsGroup groupEntity = catsGroupRepository.findOne(group.getId());
+        if (groupEntity == null) {
+            throw new IllegalStateException("Group with id " + group.getId() + " was not found");
+        }
+        return groupEntity;
     }
 }
