@@ -3,7 +3,8 @@ package com.github.mkorman9.web.controller;
 import com.github.mkorman9.logic.CatLogic;
 import com.github.mkorman9.logic.CatsGroupLogic;
 import com.github.mkorman9.web.form.CatForm;
-import com.github.mkorman9.web.form.ResponseForm;
+import com.github.mkorman9.web.form.response.ResponseForm;
+import com.github.mkorman9.web.form.response.ResponseStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,12 +29,16 @@ public class FrontController extends ControllersCommons {
 
     @RequestMapping(value = "/all", method = RequestMethod.GET)
     public ResponseForm findAllCats() {
-        return new ResponseForm("ok", catLogic.findAllCats());
+        return ResponseForm.build(ResponseStatus.OK)
+                .withData(catLogic.findAllCats())
+                .get();
     }
 
     @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
     public ResponseForm getSingleCat(@PathVariable("id") Long id) {
-        return new ResponseForm("ok", catLogic.findSingleCat(id));
+        return ResponseForm.build(ResponseStatus.OK)
+                .withData(catLogic.findSingleCat(id))
+                .get();
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
@@ -43,13 +48,15 @@ public class FrontController extends ControllersCommons {
         }
 
         catLogic.addNewCat(catForm);
-        return new ResponseForm("ok");
+        return ResponseForm.build(ResponseStatus.OK)
+                .get();
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     public ResponseForm deleteCat(@PathVariable("id") Long id) {
         catLogic.removeCat(id);
-        return new ResponseForm("ok");
+        return ResponseForm.build(ResponseStatus.OK)
+                .get();
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.PUT)
@@ -59,11 +66,14 @@ public class FrontController extends ControllersCommons {
         }
 
         catLogic.updateCat(id, catForm);
-        return new ResponseForm("ok");
+        return ResponseForm.build(ResponseStatus.OK)
+                .get();
     }
 
     @RequestMapping(value = "/groups", method = RequestMethod.GET)
     public ResponseForm findAllGroups() {
-        return new ResponseForm("ok", catsGroupLogic.findAll());
+        return ResponseForm.build(ResponseStatus.OK)
+                .withData(catsGroupLogic.findAll())
+                .get();
     }
 }

@@ -1,6 +1,8 @@
 package com.github.mkorman9.web.controller;
 
-import com.github.mkorman9.web.form.ResponseForm;
+import com.github.mkorman9.web.form.response.ResponseError;
+import com.github.mkorman9.web.form.response.ResponseForm;
+import com.github.mkorman9.web.form.response.ResponseStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ErrorAttributes;
 import org.springframework.http.HttpStatus;
@@ -31,9 +33,12 @@ public class ErrorController implements org.springframework.boot.autoconfigure.w
     @RequestMapping
     public ResponseEntity error(HttpServletRequest request){
         Map<String, Object> body = getErrorAttributes(request);
+        ResponseForm form = ResponseForm.build(ResponseStatus.ERROR)
+                .withError(ResponseError.build(body.get("status") + " " + body.get("error")).get())
+                .get();
         return ResponseEntity
                 .status(HttpStatus.valueOf(Integer.parseInt(body.get("status").toString())))
-                .body(new ResponseForm("error", new ResponseForm.Error(body.get("status") + " " + body.get("error"))));
+                .body(form);
     }
 
     private Map<String, Object> getErrorAttributes(HttpServletRequest aRequest) {

@@ -1,6 +1,8 @@
 package com.github.mkorman9.web.controller;
 
-import com.github.mkorman9.web.form.ResponseForm;
+import com.github.mkorman9.web.form.response.ResponseError;
+import com.github.mkorman9.web.form.response.ResponseForm;
+import com.github.mkorman9.web.form.response.ResponseStatus;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -9,6 +11,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @ControllerAdvice(basePackages = "com.github.mkorman9.web.controller")
@@ -19,14 +22,20 @@ class ControllersCommons {
     public ResponseEntity exceptionHandler(Exception exception) {
         LOGGER.error("Error during request processing", exception);
 
+        ResponseForm form = ResponseForm.build(ResponseStatus.ERROR)
+                .withError(ResponseError.build(exception.getMessage()).get())
+                .get();
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new ResponseForm("error", new ResponseForm.Error(exception.getMessage())));
+                .body(form);
     }
 
     protected ResponseForm handleBindingError(BindingResult bindingResult) {
-        return new ResponseForm("error", bindingResult.getFieldErrors().stream()
-                .map(error -> new ResponseForm.Error(error.getField(), error.getCode()))
-                .collect(Collectors.toList()));
+        List<ResponseError> errors = bindingResult.getFieldErrors().stream()
+                .map(error -> ResponseError.build(error.getCode()).refersToField(error.getField()).get())
+                .collect(Collectors.toList());
+        return ResponseForm.build(ResponseStatus.ERROR)
+                .withErrors(errors)
+                .get();
     }
 }
