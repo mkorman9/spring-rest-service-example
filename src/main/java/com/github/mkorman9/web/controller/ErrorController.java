@@ -33,12 +33,11 @@ public class ErrorController implements org.springframework.boot.autoconfigure.w
     @RequestMapping
     public ResponseEntity error(HttpServletRequest request){
         Map<String, Object> body = getErrorAttributes(request);
-        ResponseForm form = ResponseForm.build(ResponseStatus.ERROR)
-                .withError(ResponseError.build(body.get("status") + " " + body.get("error")).get())
-                .get();
         return ResponseEntity
                 .status(HttpStatus.valueOf(Integer.parseInt(body.get("status").toString())))
-                .body(form);
+                .body(ResponseForm.build(ResponseStatus.ERROR)
+                        .withError(ResponseError.build(body.get("status") + " " + body.get("error")).get())
+                        .get());
     }
 
     private Map<String, Object> getErrorAttributes(HttpServletRequest aRequest) {

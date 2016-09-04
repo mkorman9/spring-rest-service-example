@@ -22,20 +22,18 @@ class ControllersCommons {
     public ResponseEntity exceptionHandler(Exception exception) {
         LOGGER.error("Error during request processing", exception);
 
-        ResponseForm form = ResponseForm.build(ResponseStatus.ERROR)
-                .withError(ResponseError.build(exception.getMessage()).get())
-                .get();
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(form);
+                .body(ResponseForm.build(ResponseStatus.ERROR)
+                        .withError(ResponseError.build(exception.getMessage()).get())
+                        .get());
     }
 
     protected ResponseForm handleBindingError(BindingResult bindingResult) {
-        List<ResponseError> errors = bindingResult.getFieldErrors().stream()
-                .map(error -> ResponseError.build(error.getCode()).refersToField(error.getField()).get())
-                .collect(Collectors.toList());
         return ResponseForm.build(ResponseStatus.ERROR)
-                .withErrors(errors)
+                .withErrors(bindingResult.getFieldErrors().stream()
+                        .map(error -> ResponseError.build(error.getCode()).refersToField(error.getField()).get())
+                        .collect(Collectors.toList()))
                 .get();
     }
 }
