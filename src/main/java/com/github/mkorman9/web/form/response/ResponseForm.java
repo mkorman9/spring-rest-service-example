@@ -53,7 +53,6 @@ public class ResponseForm {
             return this;
         }
 
-
         public Builder withErrors(List<ResponseError> error) {
             this.errors = ImmutableList.copyOf(error);
             return this;
