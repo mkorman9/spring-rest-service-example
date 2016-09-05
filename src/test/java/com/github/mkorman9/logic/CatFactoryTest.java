@@ -41,7 +41,7 @@ public class CatFactoryTest {
     }
 
     @Test
-    public void shouldCreateEntityFromData() throws Exception {
+    public void shouldCreateEntityFromDto() throws Exception {
         // given
         String roleName = "Pirate";
         String name = "Barnaba";
@@ -60,7 +60,7 @@ public class CatFactoryTest {
     }
 
     @Test
-    public void shouldCreateDataFromEntity() throws Exception {
+    public void shouldCreateDtoFromEntity() throws Exception {
         // given
         String roleName = "Pirate";
         String name = "Barnaba";
@@ -68,14 +68,14 @@ public class CatFactoryTest {
         Cat entity = createCat(1L, roleName, name, duelsWon, catsGroup);
 
         // when
-        CatDto data = catFactory.createData(entity);
+        CatDto dto = catFactory.createDto(entity);
 
         // then
-        assertThat(data.getRoleName()).isEqualTo(roleName);
-        assertThat(data.getName()).isEqualTo(name);
-        assertThat(data.getDuelsWon()).isEqualTo(duelsWon);
-        assertThat(data.getGroup().getId()).isEqualTo(groupId);
-        assertThat(data.getGroup().getName()).isEqualTo(groupName);
+        assertThat(dto.getRoleName()).isEqualTo(roleName);
+        assertThat(dto.getName()).isEqualTo(name);
+        assertThat(dto.getDuelsWon()).isEqualTo(duelsWon);
+        assertThat(dto.getGroup().getId()).isEqualTo(groupId);
+        assertThat(dto.getGroup().getName()).isEqualTo(groupName);
     }
 
     @Test
@@ -85,11 +85,11 @@ public class CatFactoryTest {
         String name = "Barnaba";
         int duelsWon = 12;
         Long nonExistingGroupId = 10L;
-        CatDto data = createCatDtoMock(roleName, name, duelsWon, nonExistingGroupId);
+        CatDto dto = createCatDtoMock(roleName, name, duelsWon, nonExistingGroupId);
 
         expectedException.expect(IllegalStateException.class);
         
         // when
-        catFactory.createEntity(data);
+        catFactory.createEntity(dto);
     }
 }

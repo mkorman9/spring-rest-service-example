@@ -29,27 +29,27 @@ public class CatFactory {
         entity.setRoleName(catDto.getRoleName());
         entity.setName(catDto.getName());
         entity.setDuelsWon(catDto.getDuelsWon());
-        entity.setGroup(convertDataGroupToEntity(catDto.getGroup()));
+        entity.setGroup(convertDtoGroupToEntity(catDto.getGroup()));
     }
 
-    public CatDto createData(Cat entity) {
+    public CatDto createDto(Cat entity) {
         return CatDtoImpl.builder()
                 .id(entity.getId())
                 .roleName(entity.getRoleName())
                 .name(entity.getName())
                 .duelsWon(entity.getDuelsWon())
-                .group(convertEntityGroupToData(entity.getGroup()))
+                .group(convertEntityGroupToDto(entity.getGroup()))
                 .build();
     }
 
-    public CatsGroupDto convertEntityGroupToData(CatsGroup group) {
+    public CatsGroupDto convertEntityGroupToDto(CatsGroup group) {
         return CatsGroupDtoImpl.builder()
                 .id(group.getId())
                 .name(group.getName())
                 .build();
     }
 
-    private CatsGroup convertDataGroupToEntity(CatsGroupDto group) {
+    private CatsGroup convertDtoGroupToEntity(CatsGroupDto group) {
         CatsGroup groupEntity = catsGroupRepository.findOne(group.getId());
         if (groupEntity == null) {
             throw new IllegalStateException("Group with id " + group.getId() + " was not found");

@@ -25,19 +25,19 @@ public class CatsGroupLogicTest {
     private CatsGroupLogic catsGroupLogic;
 
     @Test
-    public void allGroupsFromDBShouldBeFoundAndConvertedToData() throws Exception {
+    public void allGroupsFromDBShouldBeFoundAndConvertedToDto() throws Exception {
         // given
         CatsGroup testCatsGroup = CatsPersistenceTestHelper.createCatsGroup(0, "Pirates");
         CatsGroupDto testCatsGroupDto = CatsPersistenceTestHelper.createGroupDtoMock(0);
 
         when(catsGroupRepository.findAll()).thenReturn(ImmutableList.of(testCatsGroup));
-        when(catFactory.convertEntityGroupToData(eq(testCatsGroup))).thenReturn(testCatsGroupDto);
+        when(catFactory.convertEntityGroupToDto(eq(testCatsGroup))).thenReturn(testCatsGroupDto);
 
         // when
         catsGroupLogic.findAll();
 
         // then
         verify(catsGroupRepository).findAll();
-        verify(catFactory).convertEntityGroupToData(eq(testCatsGroup));
+        verify(catFactory).convertEntityGroupToDto(eq(testCatsGroup));
     }
 }

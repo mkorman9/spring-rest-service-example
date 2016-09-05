@@ -13,20 +13,20 @@ public final class CatsPersistenceTestHelper {
     }
 
     static CatDto createCatDtoMock(String roleName, String name, int duelsWon, long groupId) {
-        CatsGroupDto groupDataMock = createGroupDtoMock(groupId);
+        CatsGroupDto groupDtoMock = createGroupDtoMock(groupId);
 
         CatDto catDto = mock(CatDto.class);
         when(catDto.getRoleName()).thenReturn(roleName);
         when(catDto.getName()).thenReturn(name);
-        when(catDto.getGroup()).thenReturn(groupDataMock);
+        when(catDto.getGroup()).thenReturn(groupDtoMock);
         when(catDto.getDuelsWon()).thenReturn(duelsWon);
         return catDto;
     }
 
     static CatsGroupDto createGroupDtoMock(long groupId) {
-        CatsGroupDto groupData = mock(CatsGroupDto.class);
-        when(groupData.getId()).thenReturn(groupId);
-        return groupData;
+        CatsGroupDto groupDto = mock(CatsGroupDto.class);
+        when(groupDto.getId()).thenReturn(groupId);
+        return groupDto;
     }
 
     static CatsGroup createCatsGroup(long id, String name) {

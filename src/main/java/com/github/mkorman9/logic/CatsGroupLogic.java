@@ -25,7 +25,7 @@ public class CatsGroupLogic {
     public Set<CatsGroupDto> findAll() {
         return ImmutableSet.copyOf(catsGroupRepository.findAll())
                 .stream()
-                .map(group -> catFactory.convertEntityGroupToData(group))
+                .map(group -> catFactory.convertEntityGroupToDto(group))
                 .collect(Collectors.toSet());
     }
 }

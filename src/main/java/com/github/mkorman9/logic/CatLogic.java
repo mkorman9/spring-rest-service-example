@@ -26,7 +26,7 @@ public class CatLogic {
     public Set<CatDto> findAllCats() {
         return ImmutableSet.copyOf(catRepository.findAll())
                 .stream()
-                .map(cat -> catFactory.createData(cat))
+                .map(cat -> catFactory.createDto(cat))
                 .collect(Collectors.toSet());
     }
 
@@ -36,7 +36,7 @@ public class CatLogic {
         if (entity == null) {
             throw new IllegalArgumentException("Entity with id " + id + " not found");
         }
-        return catFactory.createData(entity);
+        return catFactory.createDto(entity);
     }
 
     @Transactional
