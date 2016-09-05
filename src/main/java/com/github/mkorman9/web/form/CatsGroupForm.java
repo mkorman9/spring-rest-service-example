@@ -1,10 +1,10 @@
 package com.github.mkorman9.web.form;
 
-import com.github.mkorman9.logic.data.CatsGroupData;
+import com.github.mkorman9.logic.data.CatsGroupDto;
 
 import javax.validation.constraints.NotNull;
 
-public class CatsGroupForm implements CatsGroupData {
+public class CatsGroupForm implements CatsGroupDto {
     @NotNull
     private Long id;
 

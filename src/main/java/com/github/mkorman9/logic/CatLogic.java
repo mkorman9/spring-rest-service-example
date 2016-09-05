@@ -1,7 +1,7 @@
 package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatRepository;
-import com.github.mkorman9.logic.data.CatData;
+import com.github.mkorman9.logic.data.CatDto;
 import com.github.mkorman9.model.Cat;
 import com.google.common.collect.ImmutableSet;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class CatLogic {
     }
 
     @Transactional(readOnly = true)
-    public Set<CatData> findAllCats() {
+    public Set<CatDto> findAllCats() {
         return ImmutableSet.copyOf(catRepository.findAll())
                 .stream()
                 .map(cat -> catFactory.createData(cat))
@@ -31,7 +31,7 @@ public class CatLogic {
     }
 
     @Transactional(readOnly = true)
-    public CatData findSingleCat(Long id) {
+    public CatDto findSingleCat(Long id) {
         Cat entity = catRepository.findOne(id);
         if (entity == null) {
             throw new IllegalArgumentException("Entity with id " + id + " not found");
@@ -40,8 +40,8 @@ public class CatLogic {
     }
 
     @Transactional
-    public void addNewCat(CatData catData) {
-        Cat entity = catFactory.createEntity(catData);
+    public void addNewCat(CatDto catDto) {
+        Cat entity = catFactory.createEntity(catDto);
         catRepository.save(entity);
     }
 
@@ -51,12 +51,12 @@ public class CatLogic {
     }
 
     @Transactional
-    public void updateCat(Long id, CatData catData) {
+    public void updateCat(Long id, CatDto catDto) {
         Cat entity = catRepository.findOne(id);
         if (entity == null) {
             throw new IllegalArgumentException("Entity with id " + id + " not found");
         }
 
-        catFactory.editEntity(entity, catData);
+        catFactory.editEntity(entity, catDto);
     }
 }

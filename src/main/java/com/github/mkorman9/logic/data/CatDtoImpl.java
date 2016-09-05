@@ -1,13 +1,13 @@
 package com.github.mkorman9.logic.data;
 
-public class CatDataOutput implements CatData {
+public class CatDtoImpl implements CatDto {
     private Long id;
     private String roleName;
     private String name;
     private Integer duelsWon;
-    private CatsGroupData group;
+    private CatsGroupDto group;
 
-    CatDataOutput(Long id, String roleName, String name, Integer duelsWon, CatsGroupData group) {
+    CatDtoImpl(Long id, String roleName, String name, Integer duelsWon, CatsGroupDto group) {
         this.id = id;
         this.roleName = roleName;
         this.name = name;
@@ -36,7 +36,7 @@ public class CatDataOutput implements CatData {
     }
 
     @Override
-    public CatsGroupData getGroup() {
+    public CatsGroupDto getGroup() {
         return group;
     }
 
@@ -49,7 +49,7 @@ public class CatDataOutput implements CatData {
         private String roleName;
         private String name;
         private Integer duelsWon;
-        private CatsGroupData group;
+        private CatsGroupDto group;
 
         Builder() {
         }
@@ -74,13 +74,13 @@ public class CatDataOutput implements CatData {
             return this;
         }
 
-        public Builder withGroup(CatsGroupData group) {
+        public Builder withGroup(CatsGroupDto group) {
             this.group = group;
             return this;
         }
 
-        public CatDataOutput get() {
-            return new CatDataOutput(id, roleName, name, duelsWon, group);
+        public CatDtoImpl get() {
+            return new CatDtoImpl(id, roleName, name, duelsWon, group);
         }
     }
 }

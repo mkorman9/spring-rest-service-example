@@ -1,10 +1,10 @@
 package com.github.mkorman9.logic.data;
 
-public class CatsGroupDataOutput implements CatsGroupData {
+public class CatsGroupDtoImpl implements CatsGroupDto {
     private Long id;
     private String name;
 
-    CatsGroupDataOutput(Long id, String name) {
+    CatsGroupDtoImpl(Long id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -40,8 +40,8 @@ public class CatsGroupDataOutput implements CatsGroupData {
             return this;
         }
 
-        public CatsGroupDataOutput get() {
-            return new CatsGroupDataOutput(id, name);
+        public CatsGroupDtoImpl get() {
+            return new CatsGroupDtoImpl(id, name);
         }
     }
 }

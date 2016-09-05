@@ -1,10 +1,10 @@
 package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatsGroupRepository;
-import com.github.mkorman9.logic.data.CatData;
-import com.github.mkorman9.logic.data.CatDataOutput;
-import com.github.mkorman9.logic.data.CatsGroupData;
-import com.github.mkorman9.logic.data.CatsGroupDataOutput;
+import com.github.mkorman9.logic.data.CatDto;
+import com.github.mkorman9.logic.data.CatDtoImpl;
+import com.github.mkorman9.logic.data.CatsGroupDto;
+import com.github.mkorman9.logic.data.CatsGroupDtoImpl;
 import com.github.mkorman9.model.Cat;
 import com.github.mkorman9.model.CatsGroup;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,21 +19,21 @@ public class CatFactory {
         this.catsGroupRepository = catsGroupRepository;
     }
 
-    public Cat createEntity(CatData catData) {
+    public Cat createEntity(CatDto catDto) {
         Cat cat = new Cat();
-        editEntity(cat, catData);
+        editEntity(cat, catDto);
         return cat;
     }
 
-    public void editEntity(Cat entity, CatData catData) {
-        entity.setRoleName(catData.getRoleName());
-        entity.setName(catData.getName());
-        entity.setDuelsWon(catData.getDuelsWon());
-        entity.setGroup(convertDataGroupToEntity(catData.getGroup()));
+    public void editEntity(Cat entity, CatDto catDto) {
+        entity.setRoleName(catDto.getRoleName());
+        entity.setName(catDto.getName());
+        entity.setDuelsWon(catDto.getDuelsWon());
+        entity.setGroup(convertDataGroupToEntity(catDto.getGroup()));
     }
 
-    public CatData createData(Cat entity) {
-        return CatDataOutput.build()
+    public CatDto createData(Cat entity) {
+        return CatDtoImpl.build()
                 .withId(entity.getId())
                 .withRoleName(entity.getRoleName())
                 .withName(entity.getName())
@@ -42,14 +42,14 @@ public class CatFactory {
                 .get();
     }
 
-    public CatsGroupData convertEntityGroupToData(CatsGroup group) {
-        return CatsGroupDataOutput.build()
+    public CatsGroupDto convertEntityGroupToData(CatsGroup group) {
+        return CatsGroupDtoImpl.build()
                 .withId(group.getId())
                 .withName(group.getName())
                 .get();
     }
 
-    private CatsGroup convertDataGroupToEntity(CatsGroupData group) {
+    private CatsGroup convertDataGroupToEntity(CatsGroupDto group) {
         CatsGroup groupEntity = catsGroupRepository.findOne(group.getId());
         if (groupEntity == null) {
             throw new IllegalStateException("Group with id " + group.getId() + " was not found");

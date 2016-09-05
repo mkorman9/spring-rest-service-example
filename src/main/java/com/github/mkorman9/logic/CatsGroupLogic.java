@@ -1,7 +1,7 @@
 package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatsGroupRepository;
-import com.github.mkorman9.logic.data.CatsGroupData;
+import com.github.mkorman9.logic.data.CatsGroupDto;
 import com.google.common.collect.ImmutableSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class CatsGroupLogic {
     }
 
     @Transactional(readOnly = true)
-    public Set<CatsGroupData> findAll() {
+    public Set<CatsGroupDto> findAll() {
         return ImmutableSet.copyOf(catsGroupRepository.findAll())
                 .stream()
                 .map(group -> catFactory.convertEntityGroupToData(group))

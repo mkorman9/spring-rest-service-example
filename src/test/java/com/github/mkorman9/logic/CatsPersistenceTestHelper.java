@@ -1,7 +1,7 @@
 package com.github.mkorman9.logic;
 
-import com.github.mkorman9.logic.data.CatData;
-import com.github.mkorman9.logic.data.CatsGroupData;
+import com.github.mkorman9.logic.data.CatDto;
+import com.github.mkorman9.logic.data.CatsGroupDto;
 import com.github.mkorman9.model.Cat;
 import com.github.mkorman9.model.CatsGroup;
 
@@ -12,19 +12,19 @@ public final class CatsPersistenceTestHelper {
     private CatsPersistenceTestHelper() {
     }
 
-    static CatData createCatDataMock(String roleName, String name, int duelsWon, long groupId) {
-        CatsGroupData groupDataMock = createGroupDataMock(groupId);
+    static CatDto createCatDtoMock(String roleName, String name, int duelsWon, long groupId) {
+        CatsGroupDto groupDataMock = createGroupDtoMock(groupId);
 
-        CatData catData = mock(CatData.class);
-        when(catData.getRoleName()).thenReturn(roleName);
-        when(catData.getName()).thenReturn(name);
-        when(catData.getGroup()).thenReturn(groupDataMock);
-        when(catData.getDuelsWon()).thenReturn(duelsWon);
-        return catData;
+        CatDto catDto = mock(CatDto.class);
+        when(catDto.getRoleName()).thenReturn(roleName);
+        when(catDto.getName()).thenReturn(name);
+        when(catDto.getGroup()).thenReturn(groupDataMock);
+        when(catDto.getDuelsWon()).thenReturn(duelsWon);
+        return catDto;
     }
 
-    static CatsGroupData createGroupDataMock(long groupId) {
-        CatsGroupData groupData = mock(CatsGroupData.class);
+    static CatsGroupDto createGroupDtoMock(long groupId) {
+        CatsGroupDto groupData = mock(CatsGroupDto.class);
         when(groupData.getId()).thenReturn(groupId);
         return groupData;
     }

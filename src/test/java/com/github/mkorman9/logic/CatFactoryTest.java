@@ -1,11 +1,9 @@
 package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatsGroupRepository;
-import com.github.mkorman9.logic.data.CatData;
-import com.github.mkorman9.logic.data.CatsGroupData;
+import com.github.mkorman9.logic.data.CatDto;
 import com.github.mkorman9.model.Cat;
 import com.github.mkorman9.model.CatsGroup;
-import com.google.common.collect.Lists;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -15,13 +13,10 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.List;
-
 import static com.github.mkorman9.logic.CatsPersistenceTestHelper.createCat;
-import static com.github.mkorman9.logic.CatsPersistenceTestHelper.createCatDataMock;
+import static com.github.mkorman9.logic.CatsPersistenceTestHelper.createCatDtoMock;
 import static com.github.mkorman9.logic.CatsPersistenceTestHelper.createCatsGroup;
 import static org.fest.assertions.Assertions.assertThat;
-import static org.mockito.Matchers.anyLong;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -51,10 +46,10 @@ public class CatFactoryTest {
         String roleName = "Pirate";
         String name = "Barnaba";
         int duelsWon = 12;
-        CatData catData = createCatDataMock(roleName, name, duelsWon, groupId);
+        CatDto catDto = createCatDtoMock(roleName, name, duelsWon, groupId);
 
         // when
-        Cat cat = catFactory.createEntity(catData);
+        Cat cat = catFactory.createEntity(catDto);
 
         // then
         assertThat(cat.getRoleName()).isEqualTo(roleName);
@@ -73,7 +68,7 @@ public class CatFactoryTest {
         Cat entity = createCat(1L, roleName, name, duelsWon, catsGroup);
 
         // when
-        CatData data = catFactory.createData(entity);
+        CatDto data = catFactory.createData(entity);
 
         // then
         assertThat(data.getRoleName()).isEqualTo(roleName);
@@ -90,7 +85,7 @@ public class CatFactoryTest {
         String name = "Barnaba";
         int duelsWon = 12;
         Long nonExistingGroupId = 10L;
-        CatData data = createCatDataMock(roleName, name, duelsWon, nonExistingGroupId);
+        CatDto data = createCatDtoMock(roleName, name, duelsWon, nonExistingGroupId);
 
         expectedException.expect(IllegalStateException.class);
         

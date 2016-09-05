@@ -1,7 +1,7 @@
 package com.github.mkorman9.logging;
 
 import com.github.mkorman9.logic.CatLogic;
-import com.github.mkorman9.logic.data.CatData;
+import com.github.mkorman9.logic.data.CatDto;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;
@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
 public class CatsAuditAspect {
     private static Logger LOGGER = LoggerFactory.getLogger(CatLogic.class);
 
-    @After("execution(* com.github.mkorman9.logic.CatLogic.addNewCat(..)) && args(catData,..)")
-    public void logCatAdded(CatData catData) {
-        LOGGER.info("Added new cat " + catData.getName());
+    @After("execution(* com.github.mkorman9.logic.CatLogic.addNewCat(..)) && args(catDto,..)")
+    public void logCatAdded(CatDto catDto) {
+        LOGGER.info("Added new cat " + catDto.getName());
     }
 
     @After("execution(* com.github.mkorman9.logic.CatLogic.updateCat(..)) && args(id,..)")

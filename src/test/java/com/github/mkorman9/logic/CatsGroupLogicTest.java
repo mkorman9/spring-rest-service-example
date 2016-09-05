@@ -1,19 +1,14 @@
 package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatsGroupRepository;
-import com.github.mkorman9.logic.data.CatsGroupData;
-import com.github.mkorman9.model.Cat;
+import com.github.mkorman9.logic.data.CatsGroupDto;
 import com.github.mkorman9.model.CatsGroup;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Sets;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
-
-import java.util.Set;
 
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.eq;
@@ -33,10 +28,10 @@ public class CatsGroupLogicTest {
     public void allGroupsFromDBShouldBeFoundAndConvertedToData() throws Exception {
         // given
         CatsGroup testCatsGroup = CatsPersistenceTestHelper.createCatsGroup(0, "Pirates");
-        CatsGroupData testCatsGroupData = CatsPersistenceTestHelper.createGroupDataMock(0);
+        CatsGroupDto testCatsGroupDto = CatsPersistenceTestHelper.createGroupDtoMock(0);
 
         when(catsGroupRepository.findAll()).thenReturn(ImmutableList.of(testCatsGroup));
-        when(catFactory.convertEntityGroupToData(eq(testCatsGroup))).thenReturn(testCatsGroupData);
+        when(catFactory.convertEntityGroupToData(eq(testCatsGroup))).thenReturn(testCatsGroupDto);
 
         // when
         catsGroupLogic.findAll();

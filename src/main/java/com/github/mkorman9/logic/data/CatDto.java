@@ -1,6 +1,6 @@
 package com.github.mkorman9.logic.data;
 
-public interface CatData {
+public interface CatDto {
     Long getId();
 
     String getRoleName();
@@ -9,5 +9,5 @@ public interface CatData {
 
     Integer getDuelsWon();
 
-    CatsGroupData getGroup();
+    CatsGroupDto getGroup();
 }

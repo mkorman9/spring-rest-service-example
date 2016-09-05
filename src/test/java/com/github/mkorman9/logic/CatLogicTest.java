@@ -1,11 +1,8 @@
 package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatRepository;
-import com.github.mkorman9.logic.data.CatData;
+import com.github.mkorman9.logic.data.CatDto;
 import com.github.mkorman9.model.Cat;
-import com.github.mkorman9.model.CatsGroup;
-import com.google.common.collect.Lists;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -14,11 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import java.util.List;
-import java.util.Set;
-
 import static com.github.mkorman9.logic.CatsPersistenceTestHelper.createCat;
-import static com.github.mkorman9.logic.CatsPersistenceTestHelper.createCatDataMock;
+import static com.github.mkorman9.logic.CatsPersistenceTestHelper.createCatDtoMock;
 import static com.github.mkorman9.logic.CatsPersistenceTestHelper.createCatsGroup;
 import static org.fest.assertions.Assertions.assertThat;
 import static org.mockito.Matchers.eq;
@@ -41,7 +35,7 @@ public class CatLogicTest {
     @Test
     public void shouldConvertAndPersistNewCat() throws Exception {
         // given
-        CatData catToAdd = createCatDataMock("Pirate", "Barnaba", 13, 1L);
+        CatDto catToAdd = createCatDtoMock("Pirate", "Barnaba", 13, 1L);
         Cat catConverted = createCat(1L, "Pirate", "Barnaba", 13, createCatsGroup(0L, "Pirates"));
         when(catFactory.createEntity(eq(catToAdd))).thenReturn(catConverted);
 
@@ -57,27 +51,27 @@ public class CatLogicTest {
     public void shouldEditExistingCat() throws Exception {
         // given
         Cat catToUpdate = createCat(0L, "Pirate", "Barnaba", 14, createCatsGroup(0L, "Pirates"));
-        CatData catDataToUpdate = createCatDataMock("Pirate", "Barnaba", 13, 0L);
+        CatDto catDtoToUpdate = createCatDtoMock("Pirate", "Barnaba", 13, 0L);
         when(catRepository.findOne(eq(0L))).thenReturn(catToUpdate);
 
         // when
-        catLogic.updateCat(0L, catDataToUpdate);
+        catLogic.updateCat(0L, catDtoToUpdate);
 
         // then
         verify(catRepository).findOne(eq(0L));
-        verify(catFactory).editEntity(eq(catToUpdate), eq(catDataToUpdate));
+        verify(catFactory).editEntity(eq(catToUpdate), eq(catDtoToUpdate));
     }
 
     @Test
     public void shouldThrowExceptionWhenTryingToEditNonExistingCat() throws Exception {
         // given
-        CatData catDataToUpdate = createCatDataMock("Pirate", "Barnaba", 13, 0L);
+        CatDto catDtoToUpdate = createCatDtoMock("Pirate", "Barnaba", 13, 0L);
         when(catRepository.findOne(eq(0L))).thenReturn(null);
 
         expectedException.expect(IllegalArgumentException.class);
 
         // when
-        catLogic.updateCat(1L, catDataToUpdate);
+        catLogic.updateCat(1L, catDtoToUpdate);
     }
 
     @Test

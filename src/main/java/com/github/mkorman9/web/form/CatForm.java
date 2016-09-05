@@ -1,13 +1,13 @@
 package com.github.mkorman9.web.form;
 
-import com.github.mkorman9.logic.data.CatData;
+import com.github.mkorman9.logic.data.CatDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-public class CatForm implements CatData {
+public class CatForm implements CatDto {
     private Long id;
 
     @NotNull
