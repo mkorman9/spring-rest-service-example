@@ -1,7 +1,7 @@
 package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatsGroupRepository;
-import com.github.mkorman9.logic.data.CatsGroupDto;
+import com.github.mkorman9.logic.dto.CatsGroupDto;
 import com.google.common.collect.ImmutableSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

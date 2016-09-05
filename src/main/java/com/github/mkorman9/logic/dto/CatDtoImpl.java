@@ -1,4 +1,4 @@
-package com.github.mkorman9.logic.data;
+package com.github.mkorman9.logic.dto;
 
 public class CatDtoImpl implements CatDto {
     private Long id;

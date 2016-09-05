@@ -1,7 +1,7 @@
 package com.github.mkorman9.logging;
 
 import com.github.mkorman9.logic.CatLogic;
-import com.github.mkorman9.logic.data.CatDto;
+import com.github.mkorman9.logic.dto.CatDto;
 import org.aspectj.lang.annotation.After;
 import org.aspectj.lang.annotation.Aspect;
 import org.slf4j.Logger;

@@ -1,7 +1,7 @@
 package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatsGroupRepository;
-import com.github.mkorman9.logic.data.CatDto;
+import com.github.mkorman9.logic.dto.CatDto;
 import com.github.mkorman9.model.Cat;
 import com.github.mkorman9.model.CatsGroup;
 import org.junit.Before;

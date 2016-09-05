@@ -1,6 +1,6 @@
 package com.github.mkorman9.web.form;
 
-import com.github.mkorman9.logic.data.CatsGroupDto;
+import com.github.mkorman9.logic.dto.CatsGroupDto;
 
 import javax.validation.constraints.NotNull;
 

@@ -1,10 +1,10 @@
 package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatsGroupRepository;
-import com.github.mkorman9.logic.data.CatDto;
-import com.github.mkorman9.logic.data.CatDtoImpl;
-import com.github.mkorman9.logic.data.CatsGroupDto;
-import com.github.mkorman9.logic.data.CatsGroupDtoImpl;
+import com.github.mkorman9.logic.dto.CatDto;
+import com.github.mkorman9.logic.dto.CatDtoImpl;
+import com.github.mkorman9.logic.dto.CatsGroupDto;
+import com.github.mkorman9.logic.dto.CatsGroupDtoImpl;
 import com.github.mkorman9.model.Cat;
 import com.github.mkorman9.model.CatsGroup;
 import org.springframework.beans.factory.annotation.Autowired;

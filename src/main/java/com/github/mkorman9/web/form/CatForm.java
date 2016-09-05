@@ -1,6 +1,6 @@
 package com.github.mkorman9.web.form;
 
-import com.github.mkorman9.logic.data.CatDto;
+import com.github.mkorman9.logic.dto.CatDto;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;

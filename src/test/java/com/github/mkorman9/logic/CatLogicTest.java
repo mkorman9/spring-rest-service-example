@@ -1,7 +1,7 @@
 package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatRepository;
-import com.github.mkorman9.logic.data.CatDto;
+import com.github.mkorman9.logic.dto.CatDto;
 import com.github.mkorman9.model.Cat;
 import org.junit.Rule;
 import org.junit.Test;

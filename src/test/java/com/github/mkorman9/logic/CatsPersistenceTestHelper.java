@@ -1,7 +1,7 @@
 package com.github.mkorman9.logic;
 
-import com.github.mkorman9.logic.data.CatDto;
-import com.github.mkorman9.logic.data.CatsGroupDto;
+import com.github.mkorman9.logic.dto.CatDto;
+import com.github.mkorman9.logic.dto.CatsGroupDto;
 import com.github.mkorman9.model.Cat;
 import com.github.mkorman9.model.CatsGroup;
 
