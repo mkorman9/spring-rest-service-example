@@ -3,6 +3,7 @@ package com.github.mkorman9.web.controller;
 import com.github.mkorman9.web.form.response.ResponseError;
 import com.github.mkorman9.web.form.response.ResponseForm;
 import com.github.mkorman9.web.form.response.ResponseStatus;
+import com.google.common.collect.ImmutableList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.web.ErrorAttributes;
 import org.springframework.http.HttpStatus;
@@ -35,9 +36,13 @@ public class ErrorController implements org.springframework.boot.autoconfigure.w
         Map<String, Object> body = getErrorAttributes(request);
         return ResponseEntity
                 .status(HttpStatus.valueOf(Integer.parseInt(body.get("status").toString())))
-                .body(ResponseForm.build(ResponseStatus.ERROR)
-                        .withError(ResponseError.build(body.get("status") + " " + body.get("error")).get())
-                        .get());
+                .body(ResponseForm.builder()
+                        .status(ResponseStatus.ERROR)
+                        .errors(ImmutableList.of(ResponseError.builder()
+                                .message(body.get("status") + " " + body.get("error"))
+                                .build())
+                        )
+                        .build());
     }
 
     private Map<String, Object> getErrorAttributes(HttpServletRequest aRequest) {

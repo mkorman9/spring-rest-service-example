@@ -3,6 +3,7 @@ package com.github.mkorman9.web.controller;
 import com.github.mkorman9.web.form.response.ResponseError;
 import com.github.mkorman9.web.form.response.ResponseForm;
 import com.github.mkorman9.web.form.response.ResponseStatus;
+import com.google.common.collect.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -24,16 +25,25 @@ class ControllersCommons {
 
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ResponseForm.build(ResponseStatus.ERROR)
-                        .withError(ResponseError.build(exception.getMessage()).get())
-                        .get());
+                .body(ResponseForm.builder()
+                        .status(ResponseStatus.ERROR)
+                        .errors(ImmutableList.of(ResponseError.builder()
+                                .message(exception.getMessage())
+                                .build()
+                        ))
+                        .build());
     }
 
     protected ResponseForm handleBindingError(BindingResult bindingResult) {
-        return ResponseForm.build(ResponseStatus.ERROR)
-                .withErrors(bindingResult.getFieldErrors().stream()
-                        .map(error -> ResponseError.build(error.getCode()).refersToField(error.getField()).get())
+        return ResponseForm.builder()
+                .status(ResponseStatus.ERROR)
+                .errors(bindingResult.getFieldErrors().stream()
+                        .map(error -> ResponseError.builder()
+                                .message(error.getCode())
+                                .field(error.getField())
+                                .build()
+                        )
                         .collect(Collectors.toList()))
-                .get();
+                .build();
     }
 }
