@@ -2,6 +2,7 @@ package com.github.mkorman9.model;
 
 import com.google.common.base.MoreObjects;
 import com.google.common.base.Objects;
+import lombok.*;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
@@ -19,6 +20,11 @@ import java.io.Serializable;
 @Table(name = "CAT")
 //@JsonIgnoreProperties({"group"})
 @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE, region = "cats")
+@Getter
+@Setter
+@NoArgsConstructor
+@EqualsAndHashCode(of = {"name"})
+@ToString
 public class Cat implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -38,75 +44,9 @@ public class Cat implements Serializable {
     @JoinColumn(name = "GROUP_ID")
     private CatsGroup group;
 
-    public Cat() {
-    }
-
     public Cat(String roleName, String name, Integer duelsWon) {
         this.roleName = roleName;
         this.name = name;
         this.duelsWon = duelsWon;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getRoleName() {
-        return roleName;
-    }
-
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public Integer getDuelsWon() {
-        return duelsWon;
-    }
-
-    public void setDuelsWon(Integer duelsWon) {
-        this.duelsWon = duelsWon;
-    }
-
-    public CatsGroup getGroup() {
-        return group;
-    }
-
-    public void setGroup(CatsGroup group) {
-        this.group = group;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Cat cat = (Cat) o;
-        return Objects.equal(name, cat.name);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hashCode(name);
-    }
-
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("id", id)
-                .add("roleName", roleName)
-                .add("name", name)
-                .add("duelsWon", duelsWon)
-                .toString();
     }
 }

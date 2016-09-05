@@ -33,20 +33,20 @@ public class CatFactory {
     }
 
     public CatDto createData(Cat entity) {
-        return CatDtoImpl.build()
-                .withId(entity.getId())
-                .withRoleName(entity.getRoleName())
-                .withName(entity.getName())
-                .withDuelsWon(entity.getDuelsWon())
-                .withGroup(convertEntityGroupToData(entity.getGroup()))
-                .get();
+        return CatDtoImpl.builder()
+                .id(entity.getId())
+                .roleName(entity.getRoleName())
+                .name(entity.getName())
+                .duelsWon(entity.getDuelsWon())
+                .group(convertEntityGroupToData(entity.getGroup()))
+                .build();
     }
 
     public CatsGroupDto convertEntityGroupToData(CatsGroup group) {
-        return CatsGroupDtoImpl.build()
-                .withId(group.getId())
-                .withName(group.getName())
-                .get();
+        return CatsGroupDtoImpl.builder()
+                .id(group.getId())
+                .name(group.getName())
+                .build();
     }
 
     private CatsGroup convertDataGroupToEntity(CatsGroupDto group) {
