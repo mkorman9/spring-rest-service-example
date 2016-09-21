@@ -9,6 +9,7 @@ fi
 # Wait until application wakes up
 timeout_counter="0"
 while [ "$(curl -s "http://127.0.0.1:$APPLICATION_PORT/")" == '' ]; do
+    echo "Trying http://127.0.0.1:$APPLICATION_PORT/"
     if [[ $timeout_counter == "10" ]]; then
         echo "Application wake up phase timed out"
         exit 1
