@@ -32,8 +32,8 @@ public class MessagingConfiguration {
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate() {
-        RabbitTemplate template = new RabbitTemplate(connectionFactory());
+    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
+        RabbitTemplate template = new RabbitTemplate(connectionFactory);
         template.setRoutingKey(QUEUE_NAME);
         template.setQueue(QUEUE_NAME);
         return template;
