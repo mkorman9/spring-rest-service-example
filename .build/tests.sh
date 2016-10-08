@@ -30,7 +30,7 @@ while [ "$(curl -s "http://127.0.0.1:$APPLICATION_PORT/")" == '' ]; do
     timeout_counter=$[$timeout_counter+1]
 done
 
-python -m robot -d $CI_WORK_DIRECTORY ${WORKSPACE}/automated-tests/*.robot
+python -m robot -d $CI_WORK_DIRECTORY ${TRAVIS_BUILD_DIR}/automated-tests/*.robot
 
 if [ $? != 0 ]; then
     exit 1
