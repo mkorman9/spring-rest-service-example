@@ -27,7 +27,7 @@ public class FrontController extends ControllersCommons {
         this.catsGroupLogic = catsGroupLogic;
     }
 
-    @RequestMapping(value = "/all", method = RequestMethod.GET)
+    @RequestMapping(value = "/cats/all", method = RequestMethod.GET)
     public ResponseForm findAllCats() {
         return ResponseForm.builder()
                 .status(ResponseStatus.OK)
@@ -35,7 +35,7 @@ public class FrontController extends ControllersCommons {
                 .build();
     }
 
-    @RequestMapping(value = "/get/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/cats/get/{id}", method = RequestMethod.GET)
     public ResponseForm getSingleCat(@PathVariable("id") Long id) {
         return ResponseForm.builder()
                 .status(ResponseStatus.OK)
@@ -43,7 +43,7 @@ public class FrontController extends ControllersCommons {
                 .build();
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(value = "/cats/add", method = RequestMethod.POST)
     public ResponseForm addNewCat(@RequestBody @Valid CatForm catForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return handleBindingError(bindingResult);
@@ -55,7 +55,7 @@ public class FrontController extends ControllersCommons {
                 .build();
     }
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/cats/delete/{id}", method = RequestMethod.DELETE)
     public ResponseForm deleteCat(@PathVariable("id") Long id) {
         catLogic.removeCat(id);
         return ResponseForm.builder()
@@ -63,7 +63,7 @@ public class FrontController extends ControllersCommons {
                 .build();
     }
 
-    @RequestMapping(value = "/edit/{id}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/cats/edit/{id}", method = RequestMethod.PUT)
     public ResponseForm editCat(@PathVariable("id") Long id, @RequestBody @Valid CatForm catForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return handleBindingError(bindingResult);
@@ -75,7 +75,7 @@ public class FrontController extends ControllersCommons {
                 .build();
     }
 
-    @RequestMapping(value = "/groups", method = RequestMethod.GET)
+    @RequestMapping(value = "/groups/all", method = RequestMethod.GET)
     public ResponseForm findAllGroups() {
         return ResponseForm.builder()
                 .status(ResponseStatus.OK)

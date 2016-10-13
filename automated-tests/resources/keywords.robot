@@ -6,7 +6,7 @@ Library  keywords.py
 Get Id For Group
     [Arguments]  ${name}
     Next Request Should Succeed
-    GET  /groups
+    GET  /cats/groups
     ${response}=  Get Response Body
     Should Be Valid Json  ${response}
     ${response}=  Get Json Value  ${response}  /data
@@ -16,7 +16,7 @@ Get Id For Group
 Get Id For Cat
     [Arguments]  ${name}
     Next Request Should Succeed
-    GET  /all
+    GET  /cats/all
     ${response}=  Get Response Body
     Should Be Valid Json  ${response}
     ${response}=  Get Json Value  ${response}  /data
@@ -29,7 +29,7 @@ Add cat
     Next Request Should Succeed
     Set Request Body  {"roleName":"${roleName}","name":"${name}","duelsWon":${duelsWon},"group":{"id":${groupId}}}
     Set Request Header  Content-Type  application/json
-    POST  /add
+    POST  /cats/add
     ${response}=  Get Response Body
     Should Be Valid Json  ${response}
 
@@ -37,7 +37,7 @@ Delete cat
     [Arguments]  ${name}
     ${catId}=  Get Id For Cat  ${name}
     Next Request Should Succeed
-    DELETE  /delete/${catId}
+    DELETE  /cats/delete/${catId}
     ${response}=  Get Response Body
     Should Be Valid Json  ${response}
 
@@ -48,13 +48,13 @@ Update cat
     Next Request Should Succeed
     Set Request Body  {"roleName":"${roleName}","name":"${name}","duelsWon":${duelsWon},"group":{"id":${groupId}}}
     Set Request Header  Content-Type  application/json
-    PUT  /edit/${catId}
+    PUT  /cats/edit/${catId}
     ${response}=  Get Response Body
     Should Be Valid Json  ${response}
 
 Read all cats
     Next Request Should Succeed
-    GET  /all
+    GET  /cats/all
     ${response}=  Get Response Body
     Should Be Valid Json  ${response}
     ${response}=  Get Json Value  ${response}  /data
@@ -64,7 +64,7 @@ Read single cat
     [Arguments]  ${name}
     ${catId}=  Get Id For Cat  ${name}
     Next Request Should Succeed
-    GET  /get/${catId}
+    GET  /cats/get/${catId}
     ${response}=  Get Response Body
     Should Be Valid Json  ${response}
     ${response}=  Get Json Value  ${response}  /data
