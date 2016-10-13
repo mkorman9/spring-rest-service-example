@@ -1,4 +1,4 @@
-Feature: REST API
+Feature: REST API exposing
     Scenario: Testing valid API endpoint
       Given: application is running
       when sending request to valid endpoint
