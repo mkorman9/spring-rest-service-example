@@ -10,7 +10,7 @@ def step_impl(context):
 
 @when('sending request to valid endpoint')
 def step_impl(context):
-    address = 'http://localhost:{0}/'.format(os.environ['APPLICATION_PORT'])
+    address = 'http://localhost:{0}/cats/all'.format(os.environ['APPLICATION_PORT'])
     context.response = requests.get(address)
 
 
