@@ -2,10 +2,6 @@ from behave import *
 import os
 import requests
 
-@given('application is running')
-def step_impl(context):
-    pass
-
 
 @when('new cat is added')
 def step_impl(context):
