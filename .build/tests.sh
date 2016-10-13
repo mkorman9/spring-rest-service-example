@@ -1,20 +1,20 @@
 #!/bin/bash
 
-# Install test dependencies\
+# Install test dependencies
 python -c "import pip" &> /dev/null
 if [ $? != 0 ]; then
     curl -o /tmp/get-pip.py https://bootstrap.pypa.io/get-pip.py
     python /tmp/get-pip.py --user
 fi
 
-python -c "import robot" &> /dev/null
+python -c "import behave" &> /dev/null
 if [ $? != 0 ]; then
-    python -m pip install --user robotframework
+    python -m pip install --user behave
 fi
 
-python -c "import HttpLibrary" &> /dev/null
+python -c "import requests" &> /dev/null
 if [ $? != 0 ]; then
-    python -m pip install --user robotframework-httplibrary
+    python -m pip install --user requests
 fi
 
 # Wait until application wakes up
@@ -30,7 +30,7 @@ while [ "$(curl -s "http://127.0.0.1:$APPLICATION_PORT/")" == '' ]; do
     timeout_counter=$[$timeout_counter+1]
 done
 
-python -m robot -d $CI_WORK_DIRECTORY ${TRAVIS_BUILD_DIR}/automated-tests/*.robot
+python -m behave automated-tests/
 
 if [ $? != 0 ]; then
     exit 1
