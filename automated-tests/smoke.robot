@@ -5,7 +5,7 @@ Library  HttpLibrary.HTTP
 Valid API for retrieving cats should be exposed
     Create HTTP Context  localhost:%{APPLICATION_PORT}
     Next Request Should Succeed
-    GET  /all
+    GET  /cats/all
     ${response}=  Get Response Body
     Should Be Valid Json  ${response}
 

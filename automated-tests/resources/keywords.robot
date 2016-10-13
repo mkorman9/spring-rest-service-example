@@ -6,7 +6,7 @@ Library  keywords.py
 Get Id For Group
     [Arguments]  ${name}
     Next Request Should Succeed
-    GET  /cats/groups
+    GET  /groups/all
     ${response}=  Get Response Body
     Should Be Valid Json  ${response}
     ${response}=  Get Json Value  ${response}  /data
