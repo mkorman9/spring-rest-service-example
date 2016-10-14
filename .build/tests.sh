@@ -30,7 +30,7 @@ while [ "$(curl -s "http://127.0.0.1:$APPLICATION_PORT/")" == '' ]; do
     timeout_counter=$[$timeout_counter+1]
 done
 
-python -m behave automated-tests/
+python -m behave spring-rest-service-example-tests/src/behave
 
 if [ $? != 0 ]; then
     exit 1
