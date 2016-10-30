@@ -2,7 +2,7 @@ from behave import *
 import os
 import requests
 
-ALL_CATS_ENDPOINT = 'http://localhost:{0}/cats/add'.format(os.environ['APPLICATION_PORT'])
+ALL_CATS_ENDPOINT = 'http://localhost:{0}/cats/all'.format(os.environ['APPLICATION_PORT'])
 ALL_GROUPS_ENDPOINT = 'http://localhost:{0}/groups/all'.format(os.environ['APPLICATION_PORT'])
 ADD_CAT_ENDPOINT = 'http://localhost:{0}/cats/add'.format(os.environ['APPLICATION_PORT'])
 DELETE_CAT_ENDPOINT = 'http://localhost:{0}/cats/delete/'.format(os.environ['APPLICATION_PORT'])
@@ -50,7 +50,7 @@ def step_impl(context):
 
 @then('new validation error should be returned')
 def step_impl(context):
-    assert context.response['status'] == 'error'
+    assert context.response.json()['status'] == 'error'
     assert not check_if_cat_exists(context.payload)
 
 
