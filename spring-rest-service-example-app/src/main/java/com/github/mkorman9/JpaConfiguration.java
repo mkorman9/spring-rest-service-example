@@ -40,7 +40,7 @@ public class JpaConfiguration {
         LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(source);
         factoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
-        factoryBean.setPackagesToScan("com.github.mkorman9.model");
+        factoryBean.setPackagesToScan("com.github.mkorman9.entity");
         factoryBean.setJpaProperties(hibernateProperties);
         return factoryBean;
     }
