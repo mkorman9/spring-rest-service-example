@@ -2,8 +2,8 @@ package com.github.mkorman9.logic;
 
 import com.github.mkorman9.logic.dto.CatDto;
 import com.github.mkorman9.logic.dto.CatsGroupDto;
-import com.github.mkorman9.model.Cat;
-import com.github.mkorman9.model.CatsGroup;
+import com.github.mkorman9.entity.Cat;
+import com.github.mkorman9.entity.CatsGroup;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -27,6 +27,7 @@ public final class CatsPersistenceTestHelper {
         CatsGroupDto groupDto = mock(CatsGroupDto.class);
         when(groupDto.getId()).thenReturn(groupId);
         return groupDto;
+
     }
 
     static CatsGroup createCatsGroup(long id, String name) {

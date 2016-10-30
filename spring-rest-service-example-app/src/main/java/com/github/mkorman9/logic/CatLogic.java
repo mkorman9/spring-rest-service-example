@@ -2,7 +2,7 @@ package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatRepository;
 import com.github.mkorman9.logic.dto.CatDto;
-import com.github.mkorman9.model.Cat;
+import com.github.mkorman9.entity.Cat;
 import com.google.common.collect.ImmutableSet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

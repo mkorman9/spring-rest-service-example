@@ -2,7 +2,7 @@ package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatsGroupRepository;
 import com.github.mkorman9.logic.dto.CatsGroupDto;
-import com.github.mkorman9.model.CatsGroup;
+import com.github.mkorman9.entity.CatsGroup;
 import com.google.common.collect.ImmutableList;
 import org.junit.Test;
 import org.junit.runner.RunWith;

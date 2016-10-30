@@ -2,11 +2,11 @@ package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatsGroupRepository;
 import com.github.mkorman9.logic.dto.CatDto;
-import com.github.mkorman9.logic.dto.CatDtoImpl;
+import com.github.mkorman9.logic.dto.CatModel;
 import com.github.mkorman9.logic.dto.CatsGroupDto;
-import com.github.mkorman9.logic.dto.CatsGroupDtoImpl;
-import com.github.mkorman9.model.Cat;
-import com.github.mkorman9.model.CatsGroup;
+import com.github.mkorman9.logic.dto.CatsGroupModel;
+import com.github.mkorman9.entity.Cat;
+import com.github.mkorman9.entity.CatsGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +33,7 @@ public class CatFactory {
     }
 
     public CatDto createDto(Cat entity) {
-        return CatDtoImpl.builder()
+        return CatModel.builder()
                 .id(entity.getId())
                 .roleName(entity.getRoleName())
                 .name(entity.getName())
@@ -43,7 +43,7 @@ public class CatFactory {
     }
 
     public CatsGroupDto convertEntityGroupToDto(CatsGroup group) {
-        return CatsGroupDtoImpl.builder()
+        return CatsGroupModel.builder()
                 .id(group.getId())
                 .name(group.getName())
                 .build();

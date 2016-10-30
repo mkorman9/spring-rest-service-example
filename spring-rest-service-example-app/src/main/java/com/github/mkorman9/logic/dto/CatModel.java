@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class CatDtoImpl implements CatDto {
+public class CatModel implements CatDto {
     private Long id;
     private String roleName;
     private String name;

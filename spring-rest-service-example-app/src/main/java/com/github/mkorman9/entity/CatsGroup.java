@@ -1,7 +1,5 @@
-package com.github.mkorman9.model;
+package com.github.mkorman9.entity;
 
-import com.google.common.base.MoreObjects;
-import com.google.common.base.Objects;
 import lombok.*;
 
 import javax.persistence.Column;

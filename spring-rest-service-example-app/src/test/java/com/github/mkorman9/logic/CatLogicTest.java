@@ -1,8 +1,8 @@
 package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatRepository;
+import com.github.mkorman9.entity.Cat;
 import com.github.mkorman9.logic.dto.CatDto;
-import com.github.mkorman9.model.Cat;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -11,12 +11,8 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
-import static com.github.mkorman9.logic.CatsPersistenceTestHelper.createCat;
-import static com.github.mkorman9.logic.CatsPersistenceTestHelper.createCatDtoMock;
-import static com.github.mkorman9.logic.CatsPersistenceTestHelper.createCatsGroup;
-import static org.fest.assertions.Assertions.assertThat;
+import static com.github.mkorman9.logic.CatsPersistenceTestHelper.*;
 import static org.mockito.Matchers.eq;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
