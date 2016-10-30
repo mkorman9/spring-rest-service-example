@@ -30,7 +30,7 @@ def find_cat_id_by_name(cat_name):
 
 @when('new cat is added')
 def step_impl(context):
-    payload = {"role_name": "Bandit", "name": "Marcel", "duels_won": 13, "group":
+    payload = {"roleName": "Bandit", "name": "Marcel", "duelsWon": 13, "group":
         {"id": download_group_id('Bandits')}}
     context.payload = payload
     context.response = requests.post(ADD_CAT_ENDPOINT, json=payload)
@@ -43,7 +43,7 @@ def step_impl(context):
 
 @when('new cat request is sent with invalid data')
 def step_impl(context):
-    payload = {"name": "Invalid", "duels_won": 1, "group": {"id": download_group_id('Bandits')}}
+    payload = {"name": "Invalid", "duelsWon": 1, "group": {"id": download_group_id('Bandits')}}
     context.payload = payload
     context.response = requests.post(ADD_CAT_ENDPOINT, json=payload)
 
@@ -56,7 +56,7 @@ def step_impl(context):
 
 @when('existing cat is deleted')
 def step_impl(context):
-    add_payload = {"role_name": "Pirate", "name": "Wojtek", "duels_won": 2, "group": {"id": download_group_id('Pirates')}}
+    add_payload = {"roleName": "Pirate", "name": "Wojtek", "duelsWon": 2, "group": {"id": download_group_id('Pirates')}}
     context.payload = add_payload
     requests.post(ADD_CAT_ENDPOINT, json=add_payload)
     added_cat_id = find_cat_id_by_name('Wojtek')
