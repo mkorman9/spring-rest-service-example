@@ -61,7 +61,7 @@ def step_impl(context):
     requests.post(ADD_CAT_ENDPOINT, json=add_payload)
     added_cat_id = find_cat_id_by_name('Wojtek')
 
-    requests.delete(DELETE_CAT_ENDPOINT + added_cat_id)
+    requests.delete(DELETE_CAT_ENDPOINT + str(added_cat_id))
 
 
 @then('it should not exist in registry anymore')
