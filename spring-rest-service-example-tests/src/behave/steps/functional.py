@@ -28,12 +28,20 @@ def find_cat_id_by_name(cat_name):
     return selected_cats[0]['id']
 
 
+def add_cat(cat_data):
+    return requests.post(ADD_CAT_ENDPOINT, json=cat_data)
+
+
+def delete_cat(cat_id):
+    return requests.delete(DELETE_CAT_ENDPOINT + str(cat_id))
+
+
 @when('new cat is added')
 def step_impl(context):
     payload = {"roleName": "Bandit", "name": "Marcel", "duelsWon": 13, "group":
         {"id": download_group_id('Bandits')}}
     context.payload = payload
-    context.response = requests.post(ADD_CAT_ENDPOINT, json=payload)
+    context.response = add_cat(payload)
 
 
 @then('it should be remembered')
@@ -45,7 +53,7 @@ def step_impl(context):
 def step_impl(context):
     payload = {"name": "Invalid", "duelsWon": 1, "group": {"id": download_group_id('Bandits')}}
     context.payload = payload
-    context.response = requests.post(ADD_CAT_ENDPOINT, json=payload)
+    context.response = add_cat(payload)
 
 
 @then('new validation error should be returned')
@@ -58,10 +66,9 @@ def step_impl(context):
 def step_impl(context):
     add_payload = {"roleName": "Pirate", "name": "Wojtek", "duelsWon": 2, "group": {"id": download_group_id('Pirates')}}
     context.payload = add_payload
-    requests.post(ADD_CAT_ENDPOINT, json=add_payload)
-    added_cat_id = find_cat_id_by_name('Wojtek')
+    add_cat(add_payload)
 
-    requests.delete(DELETE_CAT_ENDPOINT + str(added_cat_id))
+    delete_cat(find_cat_id_by_name('Wojtek'))
 
 
 @then('it should not exist in registry anymore')
@@ -71,7 +78,7 @@ def step_impl(context):
 
 @when('request of deleting cat with non-existing id is sent')
 def step_impl(context):
-    context.response = requests.delete(DELETE_CAT_ENDPOINT + '666')
+    context.response = delete_cat(666)
 
 
 @then('deleting error about non-existing cat should be returned')
