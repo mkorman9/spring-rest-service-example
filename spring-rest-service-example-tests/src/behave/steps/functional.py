@@ -83,7 +83,7 @@ def step_impl(context):
 
 @then('deleting error about non-existing cat should be returned')
 def step_impl(context):
-    assert context.response.status_code == 500
+    assert context.response.status_code == 400
 
 
 @when('existing cat is updated with new data')

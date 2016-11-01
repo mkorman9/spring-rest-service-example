@@ -3,13 +3,16 @@ package com.github.mkorman9.logic;
 import com.github.mkorman9.dao.CatRepository;
 import com.github.mkorman9.entity.Cat;
 import com.github.mkorman9.logic.dto.CatDto;
+import com.github.mkorman9.logic.exception.InvalidInputDataException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.runners.MockitoJUnitRunner;
+import org.springframework.dao.EmptyResultDataAccessException;
 
 import static com.github.mkorman9.logic.CatsPersistenceTestHelper.*;
 import static org.mockito.Matchers.eq;
@@ -64,7 +67,7 @@ public class CatLogicTest {
         CatDto catDtoToUpdate = createCatDtoMock("Pirate", "Barnaba", 13, 0L);
         when(catRepository.findOne(eq(0L))).thenReturn(null);
 
-        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expect(InvalidInputDataException.class);
 
         // when
         catLogic.updateCat(1L, catDtoToUpdate);
@@ -80,13 +83,26 @@ public class CatLogicTest {
     }
 
     @Test
+    public void shouldThrowWhenTryingToDeleteNonExistingCat() throws Exception {
+        // given
+        Mockito.doThrow(new EmptyResultDataAccessException(1))
+                .when(catRepository)
+                .delete(eq(666L));
+
+        expectedException.expect(InvalidInputDataException.class);
+
+        // when
+        catLogic.removeCat(666L);
+    }
+
+    @Test
     public void shouldThrowWhenSingleCatNotFound() throws Exception {
         // given
         when(catRepository.findOne(eq(1000L))).thenReturn(null);
 
-        expectedException.expect(IllegalArgumentException.class);
+        expectedException.expect(InvalidInputDataException.class);
 
-        // then
+        // when
         catLogic.findSingleCat(1000L);
     }
 }

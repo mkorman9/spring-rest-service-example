@@ -1,10 +1,12 @@
 package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatRepository;
-import com.github.mkorman9.logic.dto.CatDto;
 import com.github.mkorman9.entity.Cat;
+import com.github.mkorman9.logic.dto.CatDto;
+import com.github.mkorman9.logic.exception.InvalidInputDataException;
 import com.google.common.collect.ImmutableSet;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,10 +33,10 @@ public class CatLogic {
     }
 
     @Transactional(readOnly = true)
-    public CatDto findSingleCat(Long id) {
+    public CatDto findSingleCat(Long id) throws InvalidInputDataException {
         Cat entity = catRepository.findOne(id);
         if (entity == null) {
-            throw new IllegalArgumentException("Entity with id " + id + " not found");
+            throw new InvalidInputDataException("Cat with id " + id + " was not found");
         }
         return catFactory.createDto(entity);
     }
@@ -46,15 +48,19 @@ public class CatLogic {
     }
 
     @Transactional
-    public void removeCat(Long id) {
-        catRepository.delete(id);
+    public void removeCat(Long id) throws InvalidInputDataException {
+        try {
+            catRepository.delete(id);
+        } catch(EmptyResultDataAccessException e) {
+            throw new InvalidInputDataException("Cat with id " + id + " was not found");
+        }
     }
 
     @Transactional
-    public void updateCat(Long id, CatDto catDto) {
+    public void updateCat(Long id, CatDto catDto) throws InvalidInputDataException {
         Cat entity = catRepository.findOne(id);
         if (entity == null) {
-            throw new IllegalArgumentException("Entity with id " + id + " not found");
+            throw new InvalidInputDataException("Cat with id " + id + " was not found");
         }
 
         catFactory.editEntity(entity, catDto);
