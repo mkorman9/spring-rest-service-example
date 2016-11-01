@@ -12,4 +12,4 @@ Feature: Updating cats
   Scenario: Updating cat with invalid data
     Given: application is running
     when request of updating data in invalid format is sent
-    then updating error about invalid data should be returned
+    then updating error about invalid data should be returned and data should not be modified

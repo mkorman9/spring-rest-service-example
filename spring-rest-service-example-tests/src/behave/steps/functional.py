@@ -18,7 +18,7 @@ def download_group_id(group_name):
     return selected_group[0]['id']
 
 
-def check_if_cat_exists(cat_name):
+def check_if_cat_exists_by_name(cat_name):
     all_cats = requests.get(ALL_CATS_ENDPOINT).json()['data']
     selected_cats = filter(lambda record: record['name'] == cat_name, all_cats)
     return len(selected_cats) == 1
@@ -48,47 +48,47 @@ def update_cat(cat_id, cat_data):
 
 @when('new cat is added')
 def step_impl(context):
-    payload = {"roleName": "Bandit", "name": "Marcel", "duelsWon": 13, "group":
-        {"id": download_group_id('Bandits')}}
-    context.payload = payload
-    context.response = add_cat(payload)
+    cat_data = {"roleName": "Bandit", "name": "Marcel", "duelsWon": 13, "group": {"id": download_group_id('Bandits')}}
+    context.remembered_cat_data = cat_data
+    context.response = add_cat(cat_data)
 
 
 @then('it should be remembered')
 def step_impl(context):
-    assert check_if_cat_exists(context.payload['name'])
-    cat_data = read_cat_data(find_cat_id_by_name(context.payload['name']))
-    assert cat_data['name'] == context.payload['name']
-    assert cat_data['roleName'] == context.payload['roleName']
-    assert cat_data['duelsWon'] == context.payload['duelsWon']
-    assert cat_data['group']['id'] == context.payload['group']['id']
+    assert check_if_cat_exists_by_name(context.remembered_cat_data['name'])
+
+    actual_cat_data = read_cat_data(find_cat_id_by_name(context.remembered_cat_data['name']))
+    assert actual_cat_data['name'] == context.remembered_cat_data['name']
+    assert actual_cat_data['roleName'] == context.remembered_cat_data['roleName']
+    assert actual_cat_data['duelsWon'] == context.remembered_cat_data['duelsWon']
+    assert actual_cat_data['group']['id'] == context.remembered_cat_data['group']['id']
 
 
 @when('new cat request is sent with invalid data')
 def step_impl(context):
-    payload = {"name": "Invalid", "duelsWon": 1, "group": {"id": download_group_id('Bandits')}}
-    context.payload = payload
-    context.response = add_cat(payload)
+    invalid_cat_data = {"name": "Invalid", "duelsWon": 1, "group": {"id": download_group_id('Bandits')}}
+    context.remembered_cat_data = invalid_cat_data
+    context.response = add_cat(invalid_cat_data)
 
 
 @then('new validation error should be returned')
 def step_impl(context):
     assert context.response.json()['status'] == 'error'
-    assert not check_if_cat_exists(context.payload['name'])
+    assert not check_if_cat_exists_by_name(context.remembered_cat_data['name'])
 
 
 @when('existing cat is deleted')
 def step_impl(context):
-    add_payload = {"roleName": "Pirate", "name": "Wojtek", "duelsWon": 2, "group": {"id": download_group_id('Pirates')}}
-    context.payload = add_payload
-    add_cat(add_payload)
+    cat_data = {"roleName": "Pirate", "name": "Wojtek", "duelsWon": 2, "group": {"id": download_group_id('Pirates')}}
+    context.remembered_cat_data = cat_data
+    add_cat(cat_data)
 
     delete_cat(find_cat_id_by_name('Wojtek'))
 
 
 @then('it should not exist in registry anymore')
 def step_impl(context):
-    assert not check_if_cat_exists(context.payload['name'])
+    assert not check_if_cat_exists_by_name(context.remembered_cat_data['name'])
 
 
 @when('request of deleting cat with non-existing id is sent')
@@ -103,30 +103,30 @@ def step_impl(context):
 
 @when('existing cat is updated with new data')
 def step_impl(context):
-    pirates_id = download_group_id('Pirates')
-    add_payload = {"roleName": "Pirate", "name": "Jack", "duelsWon": 4, "group": {"id": pirates_id}}
-    add_cat(add_payload)
-    context.id = find_cat_id_by_name('Jack')
+    pirates_group_id = download_group_id('Pirates')
+    cat_data = {"roleName": "Pirate", "name": "Jack", "duelsWon": 4, "group": {"id": pirates_group_id}}
+    add_cat(cat_data)
+    context.added_cat_id = find_cat_id_by_name('Jack')
 
-    new_payload = {"roleName": "Chief Pirate", "name": "Jacky", "duelsWon": 5, "group": {"id": pirates_id}}
-    context.new_payload = new_payload
-    update_cat(context.id, new_payload)
+    updated_cat_data = {"roleName": "Chief Pirate", "name": "Jacky", "duelsWon": 5, "group": {"id": pirates_group_id}}
+    context.updated_cat_data = updated_cat_data
+    update_cat(context.added_cat_id, updated_cat_data)
 
 
 @then('cat should be updated in registry')
 def step_impl(context):
-    cat_data = read_cat_data(context.id)
-    assert cat_data['id'] == context.id
-    assert cat_data['name'] == context.new_payload['name']
-    assert cat_data['roleName'] == context.new_payload['roleName']
-    assert cat_data['duelsWon'] == context.new_payload['duelsWon']
-    assert cat_data['group']['id'] == context.new_payload['group']['id']
+    actual_cat_data = read_cat_data(context.added_cat_id)
+    assert actual_cat_data['id'] == context.added_cat_id
+    assert actual_cat_data['name'] == context.updated_cat_data['name']
+    assert actual_cat_data['roleName'] == context.updated_cat_data['roleName']
+    assert actual_cat_data['duelsWon'] == context.updated_cat_data['duelsWon']
+    assert actual_cat_data['group']['id'] == context.updated_cat_data['group']['id']
 
 
 @when('request of updating data of non-existing cat is sent')
 def step_impl(context):
-    new_payload = {"roleName": "Chief Pirate", "name": "Jacky", "duelsWon": 5, "group": {"id": download_group_id('Pirates')}}
-    context.response = update_cat(666, new_payload)
+    cat_data = {"roleName": "Chief Pirate", "name": "Jacky", "duelsWon": 5, "group": {"id": download_group_id('Pirates')}}
+    context.response = update_cat(666, cat_data)
 
 
 @then('updating error about non-existing cat should be returned')
@@ -136,17 +136,22 @@ def step_impl(context):
 
 @when('request of updating data in invalid format is sent')
 def step_impl(context):
-    pirates_id = download_group_id('Pirates')
-    add_payload = {"roleName": "Pirate", "name": "Michael", "duelsWon": 7, "group": {"id": pirates_id}}
-    context.old_payload = add_payload
-    add_cat(add_payload)
-    context.id = find_cat_id_by_name('Michael')
+    cat_data = {"roleName": "Pirate", "name": "Michael", "duelsWon": 7, "group": {"id": download_group_id('Pirates')}}
+    context.remembered_cat_data = cat_data
+    add_cat(cat_data)
 
-    new_payload = {"name": "a", "duelsWon": -1, "group": {"id": 666}}
-    context.response = update_cat(context.id, new_payload)
+    added_cat_id = find_cat_id_by_name('Michael')
+    invalid_cat_data = {"name": "a", "duelsWon": -1, "group": {"id": 666}}
+    context.response = update_cat(added_cat_id, invalid_cat_data)
 
 
-@then('updating error about invalid data should be returned')
+@then('updating error about invalid data should be returned and data should not be modified')
 def step_impl(context):
     assert context.response.json()['status'] == 'error'
-    assert check_if_cat_exists(context.old_payload['name'])
+    assert check_if_cat_exists_by_name(context.remembered_cat_data['name'])
+
+    actual_cat_data = read_cat_data(find_cat_id_by_name(context.remembered_cat_data['name']))
+    assert actual_cat_data['name'] == context.remembered_cat_data['name']
+    assert actual_cat_data['roleName'] == context.remembered_cat_data['roleName']
+    assert actual_cat_data['duelsWon'] == context.remembered_cat_data['duelsWon']
+    assert actual_cat_data['group']['id'] == context.remembered_cat_data['group']['id']
