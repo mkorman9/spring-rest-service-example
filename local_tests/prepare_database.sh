@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# Preparing clean local database for running automated tests in developer's environment
 LOCAL_DATABASE_HOST=127.0.0.1
 LOCAL_DATABASE_NAME=test
 LOCAL_DATABASE_USER=root
