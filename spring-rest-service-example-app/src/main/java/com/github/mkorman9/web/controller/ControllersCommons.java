@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 @ControllerAdvice(basePackages = "com.github.mkorman9.web.controller")
 @Slf4j
 class ControllersCommons {
-    private static final String INTERNAL_ERROR_RESPONSE_TEXT = "Internal error while processing data";
+    private static final String INTERNAL_ERROR_RESPONSE_TEXT = "Internal error while processing request";
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity exceptionHandler(Exception exception) {
