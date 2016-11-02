@@ -162,6 +162,6 @@ def step_impl(context):
     assert check_if_cat_exists_by_name(context.remembered_cat_data['name'])
 
     compare_remembered_cat_data_to_actual_state(context)
-    validation_error_has_been_returned(context, 'duelsWon', 'Min')
-    validation_error_has_been_returned(context, 'roleName', 'NotNull')
-    validation_error_has_been_returned(context, 'name', 'Size')
+    assert validation_error_has_been_returned(context, 'duelsWon', 'Min')
+    assert validation_error_has_been_returned(context, 'roleName', 'NotNull')
+    assert validation_error_has_been_returned(context, 'name', 'Size')
