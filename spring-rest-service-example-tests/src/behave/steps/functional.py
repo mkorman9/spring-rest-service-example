@@ -2,12 +2,15 @@ from behave import *
 import os
 import requests
 
-SINGLE_CAT_ENDPOINT = 'http://localhost:{0}/cats/get/'.format(os.environ['APPLICATION_PORT'])
-ALL_CATS_ENDPOINT = 'http://localhost:{0}/cats/all'.format(os.environ['APPLICATION_PORT'])
-ALL_GROUPS_ENDPOINT = 'http://localhost:{0}/groups/all'.format(os.environ['APPLICATION_PORT'])
-ADD_CAT_ENDPOINT = 'http://localhost:{0}/cats/add'.format(os.environ['APPLICATION_PORT'])
-DELETE_CAT_ENDPOINT = 'http://localhost:{0}/cats/delete/'.format(os.environ['APPLICATION_PORT'])
-UPDATE_CAT_ENDPOINT = 'http://localhost:{0}/cats/edit/'.format(os.environ['APPLICATION_PORT'])
+
+ENDPOINT_BASE = 'http://localhost:{0}'.format(os.environ['APPLICATION_PORT'])
+
+SINGLE_CAT_ENDPOINT = '{0}/cats/get/'.format(ENDPOINT_BASE)
+ALL_CATS_ENDPOINT   = '{0}/cats/all/'.format(ENDPOINT_BASE)
+ALL_GROUPS_ENDPOINT = '{0}/groups/all/'.format(ENDPOINT_BASE)
+ADD_CAT_ENDPOINT    = '{0}/cats/add/'.format(ENDPOINT_BASE)
+DELETE_CAT_ENDPOINT = '{0}/cats/delete/'.format(ENDPOINT_BASE)
+UPDATE_CAT_ENDPOINT = '{0}/cats/edit/'.format(ENDPOINT_BASE)
 
 
 def download_group_id(group_name):
@@ -46,17 +49,12 @@ def update_cat(cat_id, cat_data):
     return requests.put(UPDATE_CAT_ENDPOINT + str(cat_id), json=cat_data)
 
 
-@when('new cat is added')
-def step_impl(context):
-    cat_data = {"roleName": "Bandit", "name": "Marcel", "duelsWon": 13, "group": {"id": download_group_id('Bandits')}}
+def add_cat_and_remember_its_data(cat_data, context):
     context.remembered_cat_data = cat_data
     context.response = add_cat(cat_data)
 
 
-@then('it should be remembered')
-def step_impl(context):
-    assert check_if_cat_exists_by_name(context.remembered_cat_data['name'])
-
+def compare_remembered_cat_data_to_actual_state(context):
     actual_cat_data = read_cat_data(find_cat_id_by_name(context.remembered_cat_data['name']))
     assert actual_cat_data['name'] == context.remembered_cat_data['name']
     assert actual_cat_data['roleName'] == context.remembered_cat_data['roleName']
@@ -64,11 +62,30 @@ def step_impl(context):
     assert actual_cat_data['group']['id'] == context.remembered_cat_data['group']['id']
 
 
+def validation_error_has_been_returned(context, expected_field, expected_message):
+    response_data = context.response.json()
+    for error in response_data['errors']:
+        if error['field'] == expected_field:
+            return error['message'] == expected_message
+    return False
+
+
+@when('new cat is added')
+def step_impl(context):
+    cat_data = {"roleName": "Bandit", "name": "Marcel", "duelsWon": 13, "group": {"id": download_group_id('Bandits')}}
+    add_cat_and_remember_its_data(cat_data, context)
+
+
+@then('it should be remembered')
+def step_impl(context):
+    assert check_if_cat_exists_by_name(context.remembered_cat_data['name'])
+    compare_remembered_cat_data_to_actual_state(context)
+
+
 @when('new cat request is sent with invalid data')
 def step_impl(context):
     invalid_cat_data = {"name": "Invalid", "duelsWon": 1, "group": {"id": download_group_id('Bandits')}}
-    context.remembered_cat_data = invalid_cat_data
-    context.response = add_cat(invalid_cat_data)
+    add_cat_and_remember_its_data(invalid_cat_data, context)
 
 
 @then('new validation error should be returned')
@@ -80,8 +97,7 @@ def step_impl(context):
 @when('existing cat is deleted')
 def step_impl(context):
     cat_data = {"roleName": "Pirate", "name": "Wojtek", "duelsWon": 2, "group": {"id": download_group_id('Pirates')}}
-    context.remembered_cat_data = cat_data
-    add_cat(cat_data)
+    add_cat_and_remember_its_data(cat_data, context)
 
     delete_cat(find_cat_id_by_name('Wojtek'))
 
@@ -106,21 +122,17 @@ def step_impl(context):
     pirates_group_id = download_group_id('Pirates')
     cat_data = {"roleName": "Pirate", "name": "Jack", "duelsWon": 4, "group": {"id": pirates_group_id}}
     add_cat(cat_data)
+
     context.added_cat_id = find_cat_id_by_name('Jack')
 
     updated_cat_data = {"roleName": "Chief Pirate", "name": "Jacky", "duelsWon": 5, "group": {"id": pirates_group_id}}
-    context.updated_cat_data = updated_cat_data
+    add_cat_and_remember_its_data(cat_data, context)
     update_cat(context.added_cat_id, updated_cat_data)
 
 
 @then('cat should be updated in registry')
 def step_impl(context):
-    actual_cat_data = read_cat_data(context.added_cat_id)
-    assert actual_cat_data['id'] == context.added_cat_id
-    assert actual_cat_data['name'] == context.updated_cat_data['name']
-    assert actual_cat_data['roleName'] == context.updated_cat_data['roleName']
-    assert actual_cat_data['duelsWon'] == context.updated_cat_data['duelsWon']
-    assert actual_cat_data['group']['id'] == context.updated_cat_data['group']['id']
+    compare_remembered_cat_data_to_actual_state(context)
 
 
 @when('request of updating data of non-existing cat is sent')
@@ -137,8 +149,7 @@ def step_impl(context):
 @when('request of updating data in invalid format is sent')
 def step_impl(context):
     cat_data = {"roleName": "Pirate", "name": "Michael", "duelsWon": 7, "group": {"id": download_group_id('Pirates')}}
-    context.remembered_cat_data = cat_data
-    add_cat(cat_data)
+    add_cat_and_remember_its_data(cat_data, context)
 
     added_cat_id = find_cat_id_by_name('Michael')
     invalid_cat_data = {"name": "a", "duelsWon": -1, "group": {"id": 666}}
@@ -150,8 +161,7 @@ def step_impl(context):
     assert context.response.json()['status'] == 'error'
     assert check_if_cat_exists_by_name(context.remembered_cat_data['name'])
 
-    actual_cat_data = read_cat_data(find_cat_id_by_name(context.remembered_cat_data['name']))
-    assert actual_cat_data['name'] == context.remembered_cat_data['name']
-    assert actual_cat_data['roleName'] == context.remembered_cat_data['roleName']
-    assert actual_cat_data['duelsWon'] == context.remembered_cat_data['duelsWon']
-    assert actual_cat_data['group']['id'] == context.remembered_cat_data['group']['id']
+    compare_remembered_cat_data_to_actual_state(context)
+    validation_error_has_been_returned(context, 'duelsWon', 'Min')
+    validation_error_has_been_returned(context, 'roleName', 'NotNull')
+    validation_error_has_been_returned(context, 'name', 'Size')
