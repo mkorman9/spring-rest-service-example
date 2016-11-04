@@ -70,25 +70,29 @@ def validation_error_has_been_returned(context, expected_field, expected_message
     return False
 
 
-@when('new cat is added')
+@given('valid cat data')
 def step_impl(context):
-    cat_data = {"roleName": "Bandit", "name": "Marcel", "duelsWon": 13, "group": {"id": download_group_id('Bandits')}}
-    add_cat_and_remember_its_data(cat_data, context)
+    context.cat_data = {"roleName": "Bandit", "name": "Marcel", "duelsWon": 13,
+                        "group": {"id": download_group_id('Bandits')}}
 
 
-@then('it should be remembered')
+@when('new cat endpoint is invoked')
+def step_impl(context):
+    add_cat_and_remember_its_data(context.cat_data, context)
+
+
+@then('new cat should be saved')
 def step_impl(context):
     assert check_if_cat_exists_by_name(context.remembered_cat_data['name'])
     compare_remembered_cat_data_to_actual_state(context)
 
 
-@when('new cat request is sent with invalid data')
+@given('invalid cat data')
 def step_impl(context):
-    invalid_cat_data = {"name": "Invalid", "duelsWon": 1, "group": {"id": download_group_id('Bandits')}}
-    add_cat_and_remember_its_data(invalid_cat_data, context)
+    context.cat_data = {"name": "Invalid", "duelsWon": 1, "group": {"id": download_group_id('Bandits')}}
 
 
-@then('new validation error should be returned')
+@then('new cat validation error should be returned')
 def step_impl(context):
     assert context.response.json()['status'] == 'error'
     assert not check_if_cat_exists_by_name(context.remembered_cat_data['name'])

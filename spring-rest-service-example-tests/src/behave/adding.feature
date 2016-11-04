@@ -1,10 +1,10 @@
 Feature: Adding cats
   Scenario: Adding new cat
-    Given: application is running
-    when new cat is added
-    then it should be remembered
+    Given: valid cat data
+    when new cat endpoint is invoked
+    then new cat should be saved
 
   Scenario: Adding new cat with invalid data
-    Given: application is running
-    when new cat request is sent with invalid data
-    then new validation error should be returned
+    Given: invalid cat data
+    when new cat endpoint is invoked
+    then new cat validation error should be returned
