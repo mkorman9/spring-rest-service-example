@@ -34,17 +34,12 @@ public class CatLogic {
 
     @Transactional(readOnly = true)
     public CatDto findSingleCat(Long id) throws InvalidInputDataException {
-        Cat entity = catRepository.findOne(id);
-        if (entity == null) {
-            throw new InvalidInputDataException("Cat with id " + id + " was not found");
-        }
-        return catFactory.createDto(entity);
+        return catFactory.createDto(findCat(id));
     }
 
     @Transactional
     public void addNewCat(CatDto catDto) {
-        Cat entity = catFactory.createEntity(catDto);
-        catRepository.save(entity);
+        catRepository.save(catFactory.createEntity(catDto));
     }
 
     @Transactional
@@ -55,12 +50,15 @@ public class CatLogic {
 
     @Transactional
     public void updateCat(Long id, CatDto catDto) throws InvalidInputDataException {
+        catFactory.editEntity(findCat(id), catDto);
+    }
+
+    private Cat findCat(Long id) {
         Cat entity = catRepository.findOne(id);
         if (entity == null) {
             throw new InvalidInputDataException("Cat with id " + id + " was not found");
         }
-
-        catFactory.editEntity(entity, catDto);
+        return entity;
     }
 
     private void reportInputError(String message) {
