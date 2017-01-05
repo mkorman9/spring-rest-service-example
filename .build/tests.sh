@@ -33,6 +33,9 @@ done
 python -m behave spring-rest-service-example-tests/src/behave
 
 if [ $? != 0 ]; then
+    echo '================================================='
+    docker logs $APP_NAME
+    echo '================================================='
     exit 1
 fi
 
