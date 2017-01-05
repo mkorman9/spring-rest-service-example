@@ -1,11 +1,10 @@
 package com.github.mkorman9.web.form.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.google.common.collect.ImmutableList;
-import com.google.common.collect.Lists;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
+import org.joda.time.DateTime;
 
 import java.util.List;
 
@@ -15,6 +14,7 @@ import java.util.List;
 public class ResponseForm {
     @Getter(AccessLevel.NONE) private ResponseStatus status;
     private List<ResponseError> errors;
+    private DateTime timestamp = DateTime.now();
     private Object data;
 
     public String getStatus() {
