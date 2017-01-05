@@ -5,8 +5,8 @@ import com.github.mkorman9.entity.Cat;
 import com.github.mkorman9.logic.dto.CatDto;
 import com.github.mkorman9.logic.exception.InvalidInputDataException;
 import com.google.common.collect.ImmutableSet;
+import javaslang.control.Try;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,11 +49,8 @@ public class CatLogic {
 
     @Transactional
     public void removeCat(Long id) throws InvalidInputDataException {
-        try {
-            catRepository.delete(id);
-        } catch(EmptyResultDataAccessException e) {
-            throw new InvalidInputDataException("Cat with id " + id + " was not found");
-        }
+        Try.run(() -> catRepository.delete(id))
+                .onFailure(exc -> reportInputError("Cat with id " + id + " was not found"));
     }
 
     @Transactional
@@ -64,5 +61,9 @@ public class CatLogic {
         }
 
         catFactory.editEntity(entity, catDto);
+    }
+
+    private void reportInputError(String message) {
+        throw new InvalidInputDataException(message);
     }
 }
