@@ -9,6 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import static javaslang.API.*;
+
 @Configuration
 @EnableRabbit
 public class MessagingConfiguration {
@@ -46,11 +48,9 @@ public class MessagingConfiguration {
 
     private String[] parseBrokerAddress(String brokerAddress) {
         String[] parts = brokerAddress.split(":");
-        if (parts.length == 1) {
-            return new String[] { parts[0], "5672" };
-        }
-        else {
-            return parts;
-        }
+        return Match(parts.length).of(
+                Case($(1), new String[] { parts[0], "5672" }),
+                Case($(), parts)
+        );
     }
 }
