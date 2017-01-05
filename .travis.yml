@@ -5,25 +5,25 @@ jdk:
 dist: trusty
 sudo: required
 
+env:
+  global:
+    - VERSION_BASE='1.0'
+
 services:
   - docker
 
-before_script:
-  - sudo docker run --name memcached -p 11212:11211 -d memcached
-  - sudo docker run --name mysql -p 3306:3306 -e MYSQL_USER=test -e MYSQL_PASSWORD=test -e MYSQL_DATABASE=test -e MYSQL_RANDOM_ROOT_PASSWORD=yes -d mysql:5.6
-  - sudo docker run -d -p 5672:5672 --name rabbitmq -e RABBITMQ_DEFAULT_USER=test -e RABBITMQ_DEFAULT_PASS=test rabbitmq:3
+before_install:
+  - export CI_WORK_DIRECTORY="${TRAVIS_BUILD_DIR}/.ci" && mkdir -p $CI_WORK_DIRECTORY
+  - git clone -b travis https://github.com/mkorman9/jenkins_scripts $CI_WORK_DIRECTORY/
+  - chmod +x $CI_WORK_DIRECTORY/*.sh $CI_WORK_DIRECTORY/common_dependencies/*.sh
 
 install:
-  - true
+  - . $CI_WORK_DIRECTORY/common_dependencies/memcached.sh
+  - . $CI_WORK_DIRECTORY/common_dependencies/mysql_5_6.sh --dbname test --username test --password test
+  - . $CI_WORK_DIRECTORY/common_dependencies/rabbitmq.sh --username test --password test
 
 script:
-  - export VERSION_BASE='1.0'
-  - export CI_WORK_DIRECTORY="${TRAVIS_BUILD_DIR}/.ci"
-  - mkdir -p $CI_WORK_DIRECTORY && git clone -b travis https://github.com/mkorman9/jenkins_scripts $CI_WORK_DIRECTORY/jenkins_scripts
-  - chmod +x $CI_WORK_DIRECTORY/jenkins_scripts/*.sh
-  - . $CI_WORK_DIRECTORY/jenkins_scripts/pre_build.sh || { echo "ERROR! Pre Build failed!"; exit 1; }
-  - $CI_WORK_DIRECTORY/jenkins_scripts/build.sh || { echo "ERROR! Build failed!"; $CI_WORK_DIRECTORY/jenkins_scripts/post_build.sh 0; exit 1; }
-  - $CI_WORK_DIRECTORY/jenkins_scripts/post_build.sh 1 || { echo "ERROR! Post build actions failed!"; exit 1; }
+  - $CI_WORK_DIRECTORY/invoke.sh || exit 1
 
 notifications:
   email: false
