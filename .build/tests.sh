@@ -21,8 +21,11 @@ fi
 timeout_counter="0"
 while [ "$(curl -s "http://127.0.0.1:$APPLICATION_PORT/")" == '' ]; do
     echo "Trying http://127.0.0.1:$APPLICATION_PORT/"
-    if [[ $timeout_counter == "10" ]]; then
+    if [[ $timeout_counter == "20" ]]; then
         echo "Application wake up phase timed out"
+        echo '================================================='
+        docker logs $APP_NAME
+        echo '================================================='
         exit 1
     fi
 
