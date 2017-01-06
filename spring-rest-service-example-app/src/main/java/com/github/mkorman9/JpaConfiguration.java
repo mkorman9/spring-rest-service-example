@@ -29,7 +29,7 @@ public class JpaConfiguration {
         properties.setProperty("h4m.adapter.spymemcached.hosts", cacheAddress);
 
         Try.run(() -> properties.load(getClass().getResourceAsStream("/META-INF/hibernate.properties")))
-                .onFailure(this::reportErrorWithLoadingProperties);
+                .onFailure(e -> { throw new RuntimeException("Cannot load Hibernate properties file", e); });
 
         return properties;
     }
@@ -47,9 +47,5 @@ public class JpaConfiguration {
     @Bean
     public PlatformTransactionManager transactionManager(LocalContainerEntityManagerFactoryBean emf) {
         return new JpaTransactionManager(emf.getObject());
-    }
-
-    private void reportErrorWithLoadingProperties(Throwable e) {
-        throw new RuntimeException("Cannot load Hibernate properties file", e);
     }
 }
