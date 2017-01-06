@@ -1,5 +1,6 @@
 package com.github.mkorman9;
 
+import javaslang.control.Try;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,11 +27,8 @@ public class JpaConfiguration {
         Properties properties = new Properties();
         properties.setProperty("h4m.adapter.spymemcached.hosts", cacheAddress);
 
-        try {
-            properties.load(getClass().getResourceAsStream("/META-INF/hibernate.properties"));
-        } catch (IOException e) {
-            throw new RuntimeException("Cannot load Hibernate properties file", e);
-        }
+        Try.run(() -> properties.load(getClass().getResourceAsStream("/META-INF/hibernate.properties")))
+                .onFailure(this::reportErrorWithLoadingProperties);
 
         return properties;
     }
@@ -48,5 +46,9 @@ public class JpaConfiguration {
     @Bean
     public PlatformTransactionManager transactionManager(LocalContainerEntityManagerFactoryBean emf) {
         return new JpaTransactionManager(emf.getObject());
+    }
+
+    private void reportErrorWithLoadingProperties(Throwable e) {
+        throw new RuntimeException("Cannot load Hibernate properties file", e);
     }
 }
