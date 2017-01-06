@@ -1,7 +1,5 @@
 package com.github.mkorman9;
 
-import javaslang.Tuple;
-import javaslang.Tuple2;
 import lombok.val;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
@@ -29,7 +27,7 @@ public class MessagingConfiguration {
     @Bean
     public ConnectionFactory connectionFactory() {
         val addressParts = parseBrokerAddress(brokerAddress);
-        val connectionFactory = new CachingConnectionFactory(addressParts._1, Integer.valueOf(addressParts._2));
+        val connectionFactory = new CachingConnectionFactory(addressParts[0], Integer.valueOf(addressParts[1]));
         connectionFactory.setUsername(brokerUsername);
         connectionFactory.setPassword(brokerPassword);
         return connectionFactory;
@@ -48,11 +46,11 @@ public class MessagingConfiguration {
         return new Queue(QUEUE_NAME, true);
     }
 
-    private Tuple2<String, String> parseBrokerAddress(String brokerAddress) {
+    private String[] parseBrokerAddress(String brokerAddress) {
         val parts = brokerAddress.split(":");
         return Match(parts.length).of(
-                Case($(1), Tuple.of(parts[0], "5672")),
-                Case($(), Tuple.of(parts[0], parts[1]))
+                Case($(1), new String[] { parts[0], "5672" }),
+                Case($(), parts)
         );
     }
 }
