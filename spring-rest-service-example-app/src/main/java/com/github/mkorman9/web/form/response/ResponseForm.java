@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 
 import java.util.List;
 
@@ -14,10 +15,14 @@ import java.util.List;
 public class ResponseForm {
     @Getter(AccessLevel.NONE) private ResponseStatus status;
     private List<ResponseError> errors;
-    private DateTime timestamp = DateTime.now();
+    private String timestamp;
     private Object data;
 
     public String getStatus() {
         return status.toString();
+    }
+
+    public static class ResponseFormBuilder {
+        private String timestamp = DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ssZ").print(DateTime.now());
     }
 }
