@@ -6,6 +6,7 @@ import com.github.mkorman9.logic.dto.CatDto;
 import com.github.mkorman9.logic.exception.InvalidInputDataException;
 import com.google.common.collect.ImmutableSet;
 import javaslang.control.Try;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -54,7 +55,7 @@ public class CatLogic {
     }
 
     private Cat findCat(Long id) {
-        Cat entity = catRepository.findOne(id);
+        val entity = catRepository.findOne(id);
         if (entity == null) {
             throw new InvalidInputDataException("Cat with id " + id + " was not found");
         }

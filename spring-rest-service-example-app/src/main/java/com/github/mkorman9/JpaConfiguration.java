@@ -1,6 +1,7 @@
 package com.github.mkorman9;
 
 import javaslang.control.Try;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,7 +25,7 @@ public class JpaConfiguration {
 
     @Bean
     public Properties hibernateProperties() {
-        Properties properties = new Properties();
+        val properties = new Properties();
         properties.setProperty("h4m.adapter.spymemcached.hosts", cacheAddress);
 
         Try.run(() -> properties.load(getClass().getResourceAsStream("/META-INF/hibernate.properties")))
@@ -35,7 +36,7 @@ public class JpaConfiguration {
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(DataSource source, Properties hibernateProperties) throws IOException {
-        LocalContainerEntityManagerFactoryBean factoryBean = new LocalContainerEntityManagerFactoryBean();
+        val factoryBean = new LocalContainerEntityManagerFactoryBean();
         factoryBean.setDataSource(source);
         factoryBean.setJpaVendorAdapter(new HibernateJpaVendorAdapter());
         factoryBean.setPackagesToScan("com.github.mkorman9.entity");

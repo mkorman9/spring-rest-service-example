@@ -1,5 +1,6 @@
 package com.github.mkorman9;
 
+import lombok.val;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.rabbit.annotation.EnableRabbit;
 import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
@@ -25,9 +26,8 @@ public class MessagingConfiguration {
 
     @Bean
     public ConnectionFactory connectionFactory() {
-        String[] addressParts = parseBrokerAddress(brokerAddress);
-        CachingConnectionFactory connectionFactory =
-                new CachingConnectionFactory(addressParts[0], Integer.valueOf(addressParts[1]));
+        val addressParts = parseBrokerAddress(brokerAddress);
+        val connectionFactory = new CachingConnectionFactory(addressParts[0], Integer.valueOf(addressParts[1]));
         connectionFactory.setUsername(brokerUsername);
         connectionFactory.setPassword(brokerPassword);
         return connectionFactory;
@@ -35,7 +35,7 @@ public class MessagingConfiguration {
 
     @Bean
     public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-        RabbitTemplate template = new RabbitTemplate(connectionFactory);
+        val template = new RabbitTemplate(connectionFactory);
         template.setRoutingKey(QUEUE_NAME);
         template.setQueue(QUEUE_NAME);
         return template;
@@ -47,7 +47,7 @@ public class MessagingConfiguration {
     }
 
     private String[] parseBrokerAddress(String brokerAddress) {
-        String[] parts = brokerAddress.split(":");
+        val parts = brokerAddress.split(":");
         return Match(parts.length).of(
                 Case($(1), new String[] { parts[0], "5672" }),
                 Case($(), parts)

@@ -1,12 +1,13 @@
 package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatsGroupRepository;
+import com.github.mkorman9.entity.Cat;
+import com.github.mkorman9.entity.CatsGroup;
 import com.github.mkorman9.logic.dto.CatDto;
 import com.github.mkorman9.logic.dto.CatModel;
 import com.github.mkorman9.logic.dto.CatsGroupDto;
 import com.github.mkorman9.logic.dto.CatsGroupModel;
-import com.github.mkorman9.entity.Cat;
-import com.github.mkorman9.entity.CatsGroup;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -50,7 +51,7 @@ public class CatFactory {
     }
 
     private CatsGroup convertDtoGroupToEntity(CatsGroupDto group) {
-        CatsGroup groupEntity = catsGroupRepository.findOne(group.getId());
+        val groupEntity = catsGroupRepository.findOne(group.getId());
         if (groupEntity == null) {
             throw new IllegalStateException("Group with id " + group.getId() + " was not found");
         }
