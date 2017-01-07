@@ -20,7 +20,7 @@ public class SampleFilter implements Filter {
             setUnauthorizedStatus(httpResponse);
         }
         else {
-            httpRequest.setAttribute("user", "authenticatedUser");
+            httpRequest.setAttribute("user", "authenticatedUser"); // to retrieve this value in controller - add HttpServletRequest to method parameters
             continueProcessing(servletResponse, filterChain, httpRequest);
         }
     }

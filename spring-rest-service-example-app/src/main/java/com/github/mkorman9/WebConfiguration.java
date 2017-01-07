@@ -15,11 +15,11 @@ public class WebConfiguration {
 
     @Bean
     public FilterRegistrationBean sampleFilterRegistartion(SampleFilter sampleFilter) {
-        val registartation = new FilterRegistrationBean();
-        registartation.setFilter(sampleFilter);
-        registartation.addUrlPatterns("/*");
-        registartation.setName("sampleFilter");
-        registartation.setOrder(1);
-        return registartation;
+        val registration = new FilterRegistrationBean();
+        registration.setFilter(sampleFilter);
+        registration.addUrlPatterns("/*");  // it's impossible to exclude some urls. Secured URLs should be bound to different context than unsecured
+        registration.setName("sampleFilter");
+        registration.setOrder(1);
+        return registration;
     }
 }
