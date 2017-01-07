@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.stream.Collectors;
 
+import static javaslang.API.*;
+import static javaslang.Predicates.instanceOf;
+
 @ControllerAdvice(basePackages = "com.github.mkorman9.web.controller")
 @Slf4j
 class ControllersCommons {
@@ -48,14 +51,16 @@ class ControllersCommons {
     }
 
     private HttpStatus resolveResponseStatus(Exception exception) {
-        return exception instanceof InvalidInputDataException ?
-                HttpStatus.BAD_REQUEST :
-                HttpStatus.INTERNAL_SERVER_ERROR;
+        return Match(exception).of(
+                Case(instanceOf(InvalidInputDataException.class), HttpStatus.BAD_REQUEST),
+                Case($(), HttpStatus.INTERNAL_SERVER_ERROR)
+        );
     }
 
     private String resolveResponseText(Exception exception) {
-        return exception instanceof InvalidInputDataException ?
-                exception.getMessage() :
-                INTERNAL_ERROR_RESPONSE_TEXT;
+        return Match(exception).of(
+                Case(instanceOf(InvalidInputDataException.class), exception.getMessage()),
+                Case($(), INTERNAL_ERROR_RESPONSE_TEXT)
+        );
     }
 }
