@@ -16,11 +16,11 @@ public class SampleFilter implements Filter {
         HttpServletResponse httpResponse = (HttpServletResponse) servletResponse;
         String securityToken = httpRequest.getHeader("X-Security-Token");
 
-        if (AUTH_ENABLED && (Strings.isNullOrEmpty(securityToken) || !securityToken.equals("token"))) {
-            httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        if (AUTH_ENABLED && !isTokenValid(securityToken)) {
+            setUnauthorizedStatus(httpResponse);
         }
         else {
-            filterChain.doFilter(httpRequest, servletResponse);
+            continueProcessing(servletResponse, filterChain, httpRequest);
         }
     }
 
@@ -30,5 +30,17 @@ public class SampleFilter implements Filter {
 
     @Override
     public void destroy() {
+    }
+
+    private boolean isTokenValid(String securityToken) {
+        return !Strings.isNullOrEmpty(securityToken) && securityToken.equals("token");
+    }
+
+    private void setUnauthorizedStatus(HttpServletResponse httpResponse) {
+        httpResponse.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+    }
+
+    private void continueProcessing(ServletResponse servletResponse, FilterChain filterChain, HttpServletRequest httpRequest) throws IOException, ServletException {
+        filterChain.doFilter(httpRequest, servletResponse);
     }
 }
