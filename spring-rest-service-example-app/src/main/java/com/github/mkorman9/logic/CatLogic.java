@@ -46,7 +46,7 @@ public class CatLogic {
     @Transactional
     public void removeCat(Long id) throws InvalidInputDataException {
         Try.run(() -> catRepository.delete(id))
-                .onFailure(exc -> reportInputError("Cat with id " + id + " was not found"));
+                .onFailure(exc -> { throw new InvalidInputDataException("Cat with id " + id + " was not found"); });
     }
 
     @Transactional
@@ -60,9 +60,5 @@ public class CatLogic {
             throw new InvalidInputDataException("Cat with id " + id + " was not found");
         }
         return entity;
-    }
-
-    private void reportInputError(String message) {
-        throw new InvalidInputDataException(message);
     }
 }
