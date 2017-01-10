@@ -1,8 +1,7 @@
-package com.github.mkorman9.web.form;
+package com.github.mkorman9.logic.model;
 
-import com.github.mkorman9.logic.dto.CatDto;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -10,8 +9,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Getter
-@Setter
-public class CatForm implements CatDto {
+@Builder
+public class CatModel {
     private Long id;
 
     @NotNull
@@ -28,5 +27,5 @@ public class CatForm implements CatDto {
 
     @NotNull
     @Valid
-    private CatsGroupForm group;
+    private CatsGroupModel group;
 }

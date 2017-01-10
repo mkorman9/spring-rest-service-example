@@ -3,7 +3,7 @@ package com.github.mkorman9.logic;
 import com.github.mkorman9.dao.CatsGroupRepository;
 import com.github.mkorman9.entity.Cat;
 import com.github.mkorman9.entity.CatsGroup;
-import com.github.mkorman9.logic.dto.CatDto;
+import com.github.mkorman9.logic.model.CatModel;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -43,10 +43,10 @@ public class CatFactoryTest {
         String roleName = "Pirate";
         String name = "Barnaba";
         int duelsWon = 12;
-        CatDto catDto = createCatDtoMock(roleName, name, duelsWon, groupId);
+        CatModel catModel = createCatModelMock(roleName, name, duelsWon, groupId);
 
         // when
-        Cat cat = catFactory.createEntity(catDto);
+        Cat cat = catFactory.createEntity(catModel);
 
         // then
         assertThat(cat.getRoleName()).isEqualTo(roleName);
@@ -65,14 +65,14 @@ public class CatFactoryTest {
         Cat entity = createCat(1L, roleName, name, duelsWon, catsGroup);
 
         // when
-        CatDto dto = catFactory.createDto(entity);
+        CatModel model = catFactory.createModel(entity);
 
         // then
-        assertThat(dto.getRoleName()).isEqualTo(roleName);
-        assertThat(dto.getName()).isEqualTo(name);
-        assertThat(dto.getDuelsWon()).isEqualTo(duelsWon);
-        assertThat(dto.getGroup().getId()).isEqualTo(groupId);
-        assertThat(dto.getGroup().getName()).isEqualTo(groupName);
+        assertThat(model.getRoleName()).isEqualTo(roleName);
+        assertThat(model.getName()).isEqualTo(name);
+        assertThat(model.getDuelsWon()).isEqualTo(duelsWon);
+        assertThat(model.getGroup().getId()).isEqualTo(groupId);
+        assertThat(model.getGroup().getName()).isEqualTo(groupName);
     }
 
     @Test
@@ -82,11 +82,11 @@ public class CatFactoryTest {
         String name = "Barnaba";
         int duelsWon = 12;
         Long nonExistingGroupId = 10L;
-        CatDto dto = createCatDtoMock(roleName, name, duelsWon, nonExistingGroupId);
+        CatModel model = createCatModelMock(roleName, name, duelsWon, nonExistingGroupId);
 
         expectedException.expect(IllegalStateException.class);
         
         // when
-        catFactory.createEntity(dto);
+        catFactory.createEntity(model);
     }
 }

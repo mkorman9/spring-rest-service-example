@@ -2,7 +2,7 @@ package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatRepository;
 import com.github.mkorman9.entity.Cat;
-import com.github.mkorman9.logic.dto.CatDto;
+import com.github.mkorman9.logic.model.CatModel;
 import com.github.mkorman9.logic.exception.InvalidInputDataException;
 import com.google.common.collect.ImmutableSet;
 import javaslang.control.Try;
@@ -26,21 +26,21 @@ public class CatLogic {
     }
 
     @Transactional(readOnly = true)
-    public Set<CatDto> findAllCats() {
+    public Set<CatModel> findAllCats() {
         return ImmutableSet.copyOf(catRepository.findAll())
                 .stream()
-                .map(cat -> catFactory.createDto(cat))
+                .map(cat -> catFactory.createModel(cat))
                 .collect(Collectors.toSet());
     }
 
     @Transactional(readOnly = true)
-    public CatDto findSingleCat(Long id) throws InvalidInputDataException {
-        return catFactory.createDto(findCat(id));
+    public CatModel findSingleCat(Long id) throws InvalidInputDataException {
+        return catFactory.createModel(findCat(id));
     }
 
     @Transactional
-    public void addNewCat(CatDto catDto) {
-        catRepository.save(catFactory.createEntity(catDto));
+    public void addNewCat(CatModel catModel) {
+        catRepository.save(catFactory.createEntity(catModel));
     }
 
     @Transactional
@@ -50,8 +50,8 @@ public class CatLogic {
     }
 
     @Transactional
-    public void updateCat(Long id, CatDto catDto) throws InvalidInputDataException {
-        catFactory.editEntity(findCat(id), catDto);
+    public void updateCat(Long id, CatModel catModel) throws InvalidInputDataException {
+        catFactory.editEntity(findCat(id), catModel);
     }
 
     private Cat findCat(Long id) {

@@ -1,9 +1,9 @@
 package com.github.mkorman9.logic;
 
-import com.github.mkorman9.logic.dto.CatDto;
-import com.github.mkorman9.logic.dto.CatsGroupDto;
 import com.github.mkorman9.entity.Cat;
 import com.github.mkorman9.entity.CatsGroup;
+import com.github.mkorman9.logic.model.CatModel;
+import com.github.mkorman9.logic.model.CatsGroupModel;
 
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -12,19 +12,19 @@ public final class CatsPersistenceTestHelper {
     private CatsPersistenceTestHelper() {
     }
 
-    static CatDto createCatDtoMock(String roleName, String name, int duelsWon, long groupId) {
-        CatsGroupDto groupDtoMock = createGroupDtoMock(groupId);
+    static CatModel createCatModelMock(String roleName, String name, int duelsWon, long groupId) {
+        CatsGroupModel groupModelMock = createGroupModelMock(groupId);
 
-        CatDto catDto = mock(CatDto.class);
+        CatModel catDto = mock(CatModel.class);
         when(catDto.getRoleName()).thenReturn(roleName);
         when(catDto.getName()).thenReturn(name);
-        when(catDto.getGroup()).thenReturn(groupDtoMock);
+        when(catDto.getGroup()).thenReturn(groupModelMock);
         when(catDto.getDuelsWon()).thenReturn(duelsWon);
         return catDto;
     }
 
-    static CatsGroupDto createGroupDtoMock(long groupId) {
-        CatsGroupDto groupDto = mock(CatsGroupDto.class);
+    static CatsGroupModel createGroupModelMock(long groupId) {
+        CatsGroupModel groupDto = mock(CatsGroupModel.class);
         when(groupDto.getId()).thenReturn(groupId);
         return groupDto;
 

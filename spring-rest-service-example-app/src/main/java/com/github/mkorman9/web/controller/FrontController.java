@@ -2,16 +2,12 @@ package com.github.mkorman9.web.controller;
 
 import com.github.mkorman9.logic.CatLogic;
 import com.github.mkorman9.logic.CatsGroupLogic;
-import com.github.mkorman9.web.form.CatForm;
+import com.github.mkorman9.logic.model.CatModel;
 import com.github.mkorman9.web.form.response.ResponseForm;
 import com.github.mkorman9.web.form.response.ResponseStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -44,7 +40,7 @@ public class FrontController extends ControllersCommons {
     }
 
     @RequestMapping(value = "/cats/add", method = RequestMethod.POST)
-    public ResponseForm addNewCat(@RequestBody @Valid CatForm catForm, BindingResult bindingResult) {
+    public ResponseForm addNewCat(@RequestBody @Valid CatModel catForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return handleBindingError(bindingResult);
         }
@@ -64,7 +60,7 @@ public class FrontController extends ControllersCommons {
     }
 
     @RequestMapping(value = "/cats/edit/{id}", method = RequestMethod.PUT)
-    public ResponseForm editCat(@PathVariable("id") Long id, @RequestBody @Valid CatForm catForm, BindingResult bindingResult) {
+    public ResponseForm editCat(@PathVariable("id") Long id, @RequestBody @Valid CatModel catForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return handleBindingError(bindingResult);
         }

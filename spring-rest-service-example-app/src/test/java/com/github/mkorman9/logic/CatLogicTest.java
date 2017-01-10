@@ -2,7 +2,7 @@ package com.github.mkorman9.logic;
 
 import com.github.mkorman9.dao.CatRepository;
 import com.github.mkorman9.entity.Cat;
-import com.github.mkorman9.logic.dto.CatDto;
+import com.github.mkorman9.logic.model.CatModel;
 import com.github.mkorman9.logic.exception.InvalidInputDataException;
 import org.junit.Rule;
 import org.junit.Test;
@@ -34,7 +34,7 @@ public class CatLogicTest {
     @Test
     public void shouldConvertAndPersistNewCat() throws Exception {
         // given
-        CatDto catToAdd = createCatDtoMock("Pirate", "Barnaba", 13, 1L);
+        CatModel catToAdd = createCatModelMock("Pirate", "Barnaba", 13, 1L);
         Cat catConverted = createCat(1L, "Pirate", "Barnaba", 13, createCatsGroup(0L, "Pirates"));
         when(catFactory.createEntity(eq(catToAdd))).thenReturn(catConverted);
 
@@ -50,27 +50,27 @@ public class CatLogicTest {
     public void shouldEditExistingCat() throws Exception {
         // given
         Cat catToUpdate = createCat(0L, "Pirate", "Barnaba", 14, createCatsGroup(0L, "Pirates"));
-        CatDto catDtoToUpdate = createCatDtoMock("Pirate", "Barnaba", 13, 0L);
+        CatModel catModelToUpdate = createCatModelMock("Pirate", "Barnaba", 13, 0L);
         when(catRepository.findOne(eq(0L))).thenReturn(catToUpdate);
 
         // when
-        catLogic.updateCat(0L, catDtoToUpdate);
+        catLogic.updateCat(0L, catModelToUpdate);
 
         // then
         verify(catRepository).findOne(eq(0L));
-        verify(catFactory).editEntity(eq(catToUpdate), eq(catDtoToUpdate));
+        verify(catFactory).editEntity(eq(catToUpdate), eq(catModelToUpdate));
     }
 
     @Test
     public void shouldThrowExceptionWhenTryingToEditNonExistingCat() throws Exception {
         // given
-        CatDto catDtoToUpdate = createCatDtoMock("Pirate", "Barnaba", 13, 0L);
+        CatModel catModelToUpdate = createCatModelMock("Pirate", "Barnaba", 13, 0L);
         when(catRepository.findOne(eq(0L))).thenReturn(null);
 
         expectedException.expect(InvalidInputDataException.class);
 
         // when
-        catLogic.updateCat(1L, catDtoToUpdate);
+        catLogic.updateCat(1L, catModelToUpdate);
     }
 
     @Test
