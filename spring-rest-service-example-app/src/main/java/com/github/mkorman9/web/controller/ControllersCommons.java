@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.stream.Collectors;
 
@@ -54,7 +53,6 @@ class ControllersCommons {
     private HttpStatus resolveResponseStatus(Exception exception) {
         return Match(exception).of(
                 Case(instanceOf(InvalidInputDataException.class), HttpStatus.BAD_REQUEST),
-                Case(instanceOf(MethodArgumentNotValidException.class), HttpStatus.BAD_REQUEST),
                 Case($(), HttpStatus.INTERNAL_SERVER_ERROR)
         );
     }
@@ -62,7 +60,6 @@ class ControllersCommons {
     private String resolveResponseText(Exception exception) {
         return Match(exception).of(
                 Case(instanceOf(InvalidInputDataException.class), exception.getMessage()),
-                Case(instanceOf(MethodArgumentNotValidException.class), exception.getMessage()),
                 Case($(), INTERNAL_ERROR_RESPONSE_TEXT)
         );
     }
