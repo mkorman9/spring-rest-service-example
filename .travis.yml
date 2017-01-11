@@ -12,6 +12,10 @@ env:
 services:
   - docker
 
+cache:
+  directories:
+    - $HOME/.m2
+
 before_install:
   - export CI_WORK_DIRECTORY="${TRAVIS_BUILD_DIR}/.ci" && mkdir -p $CI_WORK_DIRECTORY
   - git clone -b travis https://github.com/mkorman9/jenkins_scripts $CI_WORK_DIRECTORY/
