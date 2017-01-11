@@ -19,8 +19,14 @@ fi
 
 # Wait until application wakes up
 timeout_counter="0"
-while [ "$(curl -s "http://127.0.0.1:$APPLICATION_PORT/")" == '' ]; do
-    echo "Trying http://127.0.0.1:$APPLICATION_PORT/"
+while true; do
+    status_code=$(curl -s -o /dev/null -w "%{http_code}" "http://127.0.0.1:$APPLICATION_PORT/")
+    echo "Trying http://127.0.0.1:$APPLICATION_PORT/... ${status_code}"
+
+    if [ "$status_code" == "200" ] || [ "$status_code" == "404" ]; then
+        break
+    fi
+
     if [[ $timeout_counter == "20" ]]; then
         echo "Application wake up phase timed out"
         echo '================================================='
