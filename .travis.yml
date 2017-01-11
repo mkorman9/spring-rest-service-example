@@ -25,6 +25,7 @@ install:
   - . $CI_WORK_DIRECTORY/common_dependencies/memcached.sh
   - . $CI_WORK_DIRECTORY/common_dependencies/mariadb.sh --dbname test --username test --password test
   - . $CI_WORK_DIRECTORY/common_dependencies/rabbitmq.sh --username test --password test
+  - . $CI_WORK_DIRECTORY/common_dependencies/config_server.sh --port 18080
 
 script:
   - $CI_WORK_DIRECTORY/invoke.sh || exit 1
