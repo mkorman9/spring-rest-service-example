@@ -32,7 +32,7 @@ public class ErrorController implements org.springframework.boot.autoconfigure.w
     }
 
     @RequestMapping
-    public ResponseEntity error(HttpServletRequest request){
+    public ResponseEntity error(HttpServletRequest request) {
         val body = getErrorAttributes(request);
         return ResponseEntity
                 .status(HttpStatus.valueOf(Integer.parseInt(body.get("status").toString())))
