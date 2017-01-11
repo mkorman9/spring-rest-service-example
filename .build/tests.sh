@@ -1,5 +1,11 @@
 #!/bin/bash
 
+function print_logs() {
+    echo '================================================='
+    docker logs $APP_NAME
+    echo '================================================='
+}
+
 # Install test dependencies
 python -c "import pip" &> /dev/null
 if [ $? != 0 ]; then
@@ -29,9 +35,7 @@ while true; do
 
     if [[ $timeout_counter == "20" ]]; then
         echo "Application wake up phase timed out"
-        echo '================================================='
-        docker logs $APP_NAME
-        echo '================================================='
+        print_logs
         exit 1
     fi
 
@@ -41,10 +45,9 @@ done
 
 python -m behave spring-rest-service-example-tests/src/behave
 
+print_logs
+
 if [ $? != 0 ]; then
-    echo '================================================='
-    docker logs $APP_NAME
-    echo '================================================='
     exit 1
 fi
 
