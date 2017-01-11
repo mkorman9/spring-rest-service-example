@@ -18,8 +18,6 @@ if [ $? != 0 ]; then
 fi
 
 # Wait until application wakes up
-curl -v http://127.0.0.1:$APPLICATION_PORT/
-
 timeout_counter="0"
 while [ "$(curl -s "http://127.0.0.1:$APPLICATION_PORT/")" == '' ]; do
     echo "Trying http://127.0.0.1:$APPLICATION_PORT/"
