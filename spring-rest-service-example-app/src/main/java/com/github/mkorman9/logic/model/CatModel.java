@@ -2,6 +2,7 @@ package com.github.mkorman9.logic.model;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -10,6 +11,7 @@ import javax.validation.constraints.Size;
 
 @Getter
 @Builder
+@NoArgsConstructor
 public class CatModel {
     private Long id;
 
