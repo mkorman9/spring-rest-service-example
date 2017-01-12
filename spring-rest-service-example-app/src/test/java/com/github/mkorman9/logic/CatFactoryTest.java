@@ -3,6 +3,7 @@ package com.github.mkorman9.logic;
 import com.github.mkorman9.dao.CatsGroupRepository;
 import com.github.mkorman9.entity.Cat;
 import com.github.mkorman9.entity.CatsGroup;
+import com.github.mkorman9.logic.exception.InvalidInputDataException;
 import com.github.mkorman9.logic.model.CatModel;
 import org.junit.Before;
 import org.junit.Rule;
@@ -84,7 +85,7 @@ public class CatFactoryTest {
         Long nonExistingGroupId = 10L;
         CatModel model = createCatModelMock(roleName, name, duelsWon, nonExistingGroupId);
 
-        expectedException.expect(IllegalStateException.class);
+        expectedException.expect(InvalidInputDataException.class);
         
         // when
         catFactory.createEntity(model);
