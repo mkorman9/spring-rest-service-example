@@ -67,8 +67,8 @@ class ControllersCommons {
 
     private Optional<Exception> decideOnLoggingException(Exception exception) {
         return Match(exception).of(
-                Case(instanceOf(InvalidInputDataException.class), Optional.of(exception)),
-                Case($(), Optional.empty())
+                Case(instanceOf(InvalidInputDataException.class), Optional.empty()),
+                Case($(), Optional.of(exception))
         );
     }
 }
