@@ -12,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import static javaslang.API.*;
@@ -24,7 +25,7 @@ class ControllersCommons {
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity exceptionHandler(Exception exception) {
-        log.error("Error during request processing", exception);
+        decideOnLoggingException(exception).ifPresent(exc -> log.error("Error during request processing: ", exc));
 
         return ResponseEntity
                 .status(resolveResponseStatus(exception))
@@ -61,6 +62,13 @@ class ControllersCommons {
         return Match(exception).of(
                 Case(instanceOf(InvalidInputDataException.class), exception.getMessage()),
                 Case($(), INTERNAL_ERROR_RESPONSE_TEXT)
+        );
+    }
+
+    private Optional<Exception> decideOnLoggingException(Exception exception) {
+        return Match(exception).of(
+                Case(instanceOf(InvalidInputDataException.class), Optional.of(exception)),
+                Case($(), Optional.empty())
         );
     }
 }
