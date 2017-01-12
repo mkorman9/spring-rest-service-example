@@ -3,6 +3,7 @@ package com.github.mkorman9.logic;
 import com.github.mkorman9.dao.CatsGroupRepository;
 import com.github.mkorman9.entity.Cat;
 import com.github.mkorman9.entity.CatsGroup;
+import com.github.mkorman9.logic.exception.InvalidInputDataException;
 import com.github.mkorman9.logic.model.CatModel;
 import com.github.mkorman9.logic.model.CatsGroupModel;
 import lombok.val;
@@ -51,7 +52,7 @@ public class CatFactory {
     private CatsGroup convertGroupModelToEntity(CatsGroupModel group) {
         val groupEntity = catsGroupRepository.findOne(group.getId());
         if (groupEntity == null) {
-            throw new IllegalStateException("Group with id " + group.getId() + " was not found");
+            throw new InvalidInputDataException("Group with id " + group.getId() + " was not found");
         }
         return groupEntity;
     }
