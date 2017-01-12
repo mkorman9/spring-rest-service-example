@@ -1,10 +1,11 @@
 #!/bin/bash
 
 function print_logs() {
-    sudo docker cp $APP_NAME:/usr/local/$APP_NAME/config/application.properties /tmp/application.properties
+    echo
+    echo 'Dumping application data: '
 
     echo '================================================='
-    cat /tmp/application.properties
+    sudo docker cp $APP_NAME:/usr/local/$APP_NAME/config/application.properties -
     echo '================================================='
     docker logs $APP_NAME
     echo '================================================='
