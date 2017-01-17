@@ -8,7 +8,6 @@ sudo: required
 env:
   global:
     - VERSION_BASE='1.0'
-    - MVN_SETTINGS_LOCATION='.build/settings.xml'
 
 services:
   - docker
