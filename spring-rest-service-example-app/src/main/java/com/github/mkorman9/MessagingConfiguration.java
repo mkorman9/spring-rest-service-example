@@ -1,59 +1,59 @@
 package com.github.mkorman9;
 
-import javaslang.Tuple;
-import javaslang.Tuple2;
 import lombok.val;
-import org.springframework.amqp.core.Queue;
-import org.springframework.amqp.rabbit.annotation.EnableRabbit;
-import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
-import org.springframework.amqp.rabbit.connection.ConnectionFactory;
-import org.springframework.amqp.rabbit.core.RabbitTemplate;
-import org.springframework.beans.factory.annotation.Value;
+import org.apache.activemq.command.ActiveMQQueue;
+import org.springframework.boot.autoconfigure.jms.DefaultJmsListenerContainerFactoryConfigurer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jms.annotation.EnableJms;
+import org.springframework.jms.config.DefaultJmsListenerContainerFactory;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
+import org.springframework.jms.support.converter.MessageConverter;
+import org.springframework.jms.support.converter.MessageType;
 
-import static javaslang.API.*;
+import javax.jms.ConnectionFactory;
+import javax.jms.DeliveryMode;
+import javax.jms.Queue;
+import javax.jms.Session;
 
 @Configuration
-@EnableRabbit
+@EnableJms
 public class MessagingConfiguration {
     public static final String QUEUE_NAME = "someSampleQueueForSpring";
-
-    @Value("${broker.address}")
-    private String brokerAddress;
-    @Value("${broker.username}")
-    private String brokerUsername;
-    @Value("${broker.password}")
-    private String brokerPassword;
+    public static final String CONTAINER_NAME = "jmsListenerContainerFactory";
 
     @Bean
-    public ConnectionFactory connectionFactory() {
-        val addressParts = parseBrokerAddress(brokerAddress);
-        val connectionFactory = new CachingConnectionFactory(addressParts._1, addressParts._2);
-        connectionFactory.setUsername(brokerUsername);
-        connectionFactory.setPassword(brokerPassword);
-        return connectionFactory;
+    public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
+        val jmsTemplate = new JmsTemplate();
+        jmsTemplate.setConnectionFactory(connectionFactory);
+        jmsTemplate.setMessageConverter(messageConverter);
+        jmsTemplate.setSessionAcknowledgeMode(Session.CLIENT_ACKNOWLEDGE);
+        jmsTemplate.setDeliveryMode(DeliveryMode.PERSISTENT);
+        return jmsTemplate;
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate(ConnectionFactory connectionFactory) {
-        val template = new RabbitTemplate(connectionFactory);
-        template.setRoutingKey(QUEUE_NAME);
-        template.setQueue(QUEUE_NAME);
-        return template;
+    public Queue queue() {
+        return new ActiveMQQueue(QUEUE_NAME);
     }
 
     @Bean
-    public Queue queueDeclaration() {
-        return new Queue(QUEUE_NAME, true);
+    public DefaultJmsListenerContainerFactory jmsListenerContainerFactory(
+            ConnectionFactory connectionFactory,
+            DefaultJmsListenerContainerFactoryConfigurer configurer,
+            MessageConverter messageConverter) {
+        val factory = new DefaultJmsListenerContainerFactory();
+        configurer.configure(factory, connectionFactory);
+        factory.setMessageConverter(messageConverter);
+        return factory;
     }
 
-    private Tuple2<String, Integer> parseBrokerAddress(String brokerAddress) {
-        val parts = brokerAddress.split(":");
-        return Match(parts.length).of(
-                Case($(1), () -> Tuple.of(parts[0], 5672)),
-                Case($(2), () -> Tuple.of(parts[0], Integer.parseInt(parts[1]))),
-                Case($(), () -> { throw new RuntimeException("Cannot parse broker.address"); })
-        );
+    @Bean
+    public MessageConverter jacksonJmsMessageConverter() {
+        MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
+        converter.setTargetType(MessageType.TEXT);
+        converter.setTypeIdPropertyName("_type");
+        return converter;
     }
 }

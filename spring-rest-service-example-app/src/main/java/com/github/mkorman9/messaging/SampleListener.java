@@ -1,14 +1,12 @@
 package com.github.mkorman9.messaging;
 
 import com.github.mkorman9.MessagingConfiguration;
-import org.springframework.amqp.rabbit.annotation.RabbitHandler;
-import org.springframework.amqp.rabbit.annotation.RabbitListener;
-import org.springframework.stereotype.Service;
+import org.springframework.jms.annotation.JmsListener;
+import org.springframework.stereotype.Component;
 
-@Service
-@RabbitListener(queues = MessagingConfiguration.QUEUE_NAME)
+@Component
 public class SampleListener {
-    @RabbitHandler
+    @JmsListener(destination=MessagingConfiguration.QUEUE_NAME, containerFactory=MessagingConfiguration.CONTAINER_NAME)
     public void onMessage(String payload) {
         System.out.println("Received: " + payload);
     }
