@@ -24,10 +24,10 @@ public class MessagingConfiguration {
     public static final String CONTAINER_NAME = "jmsListenerContainerFactory";
 
     @Bean
-    public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory, MessageConverter messageConverter) {
+    public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory, MessageConverter jacksonJmsMessageConverter) {
         val jmsTemplate = new JmsTemplate();
         jmsTemplate.setConnectionFactory(connectionFactory);
-        jmsTemplate.setMessageConverter(messageConverter);
+        jmsTemplate.setMessageConverter(jacksonJmsMessageConverter);
         jmsTemplate.setSessionAcknowledgeMode(Session.CLIENT_ACKNOWLEDGE);
         jmsTemplate.setDeliveryMode(DeliveryMode.PERSISTENT);
         return jmsTemplate;
