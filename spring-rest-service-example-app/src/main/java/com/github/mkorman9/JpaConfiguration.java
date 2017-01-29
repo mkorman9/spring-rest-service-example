@@ -28,7 +28,7 @@ public class JpaConfiguration {
         val properties = new Properties();
         properties.setProperty("cache.address", cacheAddress);
 
-        Try.run(() -> properties.load(getClass().getResourceAsStream("/META-INF/hibernate.properties")))
+        Try.run(() -> properties.load(getClass().getResourceAsStream("/hibernate.properties")))
                 .onFailure(e -> { throw new RuntimeException("Cannot load Hibernate properties file", e); });
 
         return properties;
