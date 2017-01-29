@@ -3,7 +3,7 @@ package com.github.mkorman9;
 import org.hibernate.cache.redis.client.RedisClient;
 import org.hibernate.cache.redis.client.RedisClientFactory;
 import org.hibernate.cache.redis.hibernate4.SingletonRedisRegionFactory;
-import org.redisson.codec.JsonJacksonCodec;
+import org.redisson.codec.SnappyCodec;
 import org.redisson.config.Config;
 
 import java.util.Properties;
@@ -38,7 +38,7 @@ public class RedisCacheManager extends SingletonRedisRegionFactory {
                 .setDnsMonitoring(false)
                 .setDnsMonitoringInterval(5000);
         config.setThreads(0);
-        config.setCodec(new JsonJacksonCodec());
+        config.setCodec(new SnappyCodec());
         config.setUseLinuxNativeEpoll(false);
         config.setEventLoopGroup(null);
         return RedisClientFactory.createRedisClient(config);
