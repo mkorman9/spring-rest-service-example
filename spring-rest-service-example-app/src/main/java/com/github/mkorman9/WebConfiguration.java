@@ -9,12 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class WebConfiguration {
     @Bean
-    public SampleFilter sampleFilter() {
-        return new SampleFilter();
-    }
-
-    @Bean
-    public FilterRegistrationBean sampleFilterRegistartion(SampleFilter sampleFilter) {
+    public FilterRegistrationBean sampleFilterRegistration(SampleFilter sampleFilter) {
         val registration = new FilterRegistrationBean();
         registration.setFilter(sampleFilter);
         registration.addUrlPatterns("/*");  // it's impossible to exclude some urls. Secured URLs should be bound to different context than unsecured

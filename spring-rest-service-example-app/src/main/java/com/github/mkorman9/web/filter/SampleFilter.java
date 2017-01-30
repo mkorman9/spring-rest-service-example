@@ -1,12 +1,14 @@
 package com.github.mkorman9.web.filter;
 
 import com.google.common.base.Strings;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Component
 public class SampleFilter implements Filter {
     private static final boolean AUTH_ENABLED = false;
 
