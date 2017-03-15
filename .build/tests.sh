@@ -61,9 +61,10 @@ install_test_dependencies
 
 wait_for_application_to_wake_up
 run_tests
+TESTS_RESULT=$?
 print_logs
 
-if [ $? != 0 ]; then
+if [ $TESTS_RESULT != 0 ]; then
     exit 1
 fi
 
