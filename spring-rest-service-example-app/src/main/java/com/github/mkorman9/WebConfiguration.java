@@ -2,7 +2,7 @@ package com.github.mkorman9;
 
 import com.github.mkorman9.web.filter.SampleFilter;
 import lombok.val;
-import org.springframework.boot.context.embedded.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
