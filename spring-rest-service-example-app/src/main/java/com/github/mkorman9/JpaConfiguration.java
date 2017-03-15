@@ -31,7 +31,7 @@ public class JpaConfiguration {
     @Bean
     public Properties hibernateProperties() {
         val properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "validate");
+        properties.setProperty("hibernate.hbm2ddl.auto", "none");
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         properties.setProperty("hibernate.cache.use_second_level_cache", "false");
 
