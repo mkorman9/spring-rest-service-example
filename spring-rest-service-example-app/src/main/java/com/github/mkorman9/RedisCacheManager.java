@@ -2,7 +2,7 @@ package com.github.mkorman9;
 
 import org.hibernate.cache.redis.client.RedisClient;
 import org.hibernate.cache.redis.client.RedisClientFactory;
-import org.hibernate.cache.redis.hibernate4.SingletonRedisRegionFactory;
+import org.hibernate.cache.redis.hibernate5.SingletonRedisRegionFactory;
 import org.redisson.codec.JsonJacksonCodec;
 import org.redisson.config.Config;
 
