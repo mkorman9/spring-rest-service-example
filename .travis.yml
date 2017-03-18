@@ -23,7 +23,7 @@ before_install:
 
 install:
   - . $CI_WORK_DIRECTORY/common_dependencies/redis.sh
-  - . $CI_WORK_DIRECTORY/common_dependencies/mariadb.sh --dbname test --username test --password test
+  - . $CI_WORK_DIRECTORY/common_dependencies/mysql_5_6.sh --dbname test --username test --password test
   - . $CI_WORK_DIRECTORY/common_dependencies/activemq.sh --username test --password test
   - . $CI_WORK_DIRECTORY/common_dependencies/config_server.sh --port 18080
 
