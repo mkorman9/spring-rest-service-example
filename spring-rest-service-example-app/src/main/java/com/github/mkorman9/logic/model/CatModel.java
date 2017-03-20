@@ -21,15 +21,15 @@ public class CatModel {
     @Size(min = 3, max = 50, message="Size")
     private String roleName;
 
-    @NotNull
+    @NotNull(message="NotNull")
     @Size(min = 3, max = 50, message="Size")
     private String name;
 
-    @NotNull
+    @NotNull(message="NotNull")
     @Min(value = 0, message="Min")
     private Integer duelsWon;
 
-    @NotNull
+    @NotNull(message="NotNull")
     @Valid
     private CatsGroupModel group;
 }
