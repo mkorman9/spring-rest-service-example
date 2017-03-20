@@ -1,4 +1,4 @@
-package com.github.mkorman9.web.controller;
+package com.github.mkorman9.web.controller.util;
 
 import com.github.mkorman9.logic.exception.InvalidInputDataException;
 import com.github.mkorman9.web.form.response.ResponseError;
@@ -8,6 +8,7 @@ import com.google.common.collect.ImmutableList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -21,8 +22,9 @@ import static javaslang.Predicates.instanceOf;
 
 @ControllerAdvice(basePackages = "com.github.mkorman9.web.controller")
 @Slf4j
-class ControllersCommons {
+public class ControllersCommons {
     private static final String INTERNAL_ERROR_RESPONSE_TEXT = "Internal error while processing request";
+    private static final String UNREADABLE_BODY = "Message body is unreadable";
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity exceptionHandler(Exception exception) {
@@ -39,7 +41,7 @@ class ControllersCommons {
                         .build());
     }
 
-    protected ResponseForm handleBindingError(BindingResult bindingResult) {
+    public ResponseForm handleBindingError(BindingResult bindingResult) {
         return ResponseForm.builder()
                 .status(ResponseStatus.ERROR)
                 .errors(bindingResult.getFieldErrors().stream()
@@ -56,6 +58,7 @@ class ControllersCommons {
         return Match(exception).of(
                 Case(instanceOf(InvalidInputDataException.class), HttpStatus.BAD_REQUEST),
                 Case(instanceOf(MethodArgumentTypeMismatchException.class), HttpStatus.BAD_REQUEST),
+                Case(instanceOf(HttpMessageNotReadableException.class), HttpStatus.BAD_REQUEST),
                 Case($(), HttpStatus.INTERNAL_SERVER_ERROR)
         );
     }
@@ -64,6 +67,7 @@ class ControllersCommons {
         return Match(exception).of(
                 Case(instanceOf(InvalidInputDataException.class), exception.getMessage()),
                 Case(instanceOf(MethodArgumentTypeMismatchException.class), exception.getMessage()),
+                Case(instanceOf(HttpMessageNotReadableException.class), UNREADABLE_BODY),
                 Case($(), INTERNAL_ERROR_RESPONSE_TEXT)
         );
     }
@@ -72,6 +76,7 @@ class ControllersCommons {
         return Match(exception).of(
                 Case(instanceOf(InvalidInputDataException.class), Optional.empty()),
                 Case(instanceOf(MethodArgumentTypeMismatchException.class), Optional.empty()),
+                Case(instanceOf(HttpMessageNotReadableException.class), Optional.empty()),
                 Case($(), Optional.of(exception))
         );
     }

@@ -3,6 +3,8 @@ package com.github.mkorman9.web.controller;
 import com.github.mkorman9.logic.CatLogic;
 import com.github.mkorman9.logic.CatsGroupLogic;
 import com.github.mkorman9.logic.model.CatModel;
+import com.github.mkorman9.web.controller.util.ControllersCommons;
+import com.github.mkorman9.web.controller.util.ValidPayload;
 import com.github.mkorman9.web.form.response.ResponseForm;
 import com.github.mkorman9.web.form.response.ResponseStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,11 +42,8 @@ public class FrontController extends ControllersCommons {
     }
 
     @RequestMapping(value = "/cats/add", method = RequestMethod.POST)
+    @ValidPayload
     public ResponseForm addNewCat(@RequestBody @Valid CatModel catForm, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return handleBindingError(bindingResult);
-        }
-
         catLogic.addNewCat(catForm);
         return ResponseForm.builder()
                 .status(ResponseStatus.OK)
@@ -60,11 +59,8 @@ public class FrontController extends ControllersCommons {
     }
 
     @RequestMapping(value = "/cats/edit/{id}", method = RequestMethod.PUT)
+    @ValidPayload
     public ResponseForm editCat(@PathVariable("id") Long id, @RequestBody @Valid CatModel catForm, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            return handleBindingError(bindingResult);
-        }
-
         catLogic.updateCat(id, catForm);
         return ResponseForm.builder()
                 .status(ResponseStatus.OK)
