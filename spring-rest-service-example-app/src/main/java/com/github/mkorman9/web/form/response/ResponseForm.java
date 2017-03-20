@@ -14,7 +14,7 @@ import java.util.List;
 @Builder
 public class ResponseForm {
     @Getter(AccessLevel.NONE) private ResponseStatus status;
-    private List<ResponseError> errors;
+    private Object error;
     private String timestamp;
     private Object data;
 

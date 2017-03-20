@@ -9,22 +9,20 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static javaslang.API.*;
 import static javaslang.Predicates.instanceOf;
 
 @ControllerAdvice(basePackages = "com.github.mkorman9.web.controller")
 @Slf4j
-public class ControllersCommons {
+public class ExceptionCatcher {
     private static final String INTERNAL_ERROR_RESPONSE_TEXT = "Internal error while processing request";
-    private static final String UNREADABLE_BODY = "Message body is unreadable";
+    private static final String UNREADABLE_BODY = "Message body cannot be interpreted as valid JSON document";
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity exceptionHandler(Exception exception) {
@@ -34,24 +32,8 @@ public class ControllersCommons {
                 .status(resolveResponseStatus(exception))
                 .body(ResponseForm.builder()
                         .status(ResponseStatus.ERROR)
-                        .errors(ImmutableList.of(ResponseError.builder()
-                                .message(resolveResponseText(exception))
-                                .build()
-                        ))
+                        .error(resolveResponseObject(exception))
                         .build());
-    }
-
-    public ResponseForm handleBindingError(BindingResult bindingResult) {
-        return ResponseForm.builder()
-                .status(ResponseStatus.ERROR)
-                .errors(bindingResult.getFieldErrors().stream()
-                        .map(error -> ResponseError.builder()
-                                .message(error.getCode())
-                                .field(error.getField())
-                                .build()
-                        )
-                        .collect(Collectors.toList()))
-                .build();
     }
 
     private HttpStatus resolveResponseStatus(Exception exception) {
@@ -63,12 +45,12 @@ public class ControllersCommons {
         );
     }
 
-    private String resolveResponseText(Exception exception) {
+    private Object resolveResponseObject(Exception exception) {
         return Match(exception).of(
-                Case(instanceOf(InvalidInputDataException.class), exception.getMessage()),
-                Case(instanceOf(MethodArgumentTypeMismatchException.class), exception.getMessage()),
-                Case(instanceOf(HttpMessageNotReadableException.class), UNREADABLE_BODY),
-                Case($(), INTERNAL_ERROR_RESPONSE_TEXT)
+                Case(instanceOf(InvalidInputDataException.class), () -> ((InvalidInputDataException) exception).getError()),
+                Case(instanceOf(MethodArgumentTypeMismatchException.class), ResponseError.builder().message(exception.getMessage()).build()),
+                Case(instanceOf(HttpMessageNotReadableException.class), ResponseError.builder().message(UNREADABLE_BODY).build()),
+                Case($(), ResponseError.builder().message(INTERNAL_ERROR_RESPONSE_TEXT).build())
         );
     }
 
