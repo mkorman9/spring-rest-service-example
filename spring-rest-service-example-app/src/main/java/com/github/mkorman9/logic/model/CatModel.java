@@ -17,16 +17,16 @@ import javax.validation.constraints.Size;
 public class CatModel {
     private Long id;
 
-    @NotNull(message="NotNull")
-    @Size(min = 3, max = 50, message="Size")
+    @NotNull
+    @Size(min = 3, max = 50)
     private String roleName;
 
     @NotNull
-    @Size(min = 3, max = 50, message="Size")
+    @Size(min = 3, max = 50)
     private String name;
 
     @NotNull
-    @Min(value = 0, message="Min")
+    @Min(0)
     private Integer duelsWon;
 
     @NotNull
