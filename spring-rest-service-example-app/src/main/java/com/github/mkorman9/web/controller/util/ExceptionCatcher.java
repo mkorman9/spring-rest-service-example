@@ -24,42 +24,49 @@ public class ExceptionCatcher {
     private static final String INTERNAL_ERROR_RESPONSE_TEXT = "Internal error while processing request";
     private static final String UNREADABLE_BODY = "Message body cannot be interpreted as valid JSON document";
 
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity exceptionHandler(Exception exception) {
-        decideOnLoggingException(exception).ifPresent(exc -> log.error("Error during request processing: ", exc));
-
+    @ExceptionHandler(InvalidInputDataException.class)
+    public ResponseEntity invalidInputDataExceptionHandler(InvalidInputDataException exception) {
         return ResponseEntity
-                .status(resolveResponseStatus(exception))
+                .status(HttpStatus.BAD_REQUEST)
                 .body(ResponseForm.builder()
                         .status(ResponseStatus.ERROR)
-                        .error(resolveResponseObject(exception))
-                        .build());
+                        .error(exception.getError())
+                        .build()
+                );
     }
 
-    private HttpStatus resolveResponseStatus(Exception exception) {
-        return Match(exception).of(
-                Case(instanceOf(InvalidInputDataException.class), HttpStatus.BAD_REQUEST),
-                Case(instanceOf(MethodArgumentTypeMismatchException.class), HttpStatus.BAD_REQUEST),
-                Case(instanceOf(HttpMessageNotReadableException.class), HttpStatus.BAD_REQUEST),
-                Case($(), HttpStatus.INTERNAL_SERVER_ERROR)
-        );
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity methodArgumentTypeMismatchExceptionHandler(MethodArgumentTypeMismatchException exception) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ResponseForm.builder()
+                        .status(ResponseStatus.ERROR)
+                        .error(ResponseError.builder().message(exception.getMessage()).build())
+                        .build()
+                );
     }
 
-    private Object resolveResponseObject(Exception exception) {
-        return Match(exception).of(
-                Case(instanceOf(InvalidInputDataException.class), () -> ((InvalidInputDataException) exception).getError()),
-                Case(instanceOf(MethodArgumentTypeMismatchException.class), ResponseError.builder().message(exception.getMessage()).build()),
-                Case(instanceOf(HttpMessageNotReadableException.class), ResponseError.builder().message(UNREADABLE_BODY).build()),
-                Case($(), ResponseError.builder().message(INTERNAL_ERROR_RESPONSE_TEXT).build())
-        );
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException exception) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ResponseForm.builder()
+                        .status(ResponseStatus.ERROR)
+                        .error(ResponseError.builder().message(UNREADABLE_BODY).build())
+                        .build()
+                );
     }
 
-    private Optional<Exception> decideOnLoggingException(Exception exception) {
-        return Match(exception).of(
-                Case(instanceOf(InvalidInputDataException.class), Optional.empty()),
-                Case(instanceOf(MethodArgumentTypeMismatchException.class), Optional.empty()),
-                Case(instanceOf(HttpMessageNotReadableException.class), Optional.empty()),
-                Case($(), Optional.of(exception))
-        );
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity exceptionHandler(Exception exception) {
+        log.error("Error during request processing: ", exception);
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ResponseForm.builder()
+                        .status(ResponseStatus.ERROR)
+                        .error(ResponseError.builder().message(INTERNAL_ERROR_RESPONSE_TEXT).build())
+                        .build()
+                );
     }
 }
