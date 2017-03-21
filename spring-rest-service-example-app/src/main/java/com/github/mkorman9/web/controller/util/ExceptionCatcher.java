@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.Optional;
@@ -25,48 +26,44 @@ public class ExceptionCatcher {
     private static final String UNREADABLE_BODY = "Message body cannot be interpreted as valid JSON document";
 
     @ExceptionHandler(InvalidInputDataException.class)
-    public ResponseEntity invalidInputDataExceptionHandler(InvalidInputDataException exception) {
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(ResponseForm.builder()
-                        .status(ResponseStatus.ERROR)
-                        .error(exception.getError())
-                        .build()
-                );
+    @ResponseBody
+    @org.springframework.web.bind.annotation.ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseForm invalidInputDataExceptionHandler(InvalidInputDataException exception) {
+        return ResponseForm.builder()
+                .status(ResponseStatus.ERROR)
+                .error(exception.getError())
+                .build();
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public ResponseEntity methodArgumentTypeMismatchExceptionHandler(MethodArgumentTypeMismatchException exception) {
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(ResponseForm.builder()
-                        .status(ResponseStatus.ERROR)
-                        .error(ResponseError.builder().message(exception.getMessage()).build())
-                        .build()
-                );
+    @ResponseBody
+    @org.springframework.web.bind.annotation.ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseForm methodArgumentTypeMismatchExceptionHandler(MethodArgumentTypeMismatchException exception) {
+        return ResponseForm.builder()
+                .status(ResponseStatus.ERROR)
+                .error(ResponseError.builder().message(exception.getMessage()).build())
+                .build();
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException exception) {
-        return ResponseEntity
-                .status(HttpStatus.BAD_REQUEST)
-                .body(ResponseForm.builder()
-                        .status(ResponseStatus.ERROR)
-                        .error(ResponseError.builder().message(UNREADABLE_BODY).build())
-                        .build()
-                );
+    @ResponseBody
+    @org.springframework.web.bind.annotation.ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseForm httpMessageNotReadableExceptionHandler(HttpMessageNotReadableException exception) {
+        return ResponseForm.builder()
+                .status(ResponseStatus.ERROR)
+                .error(ResponseError.builder().message(UNREADABLE_BODY).build())
+                .build();
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity exceptionHandler(Exception exception) {
+    @ResponseBody
+    @org.springframework.web.bind.annotation.ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ResponseForm exceptionHandler(Exception exception) {
         log.error("Error during request processing: ", exception);
 
-        return ResponseEntity
-                .status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ResponseForm.builder()
-                        .status(ResponseStatus.ERROR)
-                        .error(ResponseError.builder().message(INTERNAL_ERROR_RESPONSE_TEXT).build())
-                        .build()
-                );
+        return ResponseForm.builder()
+                .status(ResponseStatus.ERROR)
+                .error(ResponseError.builder().message(INTERNAL_ERROR_RESPONSE_TEXT).build())
+                .build();
     }
 }
