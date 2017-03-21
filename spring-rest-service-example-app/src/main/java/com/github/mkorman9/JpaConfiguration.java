@@ -31,12 +31,16 @@ public class JpaConfiguration {
     @Bean
     public Properties hibernateProperties() {
         val properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "none");
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         properties.setProperty("hibernate.cache.use_second_level_cache", "false");
 
         if (productionProfileActive()) {
             loadCacheRelatedProperties(properties);
+            properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+            properties.setProperty("hibernate.hbm2ddl.auto", "none");
+        }
+        else {
+            properties.setProperty("hibernate.dialect", "org.hibernate.dialect.H2Dialect");
+            properties.setProperty("hibernate.hbm2ddl.auto", "create");
         }
 
         return properties;

@@ -1,4 +1,4 @@
-package com.github.mkorman9.web.controller;
+package com.github.mkorman9.web.controller.util;
 
 import com.github.mkorman9.web.form.response.ResponseError;
 import com.github.mkorman9.web.form.response.ResponseForm;
@@ -38,9 +38,9 @@ public class ErrorController implements org.springframework.boot.autoconfigure.w
                 .status(HttpStatus.valueOf(Integer.parseInt(body.get("status").toString())))
                 .body(ResponseForm.builder()
                         .status(ResponseStatus.ERROR)
-                        .errors(ImmutableList.of(ResponseError.builder()
+                        .error(ResponseError.builder()
                                 .message(body.get("status") + " " + body.get("error"))
-                                .build())
+                                .build()
                         )
                         .build());
     }

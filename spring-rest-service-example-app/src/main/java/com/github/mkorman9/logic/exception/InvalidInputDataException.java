@@ -1,7 +1,13 @@
 package com.github.mkorman9.logic.exception;
 
 public class InvalidInputDataException extends RuntimeException {
-    public InvalidInputDataException(String message) {
-        super(message);
+    private Object error;
+
+    public InvalidInputDataException(Object error) {
+        this.error = error;
+    }
+
+    public Object getError() {
+        return error;
     }
 }

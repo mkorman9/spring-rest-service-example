@@ -64,7 +64,7 @@ def compare_remembered_cat_data_to_actual_state(context):
 
 def validation_error_has_been_returned(context, expected_field, expected_message):
     response_data = context.response.json()
-    for error in response_data['errors']:
+    for error in response_data['error']:
         if error['field'] == expected_field:
             return error['message'] == expected_message
     return False
