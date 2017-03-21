@@ -8,6 +8,7 @@ sudo: required
 env:
   global:
     - VERSION_BASE='1.0'
+    - UPLOAD_CODE_COVERAGE=true
 
 services:
   - docker
@@ -29,9 +30,6 @@ install:
 
 script:
   - $CI_WORK_DIRECTORY/invoke.sh || exit 1
-
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
 
 notifications:
   email: false

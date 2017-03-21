@@ -63,6 +63,7 @@
                         <format>xml</format>
                     </formats>
                     <check />
+                    <quiet>true</quiet>
                 </configuration>
             </plugin>
         </plugins>
