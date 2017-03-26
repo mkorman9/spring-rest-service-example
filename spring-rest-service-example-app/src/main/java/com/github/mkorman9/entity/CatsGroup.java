@@ -24,7 +24,7 @@ public class CatsGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", nullable = false, unique = true)
-    private Long id;
+    private long id;
 
     @Column(name = "NAME", nullable = false)
     private String name;

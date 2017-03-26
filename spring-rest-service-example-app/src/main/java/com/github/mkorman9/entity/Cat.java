@@ -27,7 +27,7 @@ public class Cat implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ID", unique = true, nullable = false)
-    private Long id;
+    private long id;
 
     @Column(name = "ROLE_NAME", nullable = false)
     private String roleName;

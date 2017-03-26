@@ -13,7 +13,7 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class CatsGroupModel {
     @NotNull(message="NotNull")
-    private Long id;
+    private long id;
 
     private String name;
 }

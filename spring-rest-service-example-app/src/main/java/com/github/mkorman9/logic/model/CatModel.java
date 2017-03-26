@@ -27,7 +27,7 @@ public class CatModel {
 
     @NotNull(message="NotNull")
     @Min(value = 0, message="Min")
-    private Integer duelsWon;
+    private int duelsWon;
 
     @NotNull(message="NotNull")
     @Valid
