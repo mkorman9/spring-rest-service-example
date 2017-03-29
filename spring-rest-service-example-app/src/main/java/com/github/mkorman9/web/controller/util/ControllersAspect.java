@@ -32,7 +32,7 @@ public class ControllersAspect {
         this.validator = validator;
     }
 
-    @Pointcut("execution(public * *(..))")
+    @Pointcut("execution(public java.lang.Object *(..))")
     public void publicMethod() { }
 
     @Pointcut("@within(org.springframework.web.bind.annotation.RequestMapping)")
