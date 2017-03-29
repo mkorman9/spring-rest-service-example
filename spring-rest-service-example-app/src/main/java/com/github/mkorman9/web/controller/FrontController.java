@@ -3,8 +3,6 @@ package com.github.mkorman9.web.controller;
 import com.github.mkorman9.logic.CatLogic;
 import com.github.mkorman9.logic.CatsGroupLogic;
 import com.github.mkorman9.logic.model.CatModel;
-import com.github.mkorman9.web.form.response.ResponseForm;
-import com.github.mkorman9.web.form.response.ResponseStatus;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,50 +19,35 @@ public class FrontController {
     }
 
     @RequestMapping(value = "/cats/all", method = RequestMethod.GET)
-    public ResponseForm findAllCats() {
-        return ResponseForm.builder()
-                .status(ResponseStatus.OK)
-                .data(catLogic.findAllCats())
-                .build();
+    public Object findAllCats() {
+        return catLogic.findAllCats();
     }
 
     @RequestMapping(value = "/cats/get/{id}", method = RequestMethod.GET)
-    public ResponseForm getSingleCat(@PathVariable("id") Long id) {
-        return ResponseForm.builder()
-                .status(ResponseStatus.OK)
-                .data(catLogic.findSingleCat(id))
-                .build();
+    public Object getSingleCat(@PathVariable("id") Long id) {
+        return catLogic.findSingleCat(id);
     }
 
     @RequestMapping(value = "/cats/add", method = RequestMethod.POST)
-    public ResponseForm addNewCat(@RequestBody CatModel catForm) {
+    public Object addNewCat(@RequestBody CatModel catForm) {
         catLogic.addNewCat(catForm);
-        return ResponseForm.builder()
-                .status(ResponseStatus.OK)
-                .build();
+        return "ok";
     }
 
     @RequestMapping(value = "/cats/delete/{id}", method = RequestMethod.DELETE)
-    public ResponseForm deleteCat(@PathVariable("id") Long id) {
+    public Object deleteCat(@PathVariable("id") Long id) {
         catLogic.removeCat(id);
-        return ResponseForm.builder()
-                .status(ResponseStatus.OK)
-                .build();
+        return "ok";
     }
 
     @RequestMapping(value = "/cats/edit/{id}", method = RequestMethod.PUT)
-    public ResponseForm editCat(@PathVariable("id") Long id, @RequestBody CatModel catForm) {
+    public Object editCat(@PathVariable("id") Long id, @RequestBody CatModel catForm) {
         catLogic.updateCat(id, catForm);
-        return ResponseForm.builder()
-                .status(ResponseStatus.OK)
-                .build();
+        return "ok";
     }
 
     @RequestMapping(value = "/groups/all", method = RequestMethod.GET)
-    public ResponseForm findAllGroups() {
-        return ResponseForm.builder()
-                .status(ResponseStatus.OK)
-                .data(catsGroupLogic.findAll())
-                .build();
+    public Object findAllGroups() {
+        return catsGroupLogic.findAll();
     }
 }

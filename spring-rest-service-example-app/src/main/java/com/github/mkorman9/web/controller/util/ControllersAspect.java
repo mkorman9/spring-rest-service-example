@@ -3,6 +3,8 @@ package com.github.mkorman9.web.controller.util;
 import com.github.mkorman9.logic.exception.InvalidInputDataException;
 import com.github.mkorman9.web.form.response.ResponseError;
 import com.github.mkorman9.web.form.response.ResponseForm;
+import com.github.mkorman9.web.form.response.ResponseStatus;
+import javaslang.control.Try;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -30,14 +32,29 @@ public class ControllersAspect {
         this.validator = validator;
     }
 
-    @Pointcut("execution(public com.github.mkorman9.web.form.response.ResponseForm *(..))")
-    public void requestMappingMethod() { }
+    @Pointcut("execution(public * *(..))")
+    public void publicMethod() { }
 
     @Pointcut("@within(org.springframework.web.bind.annotation.RequestMapping)")
     public void requestMappingAnnotated() { }
 
-    @Around("requestMappingMethod() && requestMappingAnnotated()")
-    public ResponseForm validatePayload(ProceedingJoinPoint joinPoint) throws Throwable {
+    @Around("publicMethod() && requestMappingAnnotated()")
+    public ResponseForm executeControllerCode(ProceedingJoinPoint joinPoint) throws Throwable {
+        validateRequestBodyIfApplicable(joinPoint);
+
+        return Try.of(joinPoint::proceed)
+                .map(returnObject ->
+                        ResponseForm.builder()
+                        .status(ResponseStatus.OK)
+                        .data(returnObject)
+                        .build()
+                )
+                .getOrElseThrow(
+                        exc -> exc
+                );
+    }
+
+    private void validateRequestBodyIfApplicable(ProceedingJoinPoint joinPoint) throws NoSuchMethodException {
         MethodSignature method = (MethodSignature) joinPoint.getSignature();
         Object[] arguments = joinPoint.getArgs();
         Optional<Object> entityToValidate = findRequestBodyToValidate(
@@ -51,8 +68,6 @@ public class ControllersAspect {
                 throw new InvalidInputDataException(createErrorsList(violations));
             }
         }
-
-        return (ResponseForm) joinPoint.proceed();
     }
 
     private List<ResponseError> createErrorsList(Set<ConstraintViolation<Object>> violations) {
