@@ -33,12 +33,12 @@ public class ControllersAspect {
     }
 
     @Pointcut("execution(public java.lang.Object *(..))")
-    public void publicMethod() { }
+    public void publicMethodReturningObject() { }
 
     @Pointcut("@within(org.springframework.web.bind.annotation.RequestMapping)")
     public void requestMappingAnnotated() { }
 
-    @Around("publicMethod() && requestMappingAnnotated()")
+    @Around("publicMethodReturningObject() && requestMappingAnnotated()")
     public ResponseForm executeControllerCode(ProceedingJoinPoint joinPoint) throws Throwable {
         validateRequestBodyIfApplicable(joinPoint);
 

@@ -17,7 +17,7 @@ public class MessagingTestController {
     }
 
     @RequestMapping(value = "/queue/send", method = RequestMethod.GET)
-    public String queueSend() {
+    public Object queueSend() {
         jmsTemplate.convertAndSend(MessagingConfiguration.QUEUE_NAME, "Hello world!");
         return "ok";
     }
