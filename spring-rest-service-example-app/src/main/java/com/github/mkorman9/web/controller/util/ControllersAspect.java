@@ -33,7 +33,10 @@ public class ControllersAspect {
     @Pointcut("execution(public com.github.mkorman9.web.form.response.ResponseForm *(..))")
     public void requestMappingMethod() { }
 
-    @Around("requestMappingMethod()")
+    @Pointcut("@within(org.springframework.web.bind.annotation.RequestMapping)")
+    public void requestMappingAnnotated() { }
+
+    @Around("requestMappingMethod() && requestMappingAnnotated()")
     public ResponseForm validatePayload(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature method = (MethodSignature) joinPoint.getSignature();
         Object[] arguments = joinPoint.getArgs();
