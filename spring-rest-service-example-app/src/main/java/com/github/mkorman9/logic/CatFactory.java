@@ -9,6 +9,8 @@ import com.github.mkorman9.logic.model.CatsGroupModel;
 import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class CatFactory {
@@ -25,6 +27,7 @@ public class CatFactory {
         return cat;
     }
 
+    @Transactional(propagation = Propagation.MANDATORY)
     public void editEntity(Cat entity, CatModel catModel) {
         entity.setRoleName(catModel.getRoleName());
         entity.setName(catModel.getName());
@@ -32,6 +35,7 @@ public class CatFactory {
         entity.setGroup(convertGroupModelToEntity(catModel.getGroup()));
     }
 
+    @Transactional(propagation = Propagation.MANDATORY)
     public CatModel createModel(Cat entity) {
         return CatModel.builder()
                 .id(entity.getId())
