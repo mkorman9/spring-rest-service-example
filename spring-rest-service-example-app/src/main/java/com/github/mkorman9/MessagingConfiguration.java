@@ -25,6 +25,7 @@ public class MessagingConfiguration {
 
     @Bean
     public JmsTemplate jmsTemplate(ConnectionFactory connectionFactory, MessageConverter jacksonJmsMessageConverter) {
+        // this is preconfigured queue. Sometimes it is better to autowire ConnectionFactory instead and create JmsTemplate like common POJO
         val jmsTemplate = new JmsTemplate();
         jmsTemplate.setConnectionFactory(connectionFactory);
         jmsTemplate.setMessageConverter(jacksonJmsMessageConverter);
