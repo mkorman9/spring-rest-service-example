@@ -4,10 +4,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 
-import java.util.List;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @Getter
@@ -23,6 +22,6 @@ public class ResponseForm {
     }
 
     public static class ResponseFormBuilder {
-        private String timestamp = DateTimeFormat.forPattern("YYYY-MM-dd'T'HH:mm:ssZ").print(DateTime.now());
+        private String timestamp = DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ssZ").format(LocalDateTime.now());
     }
 }
