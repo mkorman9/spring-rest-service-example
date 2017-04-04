@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 
-import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -22,6 +22,6 @@ public class ResponseForm {
     }
 
     public static class ResponseFormBuilder {
-        private String timestamp = DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ssZ").format(LocalDateTime.now());
+        private String timestamp = DateTimeFormatter.ofPattern("YYYY-MM-dd'T'HH:mm:ssZ").format(ZonedDateTime.now());
     }
 }
